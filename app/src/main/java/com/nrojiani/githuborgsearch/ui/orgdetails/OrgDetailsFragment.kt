@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.di.MyApplication
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory
+import kotlinx.android.synthetic.main.fragment_org_details.*
 import javax.inject.Inject
 
 /**
@@ -25,6 +26,8 @@ class OrgDetailsFragment : Fragment() {
     lateinit var viewModelFactory: ViewModelFactory
 
     private lateinit var orgDetailsViewModel: OrgDetailsViewModel
+    private lateinit var orgName: String
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -43,16 +46,26 @@ class OrgDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated")
 
+        arguments?.let {
+            orgName = OrgDetailsFragmentArgs.fromBundle(it).orgName
+            orgNameTextView.text = orgName
+        } ?: Log.e(TAG, "onViewCreated: arguments (Bundle.arguments) null")
+
+        // TODO restore on config changes
+
         orgDetailsViewModel = ViewModelProviders.of(activity!!, viewModelFactory)
             .get(OrgDetailsViewModel::class.java)
+        orgDetailsViewModel.fetchReposForOrg(orgName)
+    }
 
-//        arguments?.let {
-//            val orgNameArg = OrgDetailsFragmentArgs.fromBundle(it).orgName
-//            orgNameTextView.text = orgNameArg
-//
-//            // TODO remove Toast
-//            Toast.makeText(activity, "orgName argument: $orgNameArg", Toast.LENGTH_SHORT).show()
-//        } ?: Log.e(TAG, "onViewCreated: arguments (Bundle.arguments) null")
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // TODO
+
+    }
+
+    companion object {
+        private const val REPO_COUNT_TO_SHOW = 3
     }
 
 }
