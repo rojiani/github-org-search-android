@@ -1,4 +1,4 @@
-package com.nrojiani.githuborgsearch.ui.orgdetails
+package com.nrojiani.githuborgsearch.ui.orgrepos
 
 import android.os.Bundle
 import android.util.Log
@@ -8,12 +8,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.nrojiani.githuborgsearch.R
-import kotlinx.android.synthetic.main.fragment_org_details.*
+import kotlinx.android.synthetic.main.fragment_top_repos.*
 
 /**
- * TODO
+ * Fragment which displays the top 3 (most-starred) repos for
+ * an organization.
  */
-class OrgDetailsFragment : Fragment() {
+class TopReposFragment : Fragment() {
 
     private val TAG by lazy { this::class.java.simpleName }
 
@@ -21,7 +22,7 @@ class OrgDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_org_details, container, false)
+        return inflater.inflate(R.layout.fragment_top_repos, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
