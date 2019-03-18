@@ -3,7 +3,7 @@ package com.nrojiani.githuborgsearch.model
 import com.squareup.moshi.Json
 
 data class Organization(
-    val name: String,
+    val name: String = "(name missing)",
     val login: String,
     @Json(name = "avatar_url") val avatarUrl: String
 )

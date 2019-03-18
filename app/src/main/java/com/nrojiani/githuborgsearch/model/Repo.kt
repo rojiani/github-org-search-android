@@ -8,9 +8,8 @@ import com.squareup.moshi.Json
 data class Repo(
     val id: Long,
     val name: String,
-    val fullName: String,
-    val description: String,
-    val owner: Owner,
+    @Json(name = "full_name") val fullName: String,
+    val description: String? = "",
     @Json(name = "stargazers_count") val stars: Long,
     @Json(name = "forks_count") val forks: Long
 )
