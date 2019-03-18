@@ -44,6 +44,7 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d(TAG, "onCreateView")
         return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
@@ -53,8 +54,19 @@ class SearchFragment : Fragment() {
         viewModel = ViewModelProviders.of(activity!!, viewModelFactory)
             .get(SearchViewModel::class.java)
 
+        Log.d(TAG, "onViewCreated: savedInstanceState: $savedInstanceState")
+
         savedInstanceState?.let {
             viewModel.restoreFromBundle(savedInstanceState)
+            viewModel.getOrganization().value?.let {
+                orgCardView.isVisible = true
+            }
+        }
+
+        Log.d(TAG, "onViewCreated: after viewModel.restoreFromBundle - viewModel.getOrg ${viewModel.getOrganization()?.value}")
+        viewModel.getOrganization().value?.let { org ->
+            Log.d(TAG, "onViewCreated: show card result (after process death)")
+            showOrgCardResult(org)
         }
 
         initViews()
@@ -63,7 +75,9 @@ class SearchFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(SearchViewModel.ORG_SEARCH_INPUT_KEY, searchEditText.text.toString())
+        if (searchEditText.text.toString().isNotBlank()) {
+            outState.putString(SearchViewModel.ORG_SEARCH_INPUT_KEY, searchEditText.text.toString())
+        }
         viewModel.saveToBundle(outState)
     }
 
@@ -101,9 +115,7 @@ class SearchFragment : Fragment() {
 
         orgCardView.setOnClickListener {
             Log.d(TAG, "orgCardView onClickListener (unimplemented)")
-//            val orgName = orgCardNameTextView.text.toString()
-//            Log.d(TAG, "orgCardView: orgName (will be passed to detail frag): $orgName")
-            val orgNameArg = viewModel.getOrganization().value?.name ?: ""
+            val orgNameArg = searchEditText.text?.toString() ?: ""
             Log.d(TAG, "orgCardView: orgName (will be passed to detail frag): $orgNameArg")
             val action =
                 SearchFragmentDirections.actionSearchFragmentToOrgDetailsFragment(orgNameArg)

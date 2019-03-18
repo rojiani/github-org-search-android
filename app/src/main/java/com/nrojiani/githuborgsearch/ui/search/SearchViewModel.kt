@@ -26,7 +26,6 @@ class SearchViewModel
 
     private val organization: MutableLiveData<Organization?>
             by lazy { MutableLiveData<Organization?>() }
-
     private val orgLoadErrorMessage: MutableLiveData<String?> by lazy { MutableLiveData<String?>() }
     private val loading: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
 
@@ -87,13 +86,12 @@ class SearchViewModel
         }
     }
 
+    /** Restore LiveData after app killed by system */
     fun restoreFromBundle(savedInstanceState: Bundle?) {
         // Restore organization data (if it was present)
-        organization.value?.let {
-            savedInstanceState?.getStringArray(ORG_DETAILS_KEY)?.let { orgData ->
-                val (name, login, avatarUrl) = orgData
-                organization.value = Organization(name, login, avatarUrl)
-            }
+        savedInstanceState?.getStringArray(ORG_DETAILS_KEY)?.let { orgData ->
+            val (name, login, avatarUrl) = orgData
+            organization.value = Organization(name, login, avatarUrl)
         }
 
         // Restore search field contents
