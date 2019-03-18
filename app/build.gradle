@@ -49,6 +49,7 @@ dependencies {
     implementation "com.saurabharora.customtabs:customtabs:$rootProject.customTabsKotlinVersion"
     implementation "com.squareup.picasso:picasso:$rootProject.picassoVersion"
     implementation "com.squareup.moshi:moshi:$rootProject.moshiVersion"
+    implementation "com.squareup.moshi:moshi-kotlin:$rootProject.moshiVersion"
     implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
     implementation "com.squareup.retrofit2:converter-moshi:$rootProject.retrofitVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$rootProject.kotlinVersion"

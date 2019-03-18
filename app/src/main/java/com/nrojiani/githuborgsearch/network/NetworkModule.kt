@@ -1,5 +1,7 @@
 package com.nrojiani.githuborgsearch.network
 
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -21,7 +23,11 @@ abstract class NetworkModule {
         @Singleton
         fun provideRetrofit(): Retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(
+                Moshi.Builder()
+                    .add(KotlinJsonAdapterFactory())
+                    .build()
+            ))
             .build()
 
         @JvmStatic
