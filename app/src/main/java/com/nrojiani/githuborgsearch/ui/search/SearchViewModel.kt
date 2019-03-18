@@ -1,6 +1,7 @@
 package com.nrojiani.githuborgsearch.ui.search
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.nrojiani.githuborgsearch.model.Organization
@@ -33,11 +34,21 @@ class SearchViewModel
     private val organization: MutableLiveData<Organization>
             by lazy { MutableLiveData<Organization>() }
 
+
     private val orgLoadError: MutableLiveData<Boolean>
             by lazy { MutableLiveData<Boolean>() }
 
     private val loading: MutableLiveData<Boolean>
             by lazy { MutableLiveData<Boolean>() }
+
+    fun getOrganization(): LiveData<Organization> = organization
+    fun setOrganization(org: Organization) {
+        organization.value = org
+    }
+
+    fun getError(): LiveData<Boolean> = orgLoadError
+    fun getLoading(): LiveData<Boolean> = loading
+
 
     private lateinit var orgCall: Call<Organization>
 
