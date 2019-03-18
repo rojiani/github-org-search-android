@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/instructions_label"
             android:imeOptions="actionSearch"
+            android:autofillHints="@string/search_edit_text_autofill_hint"
             android:inputType="text" />
 
     </com.google.android.material.textfield.TextInputLayout>
