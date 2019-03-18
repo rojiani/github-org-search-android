@@ -141,7 +141,7 @@ class SearchFragment : Fragment() {
         })
 
         // If loading
-        viewModel.getLoading().observe(this, Observer<Boolean> { isLoading ->
+        viewModel.isLoading().observe(this, Observer<Boolean> { isLoading ->
             if (isLoading) {
                 progressBar.isVisible = true
                 errorTextView.isInvisible = true

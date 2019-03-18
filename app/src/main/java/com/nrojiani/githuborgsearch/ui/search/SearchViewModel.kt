@@ -22,13 +22,13 @@ class SearchViewModel
     /* publicly exposed LiveData */
     fun getOrganization(): LiveData<Organization?> = organization
     fun getOrgLoadErrorMessage(): LiveData<String?> = orgLoadErrorMessage
-    fun getLoading(): LiveData<Boolean> = isLoading
+    fun isLoading(): LiveData<Boolean> = loading
 
     private val organization: MutableLiveData<Organization?>
             by lazy { MutableLiveData<Organization?>() }
 
     private val orgLoadErrorMessage: MutableLiveData<String?> by lazy { MutableLiveData<String?>() }
-    private val isLoading: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
+    private val loading: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
 
     /** Search EditText contents */
     private var orgSearchInput: String = ""
@@ -40,7 +40,7 @@ class SearchViewModel
      * Try to retrieve the details for a GitHub Organization.
      */
     fun fetchOrgDetails(searchInput: String) {
-        isLoading.value = true
+        loading.value = true
         orgCall = gitHubService.getOrg(searchInput)
 
         orgCall?.enqueue(object : Callback<Organization> {
@@ -56,17 +56,17 @@ class SearchViewModel
 
                 if (organization.value != null) {
                     orgLoadErrorMessage.value = null
-                    isLoading.value = false
+                    loading.value = false
                 } else {
                     orgLoadErrorMessage.value = response.message()
-                    isLoading.value = false
+                    loading.value = false
                 }
             }
 
             override fun onFailure(call: Call<Organization>, t: Throwable) {
                 Log.e(TAG, t.message, t)
                 orgLoadErrorMessage.value = "GitHubService call failed (check org name)"
-                isLoading.value = false
+                loading.value = false
             }
         })
     }
