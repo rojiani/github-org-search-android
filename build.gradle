@@ -28,6 +28,7 @@ buildscript {
         materialVersion = '1.1.0-alpha04'
         moshiVersion = '1.8.0'
         navigationVersion = '2.0.0'
+        picassoVersion = '2.5.2'
         recyclerViewVersion = '1.1.0-alpha02'
         retrofitVersion = '2.5.0'
     }

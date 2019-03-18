@@ -3,4 +3,5 @@
     <!--<color name="colorPrimary">#24282D</color>-->
     <!--<color name="colorPrimaryDark">#2D2924</color>-->
     <!--<color name="colorAccent">#FFF8FF</color>-->
+    <color name="colorError">#EA394B</color>
 </resources>

@@ -1,6 +1,7 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorError">@color/colorError</item>
         <!-- Customize your theme here. -->
     </style>
 
