@@ -1,11 +1,10 @@
 package com.nrojiani.githuborgsearch.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.nrojiani.githuborgsearch.R
-import com.nrojiani.githuborgsearch.ui.search.SearchFragment
 
 class MainActivity : AppCompatActivity() {
 

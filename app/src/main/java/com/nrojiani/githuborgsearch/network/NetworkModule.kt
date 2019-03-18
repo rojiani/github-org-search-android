@@ -37,9 +37,7 @@ abstract class NetworkModule {
             retrofit.create(GitHubService::class.java)
 
 
-        /** TODO - combine? Where is provideRetrofit even used?
-         *
-         *
+        /** TODO - combine?
          * ```kotlin
          * @Provides
          * @Singleton

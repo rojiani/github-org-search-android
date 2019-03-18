@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Widget.MaterialComponents.CardView"
-    tools:showIn="@layout/fragment_search"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
@@ -11,8 +10,9 @@
     android:layout_marginEnd="8dp"
     android:minHeight="200dp"
     app:cardBackgroundColor="@android:color/transparent"
-    app:cardElevation="0dp"
-    app:cardPreventCornerOverlap="true">
+    app:cardElevation="2dp"
+    app:cardPreventCornerOverlap="true"
+    tools:showIn="@layout/fragment_search">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -26,7 +26,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
-            android:text="The New York Times"
+            android:text="@string/sample_org_name"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textColor="#DE000000"
             android:textSize="18sp"
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:text="nytimes"
+            android:text="@string/sample_org_login"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="#8A000000"
             app:layout_constraintEnd_toStartOf="@+id/orgCardImageView"

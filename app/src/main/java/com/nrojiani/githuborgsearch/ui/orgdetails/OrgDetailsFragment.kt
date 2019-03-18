@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.di.MyApplication
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory
@@ -41,6 +42,10 @@ class OrgDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated")
+
+        orgDetailsViewModel = ViewModelProviders.of(activity!!, viewModelFactory)
+            .get(OrgDetailsViewModel::class.java)
+
 //        arguments?.let {
 //            val orgNameArg = OrgDetailsFragmentArgs.fromBundle(it).orgName
 //            orgNameTextView.text = orgNameArg
