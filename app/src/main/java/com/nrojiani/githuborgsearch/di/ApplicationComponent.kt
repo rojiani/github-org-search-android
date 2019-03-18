@@ -1,7 +1,7 @@
 package com.nrojiani.githuborgsearch.di
 
 import com.nrojiani.githuborgsearch.network.NetworkModule
-import com.nrojiani.githuborgsearch.ui.orgrepos.OrgDetailsFragment
+import com.nrojiani.githuborgsearch.ui.orgdetails.OrgDetailsFragment
 import com.nrojiani.githuborgsearch.ui.search.SearchFragment
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelModule
 import dagger.Component

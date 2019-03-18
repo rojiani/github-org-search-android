@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/orgDetailsFragment"
-        android:name="com.nrojiani.githuborgsearch.ui.orgrepos.OrgDetailsFragment"
+        android:name="com.nrojiani.githuborgsearch.ui.orgdetails.OrgDetailsFragment"
         android:label="OrgDetailsFragment"
         tools:layout="@layout/fragment_org_details">
         <argument

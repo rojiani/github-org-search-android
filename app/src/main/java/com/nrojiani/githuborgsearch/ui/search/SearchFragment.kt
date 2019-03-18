@@ -2,6 +2,7 @@ package com.nrojiani.githuborgsearch.ui.search
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,6 +55,9 @@ class SearchFragment : Fragment() {
     private fun initViews() {
         // When search button is clicked, trigger callback
         searchButton.setOnClickListener {
+            // TODO
+            Log.d(TAG, "searchButton onClickListener")
+
             val orgQuery = searchEditText.text.toString()
             if (orgQuery.isNullOrBlank()) {
                 searchEditText.error = "Invalid organization name"
@@ -67,9 +71,12 @@ class SearchFragment : Fragment() {
         }
 
         orgCardView.setOnClickListener {
+            Log.d(TAG, "orgCardView onClickListener (unimplemented)")
             val orgName = orgCardNameTextView.text.toString()
-            val action = SearchFragmentDirections.actionSearchFragmentToOrgDetailsFragment(orgName)
-            findNavController().navigate(action)
+            Log.d(TAG, "orgCardView: orgName (will be passed to detail")
+            // TODO generated name change
+            //val action = SearchFragmentDirections.actionSearchFragmentToOrgDetailsFragment(orgName)
+            // findNavController().navigate(action)
         }
     }
 

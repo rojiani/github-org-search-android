@@ -1,6 +1,7 @@
 package com.nrojiani.githuborgsearch.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.nrojiani.githuborgsearch.ui.orgdetails.OrgDetailsViewModel
 import com.nrojiani.githuborgsearch.ui.search.SearchViewModel
 import dagger.Binds
 import dagger.Module
@@ -16,6 +17,7 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(OrgViewModel::class)
-    abstract fun bindOrgViewModel(viewModel: OrgViewModel): ViewModel
+    @ViewModelKey(OrgDetailsViewModel::class)
+    abstract fun bindOrgDetailsViewModel(viewModel: OrgDetailsViewModel): ViewModel
+
 }
