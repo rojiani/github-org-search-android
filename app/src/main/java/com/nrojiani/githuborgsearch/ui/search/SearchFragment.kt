@@ -76,8 +76,14 @@ class SearchFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         if (searchEditText.text.toString().isNotBlank()) {
-            outState.putString(SearchViewModel.ORG_SEARCH_INPUT_KEY, searchEditText.text.toString())
+            outState.putString(SearchViewModel.KEY_ORG_SEARCH_INPUT, searchEditText.text.toString())
         }
+        viewModel.getOrganization().value?.let { org ->
+            outState.putParcelable(SearchViewModel.KEY_ORGANIZATION, org)
+            Log.d(TAG, "onSaveInstanceState: parcelable org added to bundle:" +
+                    "${outState.getParcelable<Organization>(SearchViewModel.KEY_ORGANIZATION)}")
+        }
+
         viewModel.saveToBundle(outState)
     }
 

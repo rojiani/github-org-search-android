@@ -77,32 +77,27 @@ class SearchViewModel
 
     fun saveToBundle(outState: Bundle) {
         organization.value?.let { org ->
-            outState.putStringArray(
-                ORG_DETAILS_KEY,
-                arrayOf(org.name, org.login, org.avatarUrl)
-            )
-
-            outState.putString(ORG_SEARCH_INPUT_KEY, orgSearchInput)
+            outState.putParcelable(KEY_ORGANIZATION, org)
+            outState.putString(KEY_ORG_SEARCH_INPUT, orgSearchInput)
         }
     }
 
     /** Restore LiveData after app killed by system */
     fun restoreFromBundle(savedInstanceState: Bundle?) {
         // Restore organization data (if it was present)
-        savedInstanceState?.getStringArray(ORG_DETAILS_KEY)?.let { orgData ->
-            val (name, login, avatarUrl) = orgData
-            organization.value = Organization(name, login, avatarUrl)
+        savedInstanceState?.getParcelable<Organization>(KEY_ORGANIZATION)?.let { org ->
+            organization.value = org
         }
 
         // Restore search field contents
-        savedInstanceState?.getString(ORG_SEARCH_INPUT_KEY)?.let {
+        savedInstanceState?.getString(KEY_ORG_SEARCH_INPUT)?.let {
             orgSearchInput = it
         }
     }
 
     companion object {
-        const val ORG_SEARCH_INPUT_KEY = "search_input"
-        private const val ORG_DETAILS_KEY = "org_details"
+        const val KEY_ORG_SEARCH_INPUT = "search_input"
+        const val KEY_ORGANIZATION = "org_parcelable"
     }
 }
 
