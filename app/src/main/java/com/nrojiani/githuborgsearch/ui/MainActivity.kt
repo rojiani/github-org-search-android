@@ -16,10 +16,12 @@ class MainActivity : AppCompatActivity() {
 
         Log.d(TAG, "onCreate")
 
-        val host = NavHostFragment.create(R.navigation.nav_graph)
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, host)
-            .setPrimaryNavigationFragment(host)
-            .commit()
+        if (savedInstanceState == null) {
+            val host = NavHostFragment.create(R.navigation.nav_graph)
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, host)
+                .setPrimaryNavigationFragment(host)
+                .commit()
+        }
     }
 }

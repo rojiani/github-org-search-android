@@ -19,84 +19,91 @@ class SearchViewModel
 
     private val TAG by lazy { this::class.java.simpleName }
 
-    private val orgSearchInput: MutableLiveData<String> by lazy { MutableLiveData<String>() }
-    fun getOrgSearchInput(): LiveData<String> = orgSearchInput
+    /* publicly exposed LiveData */
+    fun getOrganization(): LiveData<Organization?> = organization
+    fun getOrgLoadErrorMessage(): LiveData<String?> = orgLoadErrorMessage
+    fun getLoading(): LiveData<Boolean> = isLoading
+
+    private val organization: MutableLiveData<Organization?>
+            by lazy { MutableLiveData<Organization?>() }
+
+    private val orgLoadErrorMessage: MutableLiveData<String?> by lazy { MutableLiveData<String?>() }
+    private val isLoading: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
+
+    /** Search EditText contents */
+    private var orgSearchInput: String = ""
+
+    private var orgCall: Call<Organization>? = null
 
 
-    private val organization: MutableLiveData<Organization>
-            by lazy { MutableLiveData<Organization>() }
-    fun getOrganization(): LiveData<Organization> = organization
-    fun setOrganization(org: Organization) {
-        organization.value = org
-    }
+    /**
+     * Try to retrieve the details for a GitHub Organization.
+     */
+    fun fetchOrgDetails(searchInput: String) {
+        isLoading.value = true
+        orgCall = gitHubService.getOrg(searchInput)
 
-    private val orgLoadError: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
-    fun getOrgLoadError(): LiveData<Boolean> = orgLoadError
-
-    private val loading: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
-    fun getLoading(): LiveData<Boolean> = loading
-
-    private lateinit var orgCall: Call<Organization>
-
-    fun fetchOrgDetails(orgSearchInput: String) {
-        loading.value = true
-        orgCall = gitHubService.getOrg(orgSearchInput)
-
-        orgCall.enqueue(object : Callback<Organization> {
+        orgCall?.enqueue(object : Callback<Organization> {
             override fun onResponse(call: Call<Organization>, response: Response<Organization>) {
+                // DEBUG
                 Log.d(TAG, "fetchOrgDetails - onResponse: response = $response")
-                Log.d(TAG, "fetchOrgDetails - response body: ${response.body()}")
+                Log.d(TAG, "fetchOrgDetails - onResponse: response body = ${response.body()}")
 
                 // TODO - handle case with incomplete data, e.g., "NYTime"
                 // - org exists but no name (because it was a typo)
 
-                orgLoadError.value = false
-                loading.value = false
                 organization.value = response.body()
+
+                if (organization.value != null) {
+                    orgLoadErrorMessage.value = null
+                    isLoading.value = false
+                } else {
+                    orgLoadErrorMessage.value = response.message()
+                    isLoading.value = false
+                }
             }
 
             override fun onFailure(call: Call<Organization>, t: Throwable) {
                 Log.e(TAG, t.message, t)
-                orgLoadError.value = true
-                loading.value = false
+                orgLoadErrorMessage.value = "GitHubService call failed (check org name)"
+                isLoading.value = false
             }
         })
+    }
 
+    override fun onCleared() {
+        super.onCleared()
+        orgCall?.cancel()
     }
 
     fun saveToBundle(outState: Bundle) {
-        val org = organization.value
-        org?.let {
+        organization.value?.let { org ->
             outState.putStringArray(
                 ORG_DETAILS_KEY,
                 arrayOf(org.name, org.login, org.avatarUrl)
             )
 
-            Log.d(TAG, "saveToBundle: saved data ${outState.getStringArray(ORG_DETAILS_KEY).toList()}")
-        } ?: Log.d(TAG, "saveToBundle: org null - not saved")
+            outState.putString(ORG_SEARCH_INPUT_KEY, orgSearchInput)
+        }
     }
 
     fun restoreFromBundle(savedInstanceState: Bundle?) {
-        // We only care about restoring if we have Organization details
+        // Restore organization data (if it was present)
         organization.value?.let {
-            savedInstanceState?.containsKey(ORG_DETAILS_KEY)?.let {
-                val orgData = savedInstanceState.getStringArray(ORG_DETAILS_KEY)
-                Log.d(TAG, "restoreFromBundle: orgData: $orgData")
-                orgData?.let {
-                    val (name, login, avatarUrl) = it
-                    organization.value = Organization(name, login, avatarUrl)
-                }
-                Log.d(TAG, "restoreFromBundle: organization.value: ${organization.value}")
+            savedInstanceState?.getStringArray(ORG_DETAILS_KEY)?.let { orgData ->
+                val (name, login, avatarUrl) = orgData
+                organization.value = Organization(name, login, avatarUrl)
             }
-        } ?: Log.d(TAG, "restoreFromBundle: organization was null - nothing to restore")
-    }
+        }
 
-    override fun onCleared() {
-        super.onCleared()
-        orgCall.cancel()
+        // Restore search field contents
+        savedInstanceState?.getString(ORG_SEARCH_INPUT_KEY)?.let {
+            orgSearchInput = it
+        }
     }
 
     companion object {
+        const val ORG_SEARCH_INPUT_KEY = "search_input"
         private const val ORG_DETAILS_KEY = "org_details"
     }
 }

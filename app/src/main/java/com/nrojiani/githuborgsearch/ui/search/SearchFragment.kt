@@ -12,12 +12,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.di.MyApplication
 import com.nrojiani.githuborgsearch.model.Organization
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.card_org.*
 import kotlinx.android.synthetic.main.card_org.view.*
 import kotlinx.android.synthetic.main.fragment_search.*
 import javax.inject.Inject
@@ -53,7 +53,9 @@ class SearchFragment : Fragment() {
         viewModel = ViewModelProviders.of(activity!!, viewModelFactory)
             .get(SearchViewModel::class.java)
 
-        viewModel.restoreFromBundle(savedInstanceState)
+        savedInstanceState?.let {
+            viewModel.restoreFromBundle(savedInstanceState)
+        }
 
         initViews()
         observeViewModel()
@@ -61,64 +63,80 @@ class SearchFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        outState.putString(SearchViewModel.ORG_SEARCH_INPUT_KEY, searchEditText.text.toString())
         viewModel.saveToBundle(outState)
     }
 
     private fun initViews() {
         // TODO: listen for Android keyboard search button
-
+        // TODO: tap outside of keyboard dismisses it
+        searchButton.setOnEditorActionListener { textView, actionId, keyEvent ->
+            when (actionId) {
+                EditorInfo.IME_ACTION_DONE -> {
+                    Log.d(TAG, "setOnEditorActionListener - IME_ACTION_DONE")
+                    true
+                }
+                else -> {
+                    Log.d(TAG, "setOnEditorActionListener - action: $actionId")
+                    false
+                }
+            }
+        }
 
         // When search button is clicked, trigger callback
         searchButton.setOnClickListener {
             Log.d(TAG, "searchButton onClickListener")
 
             val orgQuery = searchEditText.text.toString()
-            if (orgQuery.isNullOrBlank()) {
+            if (orgQuery.isBlank()) {
                 searchEditText.error = "Invalid organization name"
             } else {
                 // Dismiss Keyboard
                 searchEditText.onEditorAction(EditorInfo.IME_ACTION_DONE)
 
                 // Trigger API call
-                val searchViewModel = ViewModelProviders.of(activity!!, viewModelFactory)
-                    .get(SearchViewModel::class.java)
-                // searchViewModel.setOrganization(repo)
-                searchViewModel.fetchOrgDetails(orgQuery)
+                viewModel.fetchOrgDetails(orgQuery)
             }
         }
 
         orgCardView.setOnClickListener {
             Log.d(TAG, "orgCardView onClickListener (unimplemented)")
-            val orgName = orgCardNameTextView.text.toString()
-            Log.d(TAG, "orgCardView: orgName (will be passed to detail frag): $orgName")
-            // TODO generated name change
-            //val action = SearchFragmentDirections.actionSearchFragmentToOrgDetailsFragment(orgName)
-            // findNavController().navigate(action)
+//            val orgName = orgCardNameTextView.text.toString()
+//            Log.d(TAG, "orgCardView: orgName (will be passed to detail frag): $orgName")
+            val orgNameArg = viewModel.getOrganization().value?.name ?: ""
+            Log.d(TAG, "orgCardView: orgName (will be passed to detail frag): $orgNameArg")
+            val action =
+                SearchFragmentDirections.actionSearchFragmentToOrgDetailsFragment(orgNameArg)
+            findNavController().navigate(action)
         }
     }
 
     private fun observeViewModel() {
-        viewModel.getOrgSearchInput().observe(this, Observer<String> { query ->
-            // TODO trigger on input?
-            Log.d(TAG, "observeViewModel - orgSearchInput: $query")
-        })
+        viewModel.getOrganization().observe(this, Observer { org: Organization? ->
+            if (org == null) {
+                // DEBUG
+                Log.d(TAG, "observeViewModel: Observer<Organization?> - org was null")
+            }
 
-        viewModel.getOrganization().observe(this, Observer<Organization> { org ->
-            progressBar.isInvisible = true
-            errorTextView.isInvisible = true
-            showOrgCardResult(org)
+            org?.let {
+                progressBar.isInvisible = true
+                errorTextView.isInvisible = true
+                showOrgCardResult(org)
+            }
         })
-
 
         // Error message
-        viewModel.getOrgLoadError().observe(this, Observer<Boolean> { hasError ->
-            if (hasError) {
-                orgCardView.isInvisible = true
-                errorTextView.isVisible = true
-                errorTextView.text = getString(R.string.api_error_loading_org)
-            } else {
-                errorTextView.isInvisible = true
-                errorTextView.text = null
+        viewModel.getOrgLoadErrorMessage().observe(this, Observer { errorMessage: String? ->
+            when {
+                errorMessage.isNullOrBlank() -> {
+                    errorTextView.isInvisible = true
+                    errorTextView.text = ""
+                }
+                else -> {
+                    orgCardView.isInvisible = true
+                    errorTextView.isVisible = true
+                    errorTextView.text = generateErrorMessage()
+                }
             }
         })
 
@@ -147,6 +165,12 @@ class SearchFragment : Fragment() {
                 .load(org.avatarUrl)
                 .into(orgCardImageView)
         }
+    }
 
+    private fun generateErrorMessage(): String? = buildString {
+        append(getString(R.string.api_error_loading_org))
+        viewModel?.getOrgLoadErrorMessage()?.value?.let { e ->
+            append(":\n$e")
+        }
     }
 }

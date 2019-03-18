@@ -14,6 +14,7 @@ Android Architecture Components:
 Dagger 2
 Retrofit+Moshi
 Espresso + JUnit
+Picasso
 
 ## Instructions ##
 

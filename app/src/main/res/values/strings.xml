@@ -2,11 +2,11 @@
     <string name="app_name">GitHubOrgSearch</string>
 
     <string name="instructions_label">Search Organizations:</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search_button_label">Search</string>
     <string name="search_edit_text_autofill_hint">Organization Name</string>
     <string name="error_organization_not_found">Organization not found. Please check input.</string>
     <string name="api_error_loading_org">Error loading Organization details</string>
     <string name="sample_org_name">The New York Times</string>
     <string name="sample_org_login">nytimes</string>
+    <string name="organization_avatar_content_desc">Organization Avatar</string>
 </resources>
