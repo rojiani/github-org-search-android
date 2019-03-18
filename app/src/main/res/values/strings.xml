@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">GitHubOrgSearch</string>
+
+    <string name="instructions_label">Search Organizations:</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search_button_label">Search</string>
+    <string name="search_edit_text_autofill_hint">Organization Name</string>
 </resources>

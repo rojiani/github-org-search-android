@@ -9,6 +9,7 @@ Github Organizations Search
 AndroidX
 Android Architecture Components:
 * LiveData
+* Navigation
 * ViewModel
 Dagger 2
 Retrofit+Moshi

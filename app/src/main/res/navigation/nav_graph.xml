@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/searchFragment">
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.nrojiani.githuborgsearch.ui.search.SearchFragment"
+        android:label="SearchFragment"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_searchFragment_to_orgDetailsFragment"
+            app:destination="@id/orgDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/orgDetailsFragment"
+        android:name="com.nrojiani.githuborgsearch.ui.orgdetails.OrgDetailsFragment"
+        android:label="OrgDetailsFragment"
+        tools:layout="@layout/fragment_org_details">
+        <argument
+            android:name="orgName"
+            android:defaultValue="NYTimes"
+            app:argType="string" />
+    </fragment>
+
+</navigation>
