@@ -83,8 +83,8 @@ class SearchFragment : Fragment(), OrgDetailsDisplayerFragment {
         }
         viewModel.getOrganization().value?.let { org ->
             outState.putParcelable(SearchViewModel.KEY_ORGANIZATION, org)
-            Log.d(
-                TAG, "onSaveInstanceState: parcelable org added to bundle:" +
+            Log.d(TAG,
+                "onSaveInstanceState: parcelable org added to bundle:" +
                         "${outState.getParcelable<Organization>(SearchViewModel.KEY_ORGANIZATION)}"
             )
         }

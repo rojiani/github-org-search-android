@@ -22,6 +22,8 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.fragment_container, host)
                 .setPrimaryNavigationFragment(host)
                 .commit()
+        } else {
+            Log.d(TAG, "onCreate - MainActivity - handle fragment restoration")
         }
     }
 }

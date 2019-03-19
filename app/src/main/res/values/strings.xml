@@ -6,9 +6,15 @@
     <string name="search_edit_text_autofill_hint">Organization Name</string>
     <string name="error_organization_not_found">Organization not found. Please check input.</string>
     <string name="api_error_loading_org">Error loading Organization details</string>
+    <string name="api_error_loading_repos">Error loading Repos</string>
     <string name="sample_org_name">The New York Times</string>
     <string name="sample_org_login">nytimes</string>
     <string name="organization_avatar_content_desc">Organization Avatar</string>
     <string name="sample_org_location">New York, NY</string>
     <string name="sample_org_blog">nytimes.com</string>
+    <string name="sample_repo_name">NYTPhotoViewer</string>
+    <string name="sample_repo_desc">A modern photo viewing experience for iOS.</string>
+    <string name="sample_repo_lang">Objective-C</string>
+    <string name="label_most_starred_repositories">Most Starred Repositories:</string>
+
 </resources>
