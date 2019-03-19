@@ -25,9 +25,8 @@
         android:label="OrgDetailsFragment"
         tools:layout="@layout/fragment_org_details">
         <argument
-            android:name="orgName"
-            android:defaultValue="NYTimes"
-            app:argType="string" />
+            android:name="selectedOrg"
+            app:argType="com.nrojiani.githuborgsearch.model.Organization" />
     </fragment>
 
 </navigation>

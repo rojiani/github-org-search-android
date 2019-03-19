@@ -8,24 +8,25 @@
     android:layout_marginStart="8dp"
     android:layout_marginTop="8dp"
     android:layout_marginEnd="8dp"
-    android:minHeight="200dp"
+    android:minHeight="148dp"
     app:cardBackgroundColor="@android:color/transparent"
     app:cardElevation="2dp"
-    app:cardCornerRadius="0dp"
     app:cardPreventCornerOverlap="true"
     tools:showIn="@layout/fragment_search">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:visibility="visible">
 
         <ImageView
             android:id="@+id/orgCardImageView"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="24dp"
             android:contentDescription="@string/organization_avatar_content_desc"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -50,12 +51,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:text="@string/sample_org_login"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             android:textColor="#8A000000"
-            app:layout_constraintStart_toEndOf="@+id/orgCardImageView"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/orgCardImageView"
             app:layout_constraintTop_toBottomOf="@+id/orgCardNameTextView" />
 
         <TextView
@@ -64,11 +65,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
-            android:text="@string/sample_org_location"
             android:drawableStart="@drawable/ic_location_on_black_24dp"
             android:drawablePadding="8dp"
-            app:layout_constraintStart_toEndOf="@+id/orgCardImageView"
+            android:text="@string/sample_org_location"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/orgCardImageView"
             app:layout_constraintTop_toBottomOf="@+id/orgCardLoginTextView" />
 
         <TextView
@@ -77,12 +78,27 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
-            android:text="@string/sample_org_blog"
+            android:autoLink="phone|web"
             android:drawableStart="@drawable/ic_link_black_24dp"
             android:drawablePadding="8dp"
-            app:layout_constraintStart_toEndOf="@+id/orgCardImageView"
+            android:text="@string/sample_org_blog"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/orgCardImageView"
             app:layout_constraintTop_toBottomOf="@+id/orgCardLocationTextView" />
+
+        <TextView
+            android:id="@+id/orgCardDetailsTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/orgCardImageView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

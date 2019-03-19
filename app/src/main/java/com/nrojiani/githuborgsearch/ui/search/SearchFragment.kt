@@ -63,7 +63,7 @@ class SearchFragment : Fragment() {
             }
         }
 
-        Log.d(TAG, "onViewCreated: after viewModel.restoreFromBundle - viewModel.getOrg ${viewModel.getOrganization()?.value}")
+        Log.d(TAG, "onViewCreated: after viewModel.restoreFromBundle - viewModel.getOrg ${viewModel.getOrganization().value}")
         viewModel.getOrganization().value?.let { org ->
             Log.d(TAG, "onViewCreated: show card result (after process death)")
             showOrgCardResult(org)
@@ -90,18 +90,8 @@ class SearchFragment : Fragment() {
     private fun initViews() {
         // TODO: listen for Android keyboard search button
         // TODO: tap outside of keyboard dismisses it
-        searchButton.setOnEditorActionListener { textView, actionId, keyEvent ->
-            when (actionId) {
-                EditorInfo.IME_ACTION_DONE -> {
-                    Log.d(TAG, "setOnEditorActionListener - IME_ACTION_DONE")
-                    true
-                }
-                else -> {
-                    Log.d(TAG, "setOnEditorActionListener - action: $actionId")
-                    false
-                }
-            }
-        }
+
+        // TODO does nothing
 
         // When search button is clicked, trigger callback
         searchButton.setOnClickListener {
@@ -120,11 +110,11 @@ class SearchFragment : Fragment() {
         }
 
         orgCardView.setOnClickListener {
-            Log.d(TAG, "orgCardView onClickListener (unimplemented)")
-            val orgNameArg = searchEditText.text?.toString() ?: ""
-            Log.d(TAG, "orgCardView: orgName (will be passed to detail frag): $orgNameArg")
-            val action =
-                SearchFragmentDirections.actionSearchFragmentToOrgDetailsFragment(orgNameArg)
+            val selectedOrg = viewModel.getOrganization().value!!// dev. error if null.
+            Log.d(TAG, "orgCardView.onClickListener: selectedOrg " +
+                    "(will be passed to detail frag): $selectedOrg")
+            val action = SearchFragmentDirections
+                .actionSearchFragmentToOrgDetailsFragment(selectedOrg)
             findNavController().navigate(action)
         }
     }
@@ -138,7 +128,7 @@ class SearchFragment : Fragment() {
 
             org?.let {
                 progressBar.isInvisible = true
-                errorTextView.isInvisible = true
+                errorTextView.isVisible = false
                 showOrgCardResult(org)
             }
         })
@@ -147,7 +137,7 @@ class SearchFragment : Fragment() {
         viewModel.getOrgLoadErrorMessage().observe(this, Observer { errorMessage: String? ->
             when {
                 errorMessage.isNullOrBlank() -> {
-                    errorTextView.isInvisible = true
+                    errorTextView.isVisible = false
                     errorTextView.text = ""
                 }
                 else -> {
@@ -162,7 +152,7 @@ class SearchFragment : Fragment() {
         viewModel.isLoading().observe(this, Observer<Boolean> { isLoading ->
             if (isLoading) {
                 progressBar.isVisible = true
-                errorTextView.isInvisible = true
+                errorTextView.isVisible = false
                 orgCardView.isInvisible = true
             } else {
                 progressBar.isInvisible = true
@@ -171,7 +161,7 @@ class SearchFragment : Fragment() {
     }
 
     /**
-     * Show the Organization result in a CardView.
+     * Show the Organization search result in a CardView.
      */
     private fun showOrgCardResult(org: Organization) {
         orgCardView.isVisible = true
@@ -184,26 +174,32 @@ class SearchFragment : Fragment() {
             orgCardNameTextView.text = org.name
             orgCardLoginTextView.text = org.login
 
-            if (org.location != null) {
+            if (org.location.isNullOrBlank()) {
+                orgCardLocationTextView.isVisible = false
+            } else {
                 orgCardLocationTextView.text = org.location
                 orgCardLocationTextView.isVisible = true
-            } else {
-                orgCardLocationTextView.isInvisible = true
             }
 
-            if (org.blogUrl != null) {
+            if (org.blogUrl.isNullOrBlank()) {
+                orgCardBlogTextView.isInvisible = true
+            } else {
                 orgCardBlogTextView.text = org.blogUrl
                 orgCardBlogTextView.isVisible = true
-            } else {
-                orgCardBlogTextView.isInvisible = true
             }
 
+            if (org.description.isNullOrBlank()) {
+                orgCardDetailsTextView.isVisible = false
+            } else {
+                orgCardDetailsTextView.text = org.description
+                orgCardDetailsTextView.isVisible = true
+            }
         }
     }
 
     private fun generateErrorMessage(): String? = buildString {
         append(getString(R.string.api_error_loading_org))
-        viewModel?.getOrgLoadErrorMessage()?.value?.let { e ->
+        viewModel.getOrgLoadErrorMessage().value?.let { e ->
             append(":\n$e")
         }
     }

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.nrojiani.githuborgsearch.model.Organization
 import com.nrojiani.githuborgsearch.model.Repo
 import com.nrojiani.githuborgsearch.network.GitHubService
 import retrofit2.Call
@@ -25,6 +26,14 @@ class OrgDetailsViewModel
     fun getRepos(): LiveData<List<Repo>?> = repos
     fun getRepoLoadErrorMessage(): LiveData<String?> = repoLoadErrorMessage
     fun isLoading(): LiveData<Boolean> = loading
+    fun getOrganization(): LiveData<Organization> = organization
+    fun setSelectedOrganization(org: Organization) {
+        organization.value = org
+    }
+
+    private val organization: MutableLiveData<Organization>
+            by lazy { MutableLiveData<Organization>() }
+
 
     private val repos: MutableLiveData<List<Repo>?> by lazy { MutableLiveData<List<Repo>?>() }
     private val repoLoadErrorMessage: MutableLiveData<String?> by lazy { MutableLiveData<String?>() }
