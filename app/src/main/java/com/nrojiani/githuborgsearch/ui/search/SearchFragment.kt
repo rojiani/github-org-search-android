@@ -177,11 +177,27 @@ class SearchFragment : Fragment() {
         orgCardView.isVisible = true
 
         orgCardView.apply {
-            orgCardNameTextView.text = org.name
-            orgCardLoginTextView.text = org.login
             Picasso.with(context)
                 .load(org.avatarUrl)
                 .into(orgCardImageView)
+
+            orgCardNameTextView.text = org.name
+            orgCardLoginTextView.text = org.login
+
+            if (org.location != null) {
+                orgCardLocationTextView.text = org.location
+                orgCardLocationTextView.isVisible = true
+            } else {
+                orgCardLocationTextView.isInvisible = true
+            }
+
+            if (org.blogUrl != null) {
+                orgCardBlogTextView.text = org.blogUrl
+                orgCardBlogTextView.isVisible = true
+            } else {
+                orgCardBlogTextView.isInvisible = true
+            }
+
         }
     }
 

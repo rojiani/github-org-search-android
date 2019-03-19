@@ -9,4 +9,6 @@
     <string name="sample_org_name">The New York Times</string>
     <string name="sample_org_login">nytimes</string>
     <string name="organization_avatar_content_desc">Organization Avatar</string>
+    <string name="sample_org_location">New York, NY</string>
+    <string name="sample_org_blog">nytimes.com</string>
 </resources>
