@@ -8,7 +8,7 @@
     tools:context=".ui.orgdetails.OrgDetailsFragment">
 
     <include
-        android:id="@+id/orgDetailsCardView"
+        android:id="@+id/detailsOrgCardView"
         layout="@layout/card_org"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

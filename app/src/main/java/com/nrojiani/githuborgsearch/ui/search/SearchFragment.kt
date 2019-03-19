@@ -16,9 +16,8 @@ import androidx.navigation.fragment.findNavController
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.di.MyApplication
 import com.nrojiani.githuborgsearch.model.Organization
+import com.nrojiani.githuborgsearch.ui.shared.OrgDetailsDisplayerFragment
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.card_org.view.*
 import kotlinx.android.synthetic.main.fragment_search.*
 import javax.inject.Inject
 
@@ -26,7 +25,7 @@ import javax.inject.Inject
  * Fragment associated with searching for an Organization and displaying
  * details about the Organization (or error messages if not found).
  */
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(), OrgDetailsDisplayerFragment {
 
     private val TAG by lazy { this::class.java.simpleName }
 
@@ -59,14 +58,18 @@ class SearchFragment : Fragment() {
         savedInstanceState?.let {
             viewModel.restoreFromBundle(savedInstanceState)
             viewModel.getOrganization().value?.let {
-                orgCardView.isVisible = true
+                searchOrgCardView.isVisible = true
             }
         }
 
-        Log.d(TAG, "onViewCreated: after viewModel.restoreFromBundle - viewModel.getOrg ${viewModel.getOrganization().value}")
+        Log.d(
+            TAG,
+            "onViewCreated: after viewModel.restoreFromBundle - viewModel.getOrg ${viewModel.getOrganization().value}"
+        )
         viewModel.getOrganization().value?.let { org ->
             Log.d(TAG, "onViewCreated: show card result (after process death)")
-            showOrgCardResult(org)
+            showOrgCardView(org)
+            // showOrgCardView(this, org)
         }
 
         initViews()
@@ -80,8 +83,10 @@ class SearchFragment : Fragment() {
         }
         viewModel.getOrganization().value?.let { org ->
             outState.putParcelable(SearchViewModel.KEY_ORGANIZATION, org)
-            Log.d(TAG, "onSaveInstanceState: parcelable org added to bundle:" +
-                    "${outState.getParcelable<Organization>(SearchViewModel.KEY_ORGANIZATION)}")
+            Log.d(
+                TAG, "onSaveInstanceState: parcelable org added to bundle:" +
+                        "${outState.getParcelable<Organization>(SearchViewModel.KEY_ORGANIZATION)}"
+            )
         }
 
         viewModel.saveToBundle(outState)
@@ -109,10 +114,12 @@ class SearchFragment : Fragment() {
             }
         }
 
-        orgCardView.setOnClickListener {
+        searchOrgCardView.setOnClickListener {
             val selectedOrg = viewModel.getOrganization().value!!// dev. error if null.
-            Log.d(TAG, "orgCardView.onClickListener: selectedOrg " +
-                    "(will be passed to detail frag): $selectedOrg")
+            Log.d(
+                TAG, "orgCardView.onClickListener: selectedOrg " +
+                        "(will be passed to detail frag): $selectedOrg"
+            )
             val action = SearchFragmentDirections
                 .actionSearchFragmentToOrgDetailsFragment(selectedOrg)
             findNavController().navigate(action)
@@ -129,7 +136,7 @@ class SearchFragment : Fragment() {
             org?.let {
                 progressBar.isInvisible = true
                 errorTextView.isVisible = false
-                showOrgCardResult(org)
+                showOrgCardView(org)
             }
         })
 
@@ -141,7 +148,7 @@ class SearchFragment : Fragment() {
                     errorTextView.text = ""
                 }
                 else -> {
-                    orgCardView.isInvisible = true
+                    searchOrgCardView.isInvisible = true
                     errorTextView.isVisible = true
                     errorTextView.text = generateErrorMessage()
                 }
@@ -153,48 +160,11 @@ class SearchFragment : Fragment() {
             if (isLoading) {
                 progressBar.isVisible = true
                 errorTextView.isVisible = false
-                orgCardView.isInvisible = true
+                searchOrgCardView.isInvisible = true
             } else {
                 progressBar.isInvisible = true
             }
         })
-    }
-
-    /**
-     * Show the Organization search result in a CardView.
-     */
-    private fun showOrgCardResult(org: Organization) {
-        orgCardView.isVisible = true
-
-        orgCardView.apply {
-            Picasso.with(context)
-                .load(org.avatarUrl)
-                .into(orgCardImageView)
-
-            orgCardNameTextView.text = org.name
-            orgCardLoginTextView.text = org.login
-
-            if (org.location.isNullOrBlank()) {
-                orgCardLocationTextView.isVisible = false
-            } else {
-                orgCardLocationTextView.text = org.location
-                orgCardLocationTextView.isVisible = true
-            }
-
-            if (org.blogUrl.isNullOrBlank()) {
-                orgCardBlogTextView.isInvisible = true
-            } else {
-                orgCardBlogTextView.text = org.blogUrl
-                orgCardBlogTextView.isVisible = true
-            }
-
-            if (org.description.isNullOrBlank()) {
-                orgCardDetailsTextView.isVisible = false
-            } else {
-                orgCardDetailsTextView.text = org.description
-                orgCardDetailsTextView.isVisible = true
-            }
-        }
     }
 
     private fun generateErrorMessage(): String? = buildString {

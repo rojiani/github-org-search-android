@@ -1,4 +1,4 @@
-package com.nrojiani.githuborgsearch.ui
+package com.nrojiani.githuborgsearch.ui.shared
 
 import android.os.Bundle
 import android.util.Log
