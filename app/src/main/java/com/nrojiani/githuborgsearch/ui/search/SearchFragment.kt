@@ -137,7 +137,7 @@ class SearchFragment : Fragment(), OrgDetailsDisplayerFragment {
 
     private fun observeViewModel() {
         viewModel.getOrganization().observe(this, Observer { org: Organization? ->
-            Log.d(TAG, "SearchViewModel getSelectedOrganization() changed to $org")
+            Log.d(TAG, "(Observer) SearchViewModel getSelectedOrganization() changed to $org")
 
             org?.let {
                 progressBar.isInvisible = true
@@ -148,7 +148,7 @@ class SearchFragment : Fragment(), OrgDetailsDisplayerFragment {
 
         // Error message
         viewModel.getOrgLoadErrorMessage().observe(this, Observer { errorMessage: String? ->
-            Log.d(TAG, "SearchViewModel getOrgLoadErrorMessage() changed to $errorMessage")
+            Log.d(TAG, "(Observer) SearchViewModel getOrgLoadErrorMessage() changed to $errorMessage")
             when {
                 errorMessage.isNullOrBlank() -> {
                     errorTextView.isVisible = false
@@ -164,7 +164,7 @@ class SearchFragment : Fragment(), OrgDetailsDisplayerFragment {
 
         // If loading
         viewModel.isLoading().observe(this, Observer<Boolean> { isLoading ->
-            Log.d(TAG, "SearchViewModel isLoading() changed to $isLoading")
+            Log.d(TAG, "(Observer) SearchViewModel isLoading() changed to $isLoading")
             if (isLoading) {
                 progressBar.isVisible = true
                 errorTextView.isVisible = false

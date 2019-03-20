@@ -35,7 +35,7 @@ class OrgDetailsFragment : Fragment(), OrgDetailsDisplayerFragment {
 
     // TODO
     fun onRepoSelected(repo: Repo) {
-        Log.d(TAG, "onRepoSelected")
+        Log.d(TAG, "onRepoSelected(repo = $repo)")
     }
 
     override fun onAttach(context: Context) {
@@ -93,41 +93,35 @@ class OrgDetailsFragment : Fragment(), OrgDetailsDisplayerFragment {
 
     private fun observeViewModel() {
         viewModel.getSelectedOrganization().observe(this, Observer { org: Organization? ->
-            Log.d(TAG, "OrgDetailsFragment getSelectedOrganization() changed to $org")
-
+            Log.d(TAG, "(Observer): OrgDetailsFragment getSelectedOrganization() changed to $org")
             org?.let {
                 showOrgCardView(org)
             }
         })
 
         viewModel.getAllRepos().observe(this, Observer { repos ->
-            Log.d(TAG, "OrgDetailsViewModel getAllRepos() changed to $repos")
-            if (repos != null) {
-                recyclerView.isVisible = true
-                repoProgressBar.isVisible = false
-                repoErrorTextView.isVisible = false
+            Log.d(TAG, "(Observer): OrgDetailsViewModel getAllRepos() changed to $repos")
+            if (repos.isNullOrEmpty()) {
             } else {
-                Log.w(TAG, "OrgDetailsViewModel getAllRepos() changed to NULL")
+                recyclerView.isVisible = true
             }
         })
 
-
         // Error message
         viewModel.getRepoLoadErrorMessage().observe(this, Observer { errorMessage ->
-            Log.d(TAG, "OrgDetailsViewModel getRepoLoadErrorMessage() changed to $errorMessage")
-            if (errorMessage != null) {
+            Log.d(TAG, "(Observer): OrgDetailsViewModel getRepoLoadErrorMessage() changed to $errorMessage")
+            if (errorMessage.isNullOrBlank()) {
+                repoErrorTextView.isVisible = false
+            } else {
                 recyclerView.isVisible = false
                 repoErrorTextView.isVisible = true
                 repoErrorTextView.text = getString(R.string.api_error_loading_repos)
-            } else {
-                repoErrorTextView.isVisible = false
-                repoErrorTextView.text = ""
             }
         })
 
         // If loading
         viewModel.isLoading().observe(this, Observer<Boolean> { isLoading ->
-            Log.d(TAG, "OrgDetailsViewModel isLoading() changed to $isLoading")
+            Log.d(TAG, "(Observer): OrgDetailsViewModel isLoading() changed to $isLoading")
             repoProgressBar.isVisible = isLoading
             if (isLoading) {
                 repoErrorTextView.isVisible = false

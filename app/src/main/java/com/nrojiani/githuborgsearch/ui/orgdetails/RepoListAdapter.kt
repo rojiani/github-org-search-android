@@ -18,18 +18,18 @@ class RepoListAdapter(
 ) : RecyclerView.Adapter<RepoListAdapter.RepoViewHolder>() {
 
     private val allRepos: MutableList<Repo> = ArrayList()
-//    private val mostStarredRepos: List<Repo>
-//        get() = allRepos.sortedByDescending { it.stars }
-//                .take(OrgDetailsViewModel.REPO_COUNT_TO_SHOW)
+    private val mostStarredRepos: List<Repo>
+        get() = allRepos.sortedByDescending { it.stars }
+            .take(OrgDetailsViewModel.REPO_COUNT_TO_SHOW)
 
     private val TAG by lazy { this::class.java.simpleName }
 
     init {
         // Subscribe to changes in the fetched repositories.
         viewModel.getAllRepos().observe(lifecycleOwner, Observer { newRepoList ->
-            Log.d(TAG, "OrgDetailsViewModel getAllRepos() changed to $newRepoList")
+            Log.d(TAG, "(Observer) OrgDetailsViewModel getAllRepos() changed to $newRepoList")
             allRepos.clear()
-            allRepos?.let {
+            newRepoList?.let {
                 allRepos.addAll(it)
             }
             // Notifies the attached observers that the underlying data has been changed and any
@@ -51,14 +51,11 @@ class RepoListAdapter(
     // Called by RecyclerView to display the data at the specified position.
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: RepoListAdapter.RepoViewHolder, position: Int) =
-        holder.bind(allRepos[position])
-        // holder.bind(mostStarredRepos[position])
+        holder.bind(mostStarredRepos[position])
 
-    //override fun getItemCount(): Int = OrgDetailsViewModel.REPO_COUNT_TO_SHOW
-    override fun getItemCount(): Int = allRepos.size
+    override fun getItemCount(): Int = OrgDetailsViewModel.REPO_COUNT_TO_SHOW
 
-    //override fun getItemId(position: Int): Long = mostStarredRepos[position].id
-    override fun getItemId(position: Int): Long = allRepos[position].id
+    override fun getItemId(position: Int): Long = mostStarredRepos[position].id
 
     class RepoViewHolder(
         itemView: View,
