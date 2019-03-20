@@ -40,6 +40,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        customTabActivityHelper.bindCustomTabsService(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        customTabActivityHelper.unbindCustomTabsService(this)
+    }
+
     /**********************************************************
      * TODO - Move Web stuff into Delegate class
      **********************************************************/

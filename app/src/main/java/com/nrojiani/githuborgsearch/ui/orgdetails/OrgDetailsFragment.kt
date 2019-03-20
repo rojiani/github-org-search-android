@@ -16,6 +16,7 @@ import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.di.MyApplication
 import com.nrojiani.githuborgsearch.model.Organization
 import com.nrojiani.githuborgsearch.model.Repo
+import com.nrojiani.githuborgsearch.ui.shared.MainActivity
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.card_org_condensed.view.*
@@ -39,6 +40,8 @@ class OrgDetailsFragment : Fragment() {
     // TODO
     fun onRepoSelected(repo: Repo) {
         Log.d(TAG, "onRepoSelected(repo = $repo)")
+        // TODO https://developer.android.com/training/basics/fragments/communicating
+        (activity as MainActivity).openWebContent(repo.repoUrl)
     }
 
     override fun onAttach(context: Context) {
