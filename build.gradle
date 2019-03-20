@@ -7,7 +7,6 @@ buildscript {
 
         // Plugins
         gradlePluginVersion = '3.3.2'
-        navSafeArgsPluginVersion = '1.0.0'
 
         // App dependencies
         // androidXAnnotationsVersion = '1.0.1'
@@ -27,7 +26,6 @@ buildscript {
         lifecycleVersion = '2.1.0-alpha03'
         materialVersion = '1.1.0-alpha04'
         moshiVersion = '1.8.0'
-        navigationVersion = '2.0.0'
         picassoVersion = '2.5.2'
         recyclerViewVersion = '1.1.0-alpha02'
         retrofitVersion = '2.5.0'
@@ -39,7 +37,6 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:$gradlePluginVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
     }
 }
 

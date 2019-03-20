@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 
 /**
- * ViewModel for the view displaying Org Details & top repos.
+ * ViewModel for the view displaying Org Details & most starred repos.
  */
 class OrgDetailsViewModel
 @Inject constructor(
@@ -25,20 +25,20 @@ class OrgDetailsViewModel
     private val TAG by lazy { this::class.java.simpleName }
 
     /* publicly exposed LiveData */
-    fun getRepos(): LiveData<List<Repo>?> = repos
+    fun getAllRepos(): LiveData<List<Repo>?> = allRepos
 
     fun getRepoLoadErrorMessage(): LiveData<String?> = repoLoadErrorMessage
     fun isLoading(): LiveData<Boolean> = loading
-    fun getOrganization(): LiveData<Organization> = organization
+    fun getSelectedOrganization(): LiveData<Organization> = selectedOrganization
     fun setSelectedOrganization(org: Organization) {
-        organization.value = org
+        selectedOrganization.value = org
     }
 
-    private val organization: MutableLiveData<Organization>
+    private val selectedOrganization: MutableLiveData<Organization>
             by lazy { MutableLiveData<Organization>() }
 
 
-    private val repos: MutableLiveData<List<Repo>?> by lazy { MutableLiveData<List<Repo>?>() }
+    private val allRepos: MutableLiveData<List<Repo>?> by lazy { MutableLiveData<List<Repo>?>() }
     private val loading: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
     private val repoLoadErrorMessage: MutableLiveData<String?> by lazy { MutableLiveData<String?>() }
 
@@ -47,20 +47,20 @@ class OrgDetailsViewModel
     /**
      * Fetch all repositories owned by the organization.
      */
-    fun fetchReposForOrg(orgLogin: String) {
-        Log.d(TAG, "fetchReposForOrg($orgLogin)")
+    fun loadReposForOrg(organization: Organization) {
+        Log.d(TAG, "loadReposForOrg($organization)")
         loading.value = true
-        repoCall = gitHubService.getRepositoriesForOrg(orgLogin)
+        repoCall = gitHubService.getRepositoriesForOrg(organization.login)
 
         repoCall?.enqueue(object : Callback<List<Repo>> {
             override fun onResponse(call: Call<List<Repo>>, response: Response<List<Repo>>) {
                 // DEBUG
-                Log.d(TAG, "fetchRepos - onResponse: response = $response")
-                Log.d(TAG, "fetchRepos - response body: ${response.body()}")
+                Log.d(TAG, "loadReposForOrg - onResponse: response = $response")
+                Log.d(TAG, "loadReposForOrg - response body: ${response.body()}")
 
-                repos.value = response.body()
+                allRepos.value = response.body()
 
-                if (repos.value != null) {
+                if (allRepos.value != null) {
                     repoLoadErrorMessage.value = null
                     loading.value = false
                 } else {
@@ -78,32 +78,33 @@ class OrgDetailsViewModel
     }
 
     fun saveToBundle(outState: Bundle) {
-        organization.value?.let { org ->
+        Log.d(TAG, "saveToBundle")
+        selectedOrganization.value?.let { org ->
             outState.putParcelable(OrgDetailsViewModel.KEY_ORGANIZATION, org)
         }
-
-        // TODO top repos
     }
 
-    /** Restore LiveData after app killed by system */
+    /** Restore LiveData after app killed */
     fun restoreFromBundle(savedInstanceState: Bundle?) {
-        // Restore organization data (if it was present)
-        savedInstanceState?.getParcelable<Organization>(OrgDetailsViewModel.KEY_ORGANIZATION)
-            ?.let { org ->
-                organization.value = org
-            }
+        Log.d(TAG, "restoreFromBundle")
+        // If selectedOrganization (LiveData) is null, the ViewModel was destroyed.
+        // Restore from Bundle. Otherwise we don't need to do anything.
+        if (selectedOrganization.value == null) {
+            savedInstanceState?.getParcelable<Organization>(OrgDetailsViewModel.KEY_ORGANIZATION)
+                ?.let { org ->
+                    selectedOrganization.value = org
+                    Log.d(TAG, "restoreFromBundle - selectedOrganization restored from Bundle")
+                    loadReposForOrg(org)
+                    Log.d(TAG, "restoreFromBundle - Re-fetching repos")
+                }
+        }
 
-        // TODO top repos
+        // TODO what selectedOrganization != null, but
     }
-
 
     companion object {
         const val REPO_COUNT_TO_SHOW = 3
-
         const val KEY_ORGANIZATION = "org_details"
-//        const val KEY_REPO_1 = "key_repo_1"
-//        const val KEY_REPO_2 = "key_repo_2"
-//        const val KEY_REPO_3 = "key_repo_3"
     }
 
 }

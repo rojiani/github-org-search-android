@@ -14,21 +14,22 @@ import com.nrojiani.githuborgsearch.model.Repo
 class RepoListAdapter(
     viewModel: OrgDetailsViewModel,
     lifecycleOwner: LifecycleOwner,
-    private val repoSelectedListener: RepoSelectedListener  // TODO remove if unnecessary with Navigation
+    private val onRepoSelected: (Repo) -> Unit
 ) : RecyclerView.Adapter<RepoListAdapter.RepoViewHolder>() {
 
     private val allRepos: MutableList<Repo> = ArrayList()
-
-    private val mostStarredRepos: List<Repo>
-        get() = allRepos.sortedByDescending { it.stars }
-                .take(OrgDetailsViewModel.REPO_COUNT_TO_SHOW)
+//    private val mostStarredRepos: List<Repo>
+//        get() = allRepos.sortedByDescending { it.stars }
+//                .take(OrgDetailsViewModel.REPO_COUNT_TO_SHOW)
 
     private val TAG by lazy { this::class.java.simpleName }
 
     init {
-        viewModel.getRepos().observe(lifecycleOwner, Observer { repos ->
+        // Subscribe to changes in the fetched repositories.
+        viewModel.getAllRepos().observe(lifecycleOwner, Observer { newRepoList ->
+            Log.d(TAG, "OrgDetailsViewModel getAllRepos() changed to $newRepoList")
             allRepos.clear()
-            repos?.let {
+            allRepos?.let {
                 allRepos.addAll(it)
             }
             // Notifies the attached observers that the underlying data has been changed and any
@@ -39,27 +40,29 @@ class RepoListAdapter(
         setHasStableIds(true)
     }
 
-
     // Called when RecyclerView needs a new RecyclerView.ViewHolder of the given type to represent an item.
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepoViewHolder {
-        // inflate the view for a single list item
+        // inflate the view for a single list item (repo)
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.card_repo, parent, false)
-        return RepoListAdapter.RepoViewHolder(view, repoSelectedListener)
+        return RepoListAdapter.RepoViewHolder(view, onRepoSelected)
     }
 
     // Called by RecyclerView to display the data at the specified position.
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: RepoListAdapter.RepoViewHolder, position: Int) =
-        holder.bind(mostStarredRepos[position])
+        holder.bind(allRepos[position])
+        // holder.bind(mostStarredRepos[position])
 
-    override fun getItemCount(): Int = OrgDetailsViewModel.REPO_COUNT_TO_SHOW
+    //override fun getItemCount(): Int = OrgDetailsViewModel.REPO_COUNT_TO_SHOW
+    override fun getItemCount(): Int = allRepos.size
 
-    override fun getItemId(position: Int): Long = mostStarredRepos[position].id
+    //override fun getItemId(position: Int): Long = mostStarredRepos[position].id
+    override fun getItemId(position: Int): Long = allRepos[position].id
 
     class RepoViewHolder(
         itemView: View,
-        repoSelectedListener: RepoSelectedListener
+        private val onRepoSelected: (Repo) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
 
         private lateinit var repo: Repo
@@ -73,7 +76,7 @@ class RepoListAdapter(
         init {
             // Set click list listener for a list item
             itemView.setOnClickListener {
-                if (repo != null) repoSelectedListener.onRepoSelected(repo)
+                if (repo != null) onRepoSelected(repo)
             }
         }
 

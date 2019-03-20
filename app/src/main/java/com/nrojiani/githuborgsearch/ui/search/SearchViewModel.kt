@@ -34,19 +34,18 @@ class SearchViewModel
 
     private var orgCall: Call<Organization>? = null
 
-
     /**
      * Try to retrieve the details for a GitHub Organization.
      */
-    fun fetchOrgDetails(searchInput: String) {
+    fun loadOrgDetails(searchInput: String) {
         loading.value = true
         orgCall = gitHubService.getOrg(searchInput)
 
         orgCall?.enqueue(object : Callback<Organization> {
             override fun onResponse(call: Call<Organization>, response: Response<Organization>) {
                 // DEBUG
-                Log.d(TAG, "fetchOrgDetails - onResponse: response = $response")
-                Log.d(TAG, "fetchOrgDetails - onResponse: response body = ${response.body()}")
+                Log.d(TAG, "loadOrgDetails - onResponse: response = $response")
+                Log.d(TAG, "loadOrgDetails - onResponse: response body = ${response.body()}")
 
                 // TODO - handle case with incomplete data, e.g., "NYTime"
                 // - org exists but no name (because it was a typo)
@@ -78,7 +77,6 @@ class SearchViewModel
     fun saveToBundle(outState: Bundle) {
         organization.value?.let { org ->
             outState.putParcelable(KEY_ORGANIZATION, org)
-            outState.putString(KEY_ORG_SEARCH_INPUT, orgSearchInput)
         }
     }
 

@@ -16,7 +16,6 @@ import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.di.MyApplication
 import com.nrojiani.githuborgsearch.model.Organization
 import com.nrojiani.githuborgsearch.model.Repo
-import com.nrojiani.githuborgsearch.ui.search.SearchViewModel
 import com.nrojiani.githuborgsearch.ui.shared.OrgDetailsDisplayerFragment
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.screen_list.*
@@ -26,22 +25,18 @@ import javax.inject.Inject
  * Fragment which displays the top 3 (most-starred) repos for
  * an organization.
  */
-class OrgDetailsFragment : Fragment(), OrgDetailsDisplayerFragment, RepoSelectedListener {
-
+class OrgDetailsFragment : Fragment(), OrgDetailsDisplayerFragment {
 
     private val TAG by lazy { this::class.java.simpleName }
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     private lateinit var viewModel: OrgDetailsViewModel
-    private var selectedOrg: Organization? = null
 
-
-    override fun onRepoSelected(repo: Repo) {
-        // TODO
+    // TODO
+    fun onRepoSelected(repo: Repo) {
         Log.d(TAG, "onRepoSelected")
     }
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -60,24 +55,24 @@ class OrgDetailsFragment : Fragment(), OrgDetailsDisplayerFragment, RepoSelected
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated")
 
-
-        // TODO restore on config changes
-
         viewModel = ViewModelProviders.of(activity!!, viewModelFactory)
             .get(OrgDetailsViewModel::class.java)
 
-        arguments?.let {
-            val selectedOrgArg = OrgDetailsFragmentArgs.fromBundle(it).selectedOrg
-            selectedOrg = selectedOrgArg
-            Log.e(TAG, "onViewCreated: Fragment arg selectedOrg: $selectedOrgArg")
-            viewModel.setSelectedOrganization(selectedOrgArg)
+        viewModel.restoreFromBundle(savedInstanceState)
 
-            // Fetch repos for the Organization
-            viewModel.fetchReposForOrg(selectedOrgArg.login)
+        // DEBUG
+        requireNotNull(viewModel.getSelectedOrganization().value) {
+            "ERROR - selectedOrganization is null after restoreFromBundle"
+        }
 
-            // Display org cardview
-            showOrgCardView(selectedOrgArg)
-        } ?: Log.e(TAG, "onViewCreated: arguments (Bundle.arguments) null")
+        val repos: List<Repo>? = viewModel.getAllRepos().value
+         if (repos.isNullOrEmpty()) {
+             Log.d(TAG, "onViewCreated: repos null or empty. calling viewModel.loadReposForOrg()")
+             viewModel.getSelectedOrganization().value?.let {
+                 showOrgCardView(it)
+                 viewModel.loadReposForOrg(it)
+             }
+         }
 
         // TODO set click listeners on repo cards
 
@@ -85,35 +80,54 @@ class OrgDetailsFragment : Fragment(), OrgDetailsDisplayerFragment, RepoSelected
         recyclerView.addItemDecoration(
             DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         )
-        recyclerView.adapter = RepoListAdapter(viewModel, this, this)
+        recyclerView.adapter = RepoListAdapter(viewModel, this, ::onRepoSelected)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         observeViewModel()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        viewModel.saveToBundle(outState)
+    }
+
     private fun observeViewModel() {
-        viewModel.getRepos().observe(this, Observer { repos ->
-            Log.d(TAG, "observeViewModels: getRepos() - Observer<List<Repo>?>")
+        viewModel.getSelectedOrganization().observe(this, Observer { org: Organization? ->
+            Log.d(TAG, "OrgDetailsFragment getSelectedOrganization() changed to $org")
+
+            org?.let {
+                showOrgCardView(org)
+            }
+        })
+
+        viewModel.getAllRepos().observe(this, Observer { repos ->
+            Log.d(TAG, "OrgDetailsViewModel getAllRepos() changed to $repos")
             if (repos != null) {
                 recyclerView.isVisible = true
+                repoProgressBar.isVisible = false
+                repoErrorTextView.isVisible = false
+            } else {
+                Log.w(TAG, "OrgDetailsViewModel getAllRepos() changed to NULL")
             }
         })
 
 
         // Error message
         viewModel.getRepoLoadErrorMessage().observe(this, Observer { errorMessage ->
+            Log.d(TAG, "OrgDetailsViewModel getRepoLoadErrorMessage() changed to $errorMessage")
             if (errorMessage != null) {
                 recyclerView.isVisible = false
                 repoErrorTextView.isVisible = true
                 repoErrorTextView.text = getString(R.string.api_error_loading_repos)
             } else {
                 repoErrorTextView.isVisible = false
-                repoErrorTextView.text = null
+                repoErrorTextView.text = ""
             }
         })
 
         // If loading
         viewModel.isLoading().observe(this, Observer<Boolean> { isLoading ->
+            Log.d(TAG, "OrgDetailsViewModel isLoading() changed to $isLoading")
             repoProgressBar.isVisible = isLoading
             if (isLoading) {
                 repoErrorTextView.isVisible = false
@@ -122,29 +136,11 @@ class OrgDetailsFragment : Fragment(), OrgDetailsDisplayerFragment, RepoSelected
         })
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
 
-        // Restore selectedOrg
+    // LIFECYCLE
 
-        viewModel.getOrganization().value?.let { org ->
-            outState.putParcelable(SearchViewModel.KEY_ORGANIZATION, org)
-            Log.d(TAG, "onSaveInstanceState: parcelable org added to bundle:" +
-                        "${outState.getParcelable<Organization>(SearchViewModel.KEY_ORGANIZATION)}"
-            )
-        }
 
-        // TODO
-//        if (allRepos.size >= REPO_COUNT_TO_SHOW) {
-//            val (repo1, repo2, repo3) = mostStarredRepos
-//            outState.putParcelable(KEY_REPO_1, repo1)
-//            outState.putParcelable(KEY_REPO_2, repo2)
-//            outState.putParcelable(KEY_REPO_3, repo3)
-//        } else {
-//            Log.d(TAG, "onSaveInstanceState: < 3 repos. allRepos: $allRepos")
-//        }
 
-        viewModel.saveToBundle(outState)
     }
 
 }
