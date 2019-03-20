@@ -9,11 +9,10 @@ buildscript {
         gradlePluginVersion = '3.3.2'
 
         // App dependencies
-        // androidXAnnotationsVersion = '1.0.1'
-        // androidXBrowserVersion = '1.0.0'
+        androidXAnnotationsVersion = '1.0.1'
+        androidXBrowserVersion = '1.0.0'
         androidXTestVersion = '1.1.0-alpha4'
-        // appCompatVersion = '1.1.0-alpha03'
-        // cardViewVersion = '1.0.0'
+        appCompatVersion = '1.1.0-alpha03'
         constraintLayoutVersion = '2.0.0-alpha3'
         // customTabsKotlinVersion = '1.0.0'
         coreTestingVersion = '2.0.0'

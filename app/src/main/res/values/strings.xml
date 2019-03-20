@@ -18,4 +18,6 @@
     <string name="sample_repo_lang">Objective-C</string>
     <string name="label_top_repos">Top Repositories</string>
 
+    <!--<string name="error_invalid_url">URL doesn\'t look valid</string>-->
+
 </resources>
