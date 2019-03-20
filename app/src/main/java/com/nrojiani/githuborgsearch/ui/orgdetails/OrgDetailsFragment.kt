@@ -37,7 +37,6 @@ class OrgDetailsFragment : Fragment() {
     lateinit var viewModelFactory: ViewModelFactory
     private lateinit var viewModel: OrgDetailsViewModel
 
-    // TODO
     fun onRepoSelected(repo: Repo) {
         Log.d(TAG, "onRepoSelected(repo = $repo)")
         // TODO https://developer.android.com/training/basics/fragments/communicating

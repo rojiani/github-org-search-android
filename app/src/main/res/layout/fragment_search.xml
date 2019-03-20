@@ -14,7 +14,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:hint="@string/instructions_label"
+        android:hint="@string/hint_enter_an_organization"
         android:minWidth="1280dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints="@string/search_edit_text_autofill_hint"
-            android:hint="@string/instructions_label"
+            android:hint="@string/hint_org"
             android:imeOptions="actionSearch"
             android:inputType="text" />
 

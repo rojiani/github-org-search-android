@@ -83,19 +83,19 @@ class CustomTabActivityHelper : ServiceConnectionCallback {
         CustomTabsClient.bindCustomTabsService(activity, packageName, serviceConnection)
     }
 
-//    /**
-//     * TODO
-//     * Unbinds the Activity from the Custom Tabs Service.
-//     * @param activity the activity that is connected to the service.
-//     */
-//    fun unbindCustomTabsService(activity: Activity) {
-//        serviceConnection ?: return
-//
-//        activity.unbindService(serviceConnection)
-//        customTabsClient = null
-//        customTabsSession = null
-//        serviceConnection = null
-//    }
+    /**
+     * TODO
+     * Unbinds the Activity from the Custom Tabs Service.
+     * @param activity the activity that is connected to the service.
+     */
+    fun unbindCustomTabsService(activity: Activity) {
+        serviceConnection ?: return
+
+        activity.unbindService(serviceConnection)
+        customTabsClient = null
+        customTabsSession = null
+        serviceConnection = null
+    }
 
 //  TODO - Remove if not necessary
 //    /**
