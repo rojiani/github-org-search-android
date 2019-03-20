@@ -16,6 +16,6 @@
     <string name="sample_repo_name">NYTPhotoViewer</string>
     <string name="sample_repo_desc">A modern photo viewing experience for iOS.</string>
     <string name="sample_repo_lang">Objective-C</string>
-    <string name="label_most_starred_repositories">Most Starred Repositories:</string>
+    <string name="label_top_repos">Top Repositories</string>
 
 </resources>

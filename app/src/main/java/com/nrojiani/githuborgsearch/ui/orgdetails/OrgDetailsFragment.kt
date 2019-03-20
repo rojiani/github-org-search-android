@@ -103,7 +103,7 @@ class OrgDetailsFragment : Fragment() {
                 .into(orgAvatarImageView)
 
             condensedOrgNameTextView.text = org.name
-            condensedOrgLoginTextView.text = org.login
+            condensedOrgLoginTextView.text = "@${org.login}"
         }
     }
 

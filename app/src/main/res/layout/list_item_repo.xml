@@ -24,48 +24,56 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="@string/sample_repo_desc"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-        android:textColor="#8A000000"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+        android:maxLines="2"
+        android:ellipsize="end"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/repoNameTextView" />
 
-    <com.google.android.material.chip.Chip
-        android:id="@+id/repoLanguageChip"
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/repoChipGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="@string/sample_repo_lang"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Chip"
-        app:chipBackgroundColor="#EBEBEB"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/repoDescriptionTextView"
-        tools:ignore="HardcodedText" />
+        app:layout_constraintTop_toBottomOf="@id/repoDescriptionTextView">
 
-    <com.google.android.material.chip.Chip
-        android:id="@+id/repoStarsChip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="199"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Chip"
-        app:chipBackgroundColor="#EBEBEB"
-        app:chipIcon="@drawable/ic_star_black_18dp"
-        app:layout_constraintStart_toEndOf="@+id/repoLanguageChip"
-        app:layout_constraintTop_toBottomOf="@+id/repoDescriptionTextView"
-        tools:ignore="HardcodedText" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/repoLanguageChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sample_repo_lang"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Chip"
+            android:textSize="2sp"
+            app:chipBackgroundColor="#EBEBEB"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/repoDescriptionTextView"
+            tools:ignore="HardcodedText" />
 
-    <com.google.android.material.chip.Chip
-        android:id="@+id/repoForksChip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="17"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Chip"
-        app:chipBackgroundColor="#EBEBEB"
-        app:chipIcon="@drawable/ic_fork_black_18dp"
-        app:layout_constraintStart_toEndOf="@+id/repoStarsChip"
-        app:layout_constraintTop_toBottomOf="@+id/repoDescriptionTextView"
-        tools:ignore="HardcodedText"
-        tools:layout_editor_absoluteY="62dp" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/repoStarsChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="199"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Chip"
+            android:textSize="2sp"
+            app:chipBackgroundColor="#EBEBEB"
+            app:chipIcon="@drawable/ic_star_black_18dp"
+            app:layout_constraintStart_toEndOf="@+id/repoLanguageChip"
+            app:layout_constraintTop_toBottomOf="@+id/repoDescriptionTextView"
+            tools:ignore="HardcodedText" />
 
+        <com.google.android.material.chip.Chip
+            android:id="@+id/repoForksChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="17"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Chip"
+            android:textSize="2sp"
+            app:chipBackgroundColor="#EBEBEB"
+            app:chipIcon="@drawable/ic_fork_black_18dp"
+            app:layout_constraintStart_toEndOf="@+id/repoStarsChip"
+            app:layout_constraintTop_toBottomOf="@+id/repoDescriptionTextView"
+            tools:ignore="HardcodedText" />
+
+    </com.google.android.material.chip.ChipGroup>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
@@ -83,7 +85,12 @@ class RepoListAdapter(
             this.repo = repo
             repoNameTextView.text = repo.name
             repoDescriptionTextView.text = repo.description
-            repoLanguageChip.text = repo.language
+            if (repo.language.isNullOrBlank()) {
+                repoLanguageChip.isGone = true
+            } else {
+                repoLanguageChip.isVisible = true
+                repoLanguageChip.text = repo.language
+            }
             forksChip.text = repo.forks.toString()
             starsChip.text = repo.stars.toString()
         }
