@@ -44,7 +44,7 @@ class RepoListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepoViewHolder {
         // inflate the view for a single list item (repo)
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.card_repo, parent, false)
+            .inflate(R.layout.list_item_repo, parent, false)
         return RepoListAdapter.RepoViewHolder(view, onRepoSelected)
     }
 
@@ -65,10 +65,12 @@ class RepoListAdapter(
         private lateinit var repo: Repo
 
         private val repoNameTextView: TextView = itemView.findViewById(R.id.repoNameTextView)
-        private val repoDescriptionTextView: TextView = itemView.findViewById(R.id.repoDescriptionTextView)
-        private val repoLanguageTextView: TextView = itemView.findViewById(R.id.repoLanguageTextView)
-        private val forksTextView: TextView = itemView.findViewById(R.id.repoStarsTextView)
-        private val starsTextView: TextView = itemView.findViewById(R.id.repoForksTextView)
+        private val repoDescriptionTextView: TextView =
+            itemView.findViewById(R.id.repoDescriptionTextView)
+        private val repoLanguageChip: TextView =
+            itemView.findViewById(R.id.repoLanguageChip)
+        private val starsChip: TextView = itemView.findViewById(R.id.repoStarsChip)
+        private val forksChip: TextView = itemView.findViewById(R.id.repoForksChip)
 
         init {
             // Set click list listener for a list item
@@ -81,9 +83,9 @@ class RepoListAdapter(
             this.repo = repo
             repoNameTextView.text = repo.name
             repoDescriptionTextView.text = repo.description
-            repoLanguageTextView.text = repo.language
-            forksTextView.text = repo.forks.toString()
-            starsTextView.text = repo.stars.toString()
+            repoLanguageChip.text = repo.language
+            forksChip.text = repo.forks.toString()
+            starsChip.text = repo.stars.toString()
         }
     }
 

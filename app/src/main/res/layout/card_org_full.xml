@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     style="@style/Widget.MaterialComponents.CardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,7 +9,8 @@
     android:layout_marginEnd="8dp"
     android:minHeight="128dp"
     app:cardBackgroundColor="@android:color/transparent"
-    app:cardElevation="2dp"
+    app:cardCornerRadius="1dp"
+    app:cardElevation="1dp"
     app:cardPreventCornerOverlap="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,7 +19,7 @@
         android:visibility="visible">
 
         <ImageView
-            android:id="@+id/orgCardImageView"
+            android:id="@+id/orgImageView"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginStart="16dp"
@@ -31,7 +31,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/orgCardNameTextView"
+            android:id="@+id/orgNameTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -42,11 +42,11 @@
             android:textColor="#DE000000"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/orgCardImageView"
+            app:layout_constraintStart_toEndOf="@+id/orgImageView"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/orgCardLoginTextView"
+            android:id="@+id/orgLoginTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -55,26 +55,26 @@
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             android:textColor="#8A000000"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/orgCardImageView"
-            app:layout_constraintTop_toBottomOf="@+id/orgCardNameTextView" />
+            app:layout_constraintStart_toEndOf="@+id/orgImageView"
+            app:layout_constraintTop_toBottomOf="@+id/orgNameTextView" />
 
         <TextView
-            android:id="@+id/orgCardLocationTextView"
+            android:id="@+id/orgLocationTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
             android:drawableStart="@drawable/ic_location_on_black_24dp"
             android:drawablePadding="8dp"
-            android:text="@string/sample_org_location"
-            android:textSize="12dp"
             android:gravity="center_vertical"
+            android:text="@string/sample_org_location"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/orgCardImageView"
-            app:layout_constraintTop_toBottomOf="@+id/orgCardLoginTextView" />
+            app:layout_constraintStart_toEndOf="@+id/orgImageView"
+            app:layout_constraintTop_toBottomOf="@+id/orgLoginTextView" />
 
         <TextView
-            android:id="@+id/orgCardBlogTextView"
+            android:id="@+id/orgBlogTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -82,26 +82,27 @@
             android:autoLink="phone|web"
             android:drawableStart="@drawable/ic_link_black_24dp"
             android:drawablePadding="8dp"
-            android:text="@string/sample_org_blog"
-            android:textSize="12dp"
             android:gravity="center_vertical"
+            android:text="@string/sample_org_blog"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/orgCardImageView"
-            app:layout_constraintTop_toBottomOf="@+id/orgCardLocationTextView" />
+            app:layout_constraintStart_toEndOf="@+id/orgImageView"
+            app:layout_constraintTop_toBottomOf="@+id/orgLocationTextView" />
 
         <TextView
-            android:id="@+id/orgCardDetailsTextView"
+            android:id="@+id/orgDescriptionTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:visibility="gone"
+            android:text="@string/sample_org_desc"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/orgCardImageView" />
+            app:layout_constraintTop_toBottomOf="@+id/orgImageView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

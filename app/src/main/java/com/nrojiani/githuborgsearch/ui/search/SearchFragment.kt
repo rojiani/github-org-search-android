@@ -17,8 +17,9 @@ import com.nrojiani.githuborgsearch.di.MyApplication
 import com.nrojiani.githuborgsearch.model.Organization
 import com.nrojiani.githuborgsearch.ui.orgdetails.OrgDetailsFragment
 import com.nrojiani.githuborgsearch.ui.orgdetails.OrgDetailsViewModel
-import com.nrojiani.githuborgsearch.ui.shared.OrgDetailsDisplayerFragment
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.card_org_full.*
 import kotlinx.android.synthetic.main.fragment_search.*
 import javax.inject.Inject
 
@@ -26,7 +27,7 @@ import javax.inject.Inject
  * Fragment associated with searching for an Organization and displaying
  * details about the Organization (or error messages if not found).
  */
-class SearchFragment : Fragment(), OrgDetailsDisplayerFragment {
+class SearchFragment : Fragment() {
 
     private val TAG by lazy { this::class.java.simpleName }
 
@@ -60,7 +61,7 @@ class SearchFragment : Fragment(), OrgDetailsDisplayerFragment {
         savedInstanceState?.let {
             viewModel.restoreFromBundle(savedInstanceState)
             viewModel.getOrganization().value?.let {
-                searchOrgCardView.isVisible = true
+                orgCardView.isVisible = true
             }
         }
 
@@ -68,7 +69,7 @@ class SearchFragment : Fragment(), OrgDetailsDisplayerFragment {
                 "viewModel.getOrg ${viewModel.getOrganization().value}")
         viewModel.getOrganization().value?.let { org ->
             Log.d(TAG, "onViewCreated: show card result (after process death)")
-            showOrgCardView(org)
+            showOrgDetails(org)
         }
 
         initViews()
@@ -110,12 +111,47 @@ class SearchFragment : Fragment(), OrgDetailsDisplayerFragment {
             }
         }
 
-        searchOrgCardView.setOnClickListener {
-            Log.d(TAG, "searchOrgCardView clicked")
+        orgCardView.setOnClickListener {
+            Log.d(TAG, "orgDetailsCardView clicked")
 
             viewModel.getOrganization()?.value?.let { selectedOrg ->
                 onOrgSelected(selectedOrg)
-            } ?: Log.e(TAG, "searchOrgCardView clicked, but organization data in SearchViewModel is null")
+            } ?: Log.e(TAG, "orgDetailsCardView clicked, but organization data in SearchViewModel is null")
+        }
+    }
+
+    private fun showOrgDetails(org: Organization) {
+        orgCardView.isVisible = true
+
+        orgCardView.apply {
+            // TODO dependency injection
+            Picasso.with(context)
+                .load(org.avatarUrl)
+                .into(orgImageView)
+
+            orgNameTextView.text = org.name
+            orgLoginTextView.text = org.login
+
+            if (org.location.isNullOrBlank()) {
+                orgLocationTextView.isVisible = false
+            } else {
+                orgLocationTextView.text = org.location
+                orgLocationTextView.isVisible = true
+            }
+
+            if (org.blogUrl.isNullOrBlank()) {
+                orgBlogTextView.isInvisible = true
+            } else {
+                orgBlogTextView.text = org.blogUrl
+                orgBlogTextView.isVisible = true
+            }
+
+            if (org.description.isNullOrBlank()) {
+                orgDescriptionTextView.isVisible = false
+            } else {
+                orgDescriptionTextView.text = org.description
+                orgDescriptionTextView.isVisible = true
+            }
         }
     }
 
@@ -142,7 +178,7 @@ class SearchFragment : Fragment(), OrgDetailsDisplayerFragment {
             org?.let {
                 progressBar.isInvisible = true
                 errorTextView.isVisible = false
-                showOrgCardView(org)
+                showOrgDetails(org)
             }
         })
 
@@ -155,7 +191,7 @@ class SearchFragment : Fragment(), OrgDetailsDisplayerFragment {
                     errorTextView.text = ""
                 }
                 else -> {
-                    searchOrgCardView.isInvisible = true
+                    orgCardView.isInvisible = true
                     errorTextView.isVisible = true
                     errorTextView.text = generateErrorMessage()
                 }
@@ -168,7 +204,7 @@ class SearchFragment : Fragment(), OrgDetailsDisplayerFragment {
             if (isLoading) {
                 progressBar.isVisible = true
                 errorTextView.isVisible = false
-                searchOrgCardView.isInvisible = true
+                orgCardView.isInvisible = true
             } else {
                 progressBar.isInvisible = true
             }

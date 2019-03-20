@@ -12,6 +12,7 @@
     <string name="organization_avatar_content_desc">Organization Avatar</string>
     <string name="sample_org_location">New York, NY</string>
     <string name="sample_org_blog">nytimes.com</string>
+    <string name="sample_org_desc">We are working to build community through open source technology. NB: members must have two-factor auth</string>
     <string name="sample_repo_name">NYTPhotoViewer</string>
     <string name="sample_repo_desc">A modern photo viewing experience for iOS.</string>
     <string name="sample_repo_lang">Objective-C</string>

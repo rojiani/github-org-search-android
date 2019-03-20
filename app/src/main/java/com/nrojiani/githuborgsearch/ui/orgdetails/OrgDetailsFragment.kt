@@ -16,8 +16,11 @@ import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.di.MyApplication
 import com.nrojiani.githuborgsearch.model.Organization
 import com.nrojiani.githuborgsearch.model.Repo
-import com.nrojiani.githuborgsearch.ui.shared.OrgDetailsDisplayerFragment
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.card_org_condensed.view.*
+import kotlinx.android.synthetic.main.card_org_full.*
+import kotlinx.android.synthetic.main.fragment_org_details.*
 import kotlinx.android.synthetic.main.screen_list.*
 import javax.inject.Inject
 
@@ -25,7 +28,7 @@ import javax.inject.Inject
  * Fragment which displays the top 3 (most-starred) repos for
  * an organization.
  */
-class OrgDetailsFragment : Fragment(), OrgDetailsDisplayerFragment {
+class OrgDetailsFragment : Fragment() {
 
     private val TAG by lazy { this::class.java.simpleName }
 
@@ -66,13 +69,13 @@ class OrgDetailsFragment : Fragment(), OrgDetailsDisplayerFragment {
         }
 
         val repos: List<Repo>? = viewModel.getAllRepos().value
-         if (repos.isNullOrEmpty()) {
-             Log.d(TAG, "onViewCreated: repos null or empty. calling viewModel.loadReposForOrg()")
-             viewModel.getSelectedOrganization().value?.let {
-                 showOrgCardView(it)
-                 viewModel.loadReposForOrg(it)
-             }
-         }
+        if (repos.isNullOrEmpty()) {
+            Log.d(TAG, "onViewCreated: repos null or empty. calling viewModel.loadReposForOrg()")
+            viewModel.getSelectedOrganization().value?.let {
+                showCondensedOrgDetails(it)
+                viewModel.loadReposForOrg(it)
+            }
+        }
 
         // TODO set click listeners on repo cards
 
@@ -86,16 +89,29 @@ class OrgDetailsFragment : Fragment(), OrgDetailsDisplayerFragment {
         observeViewModel()
     }
 
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         viewModel.saveToBundle(outState)
+    }
+
+    private fun showCondensedOrgDetails(org: Organization) {
+        condensedOrgView.apply {
+            // TODO dependency injection
+            Picasso.with(context)
+                .load(org.avatarUrl)
+                .into(orgAvatarImageView)
+
+            condensedOrgNameTextView.text = org.name
+            condensedOrgLoginTextView.text = org.login
+        }
     }
 
     private fun observeViewModel() {
         viewModel.getSelectedOrganization().observe(this, Observer { org: Organization? ->
             Log.d(TAG, "(Observer): OrgDetailsFragment getSelectedOrganization() changed to $org")
             org?.let {
-                showOrgCardView(org)
+                showCondensedOrgDetails(org)
             }
         })
 

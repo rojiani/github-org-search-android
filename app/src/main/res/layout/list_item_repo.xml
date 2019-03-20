@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/repoNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/sample_repo_name"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/repoDescriptionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/sample_repo_desc"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textColor="#8A000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/repoNameTextView" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/repoLanguageChip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/sample_repo_lang"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Chip"
+        app:chipBackgroundColor="#EBEBEB"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/repoDescriptionTextView"
+        tools:ignore="HardcodedText" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/repoStarsChip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="199"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Chip"
+        app:chipBackgroundColor="#EBEBEB"
+        app:chipIcon="@drawable/ic_star_black_18dp"
+        app:layout_constraintStart_toEndOf="@+id/repoLanguageChip"
+        app:layout_constraintTop_toBottomOf="@+id/repoDescriptionTextView"
+        tools:ignore="HardcodedText" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/repoForksChip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="17"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Chip"
+        app:chipBackgroundColor="#EBEBEB"
+        app:chipIcon="@drawable/ic_fork_black_18dp"
+        app:layout_constraintStart_toEndOf="@+id/repoStarsChip"
+        app:layout_constraintTop_toBottomOf="@+id/repoDescriptionTextView"
+        tools:ignore="HardcodedText"
+        tools:layout_editor_absoluteY="62dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
