@@ -1,5 +1,6 @@
 package com.nrojiani.githuborgsearch.ui.search
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -63,10 +65,13 @@ class SearchFragment : Fragment() {
             viewModel.getOrganization().value?.let {
                 orgCardView.isVisible = true
             }
+            Log.d(
+                TAG, "onViewCreated: after viewModel.restoreFromBundle, " +
+                        "org: ${viewModel.getOrganization().value}"
+            )
         }
 
-        Log.d(TAG, "onViewCreated: after viewModel.restoreFromBundle - " +
-                "viewModel.getOrg ${viewModel.getOrganization().value}")
+
         viewModel.getOrganization().value?.let { org ->
             Log.d(TAG, "onViewCreated: show card result (after process death)")
             showOrgDetails(org)
@@ -82,9 +87,9 @@ class SearchFragment : Fragment() {
         Log.d(TAG, "onSaveInstanceState: outState (Bundle): $outState")
 
         // TODO: Use Data Binding on searchEditText. Its text should be in ViewModel.
-        searchEditText?.text?.toString()?.let {
-            if (it.isNotBlank()) {
-                outState.putString(SearchViewModel.KEY_ORG_SEARCH_INPUT, it)
+        searchEditText?.text?.toString()?.run {
+            if (isNotBlank()) {
+                outState.putString(SearchViewModel.KEY_ORG_SEARCH_INPUT, this)
             }
         }
 
@@ -92,31 +97,41 @@ class SearchFragment : Fragment() {
     }
 
     private fun initViews() {
-        // TODO: listen for Android keyboard search button
-        // TODO: tap outside of keyboard dismisses it
-
-        // When search button is clicked, trigger callback
-        searchButton.setOnClickListener {
-            Log.d(TAG, "searchButton onClickListener")
-
-            val orgQuery = searchEditText.text.toString()
-            if (orgQuery.isBlank()) {
-                searchEditText.error = "Invalid organization name"
-            } else {
-                // Dismiss Keyboard
-                searchEditText.onEditorAction(EditorInfo.IME_ACTION_DONE)
-
-                // Fetch Org info
-                viewModel.loadOrgDetails(orgQuery)
+        /* Trigger GitHub Org search call when either the Search button is pressed
+           or the search key is pressed on keyboard */
+        searchButton.setOnClickListener { performSearch() }
+        searchEditText.setOnEditorActionListener { _, actionId, _ ->
+            when (actionId) {
+                EditorInfo.IME_ACTION_SEARCH -> {
+                    performSearch()
+                    true
+                }
+                else -> false
             }
         }
 
-        orgCardView.setOnClickListener {
-            Log.d(TAG, "orgDetailsCardView clicked")
+        // Tap outside of text field dismisses keyboard
+        searchFragment.setOnClickListener {
+            activity?.let(this::hideSoftKeyBoard)
+        }
 
+        orgCardView.setOnClickListener {
             viewModel.getOrganization()?.value?.let { selectedOrg ->
                 onOrgSelected(selectedOrg)
-            } ?: Log.e(TAG, "orgDetailsCardView clicked, but organization data in SearchViewModel is null")
+            }
+        }
+    }
+
+    private fun performSearch() {
+        val orgQuery = searchEditText.text.toString()
+        if (orgQuery.isBlank()) {
+            searchEditText.error = "Please enter an organization name"
+        } else {
+            // Dismiss Keyboard
+            searchEditText.onEditorAction(EditorInfo.IME_ACTION_DONE)
+
+            // Fetch Org info
+            viewModel.loadOrgDetails(orgQuery)
         }
     }
 
@@ -216,5 +231,14 @@ class SearchFragment : Fragment() {
         viewModel.getOrgLoadErrorMessage().value?.let { e ->
             append(":\n$e")
         }
+    }
+
+    private fun hideSoftKeyBoard(parentActivity: Activity) {
+        val inputMethodManager = parentActivity.getSystemService(Context.INPUT_METHOD_SERVICE)
+                as? InputMethodManager
+
+        val currentFocus = parentActivity.currentFocus ?: return
+        inputMethodManager?.takeIf { it?.isAcceptingText }
+            ?.apply { hideSoftInputFromWindow(currentFocus.windowToken, 0) }
     }
 }
