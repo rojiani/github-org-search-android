@@ -24,7 +24,9 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".ui.shared.MainActivity">
+        <activity
+            android:name=".ui.shared.MainActivity"
+            android:windowSoftInputMode="stateUnchanged|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
