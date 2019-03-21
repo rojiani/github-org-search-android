@@ -2,6 +2,7 @@ package com.nrojiani.githuborgsearch.web.chromecustomtabs
 
 import android.content.ComponentName
 import androidx.browser.customtabs.CustomTabsClient
+import androidx.browser.customtabs.CustomTabsService
 import androidx.browser.customtabs.CustomTabsServiceConnection
 import java.lang.ref.WeakReference
 

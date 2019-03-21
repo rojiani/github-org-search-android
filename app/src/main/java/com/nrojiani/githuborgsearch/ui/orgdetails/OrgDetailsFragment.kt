@@ -20,7 +20,6 @@ import com.nrojiani.githuborgsearch.ui.shared.MainActivity
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.card_org_condensed.view.*
-import kotlinx.android.synthetic.main.card_org_full.*
 import kotlinx.android.synthetic.main.fragment_org_details.*
 import kotlinx.android.synthetic.main.screen_list.*
 import javax.inject.Inject
@@ -36,12 +35,6 @@ class OrgDetailsFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     private lateinit var viewModel: OrgDetailsViewModel
-
-    fun onRepoSelected(repo: Repo) {
-        Log.d(TAG, "onRepoSelected(repo = $repo)")
-        // TODO https://developer.android.com/training/basics/fragments/communicating
-        (activity as MainActivity).openWebContent(repo.repoUrl)
-    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -91,10 +84,15 @@ class OrgDetailsFragment : Fragment() {
         observeViewModel()
     }
 
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         viewModel.saveToBundle(outState)
+    }
+
+    private fun onRepoSelected(repo: Repo) {
+        Log.d(TAG, "onRepoSelected(repo = $repo)")
+        // TODO https://developer.android.com/training/basics/fragments/communicating
+        (activity as MainActivity).openWebContent(repo.repoUrl)
     }
 
     private fun showCondensedOrgDetails(org: Organization) {
@@ -112,9 +110,7 @@ class OrgDetailsFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.getSelectedOrganization().observe(this, Observer { org: Organization? ->
             Log.d(TAG, "(Observer): OrgDetailsFragment getSelectedOrganization() changed to $org")
-            org?.let {
-                showCondensedOrgDetails(org)
-            }
+            org?.let(this::showCondensedOrgDetails)
         })
 
         viewModel.getAllRepos().observe(this, Observer { repos ->
@@ -147,12 +143,4 @@ class OrgDetailsFragment : Fragment() {
             }
         })
     }
-
-
-    // LIFECYCLE
-
-
-
-    }
-
 }

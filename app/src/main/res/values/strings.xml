@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GitHubOrgSearch</string>
+    <string name="app_name">GitHub Organization Search</string>
 
     <string name="hint_enter_an_organization">Enter an Organization</string>
     <string name="search_edit_text_autofill_hint">Organization Name</string>

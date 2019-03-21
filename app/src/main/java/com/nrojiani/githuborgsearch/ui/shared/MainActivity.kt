@@ -31,8 +31,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Log.d(TAG, "onCreate")
-
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, SearchFragment())
@@ -144,9 +142,4 @@ class MainActivity : AppCompatActivity() {
         actionIntent.putExtra(ChromeTabActionReceiver.KEY_ACTION_SOURCE, actionSource)
         return PendingIntent.getBroadcast(this, actionSource, actionIntent, 0)
     }
-
-    // TODO
-    private fun String?.isValidUrl(): Boolean = this?.let { url ->
-        url.isNotBlank() && (url.startsWith("http://") || url.startsWith("https://"))
-    } ?: false
 }

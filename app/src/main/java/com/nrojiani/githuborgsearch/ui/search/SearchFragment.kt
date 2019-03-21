@@ -47,10 +47,7 @@ class SearchFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        Log.d(TAG, "onCreateView")
-        return inflater.inflate(R.layout.fragment_search, container, false)
-    }
+    ): View? = inflater.inflate(R.layout.fragment_search, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -71,11 +68,8 @@ class SearchFragment : Fragment() {
             )
         }
 
-
-        viewModel.getOrganization().value?.let { org ->
-            Log.d(TAG, "onViewCreated: show card result (after process death)")
-            showOrgDetails(org)
-        }
+        // TODO may be unnecessary
+        viewModel.getOrganization().value?.let(this::showOrgDetails)
 
         initViews()
         observeViewModel()
@@ -116,8 +110,8 @@ class SearchFragment : Fragment() {
         }
 
         orgCardView.setOnClickListener {
-            viewModel.getOrganization()?.value?.let { selectedOrg ->
-                onOrgSelected(selectedOrg)
+            viewModel.getOrganization()?.value?.let {
+                onOrgSelected(it)
             }
         }
     }
@@ -199,7 +193,9 @@ class SearchFragment : Fragment() {
 
         // Error message
         viewModel.getOrgLoadErrorMessage().observe(this, Observer { errorMessage: String? ->
-            Log.d(TAG, "(Observer) SearchViewModel getOrgLoadErrorMessage() changed to $errorMessage")
+            Log.d(TAG,
+                "(Observer) SearchViewModel getOrgLoadErrorMessage() changed to $errorMessage"
+            )
             when {
                 errorMessage.isNullOrBlank() -> {
                     errorTextView.isVisible = false
@@ -238,7 +234,7 @@ class SearchFragment : Fragment() {
                 as? InputMethodManager
 
         val currentFocus = parentActivity.currentFocus ?: return
-        inputMethodManager?.takeIf { it?.isAcceptingText }
+        inputMethodManager?.takeIf { it.isAcceptingText }
             ?.apply { hideSoftInputFromWindow(currentFocus.windowToken, 0) }
     }
 }

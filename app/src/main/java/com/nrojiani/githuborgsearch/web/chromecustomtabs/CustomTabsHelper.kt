@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.util.Log
-import com.nrojiani.githuborgsearch.ui.shared.MainActivity
 
 
 /**
@@ -91,7 +90,7 @@ object CustomTabsHelper {
 
         packageNameToUse = when {
             packagesSupportingCustomTabs.isEmpty() -> null
-            packagesSupportingCustomTabs.size == 1 -> packagesSupportingCustomTabs.get(0)
+            packagesSupportingCustomTabs.size == 1 -> packagesSupportingCustomTabs[0]
             !defaultViewHandlerPackageName.isNullOrBlank()
                     && !hasSpecializedHandlerIntents(
                 context,

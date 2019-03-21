@@ -31,9 +31,8 @@ class RepoListAdapter(
         viewModel.getAllRepos().observe(lifecycleOwner, Observer { newRepoList ->
             Log.d(TAG, "(Observer) OrgDetailsViewModel getAllRepos() changed to $newRepoList")
             allRepos.clear()
-            newRepoList?.let {
-                allRepos.addAll(it)
-            }
+            newRepoList?.let(allRepos::addAll)
+
             // Notifies the attached observers that the underlying data has been changed and any
             // View reflecting the data set should refresh itself.
             notifyDataSetChanged()
@@ -77,7 +76,7 @@ class RepoListAdapter(
         init {
             // Set click list listener for a list item
             itemView.setOnClickListener {
-                if (repo != null) onRepoSelected(repo)
+                repo?.let { onRepoSelected(it) }
             }
         }
 

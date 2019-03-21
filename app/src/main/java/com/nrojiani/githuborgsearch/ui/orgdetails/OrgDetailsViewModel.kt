@@ -94,6 +94,7 @@ class OrgDetailsViewModel
                 ?.let { org ->
                     selectedOrganization.value = org
                     Log.d(TAG, "restoreFromBundle - selectedOrganization restored from Bundle")
+
                     loadReposForOrg(org)
                     Log.d(TAG, "restoreFromBundle - Re-fetching repos")
                 }

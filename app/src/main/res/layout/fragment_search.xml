@@ -54,6 +54,7 @@
         android:text="@string/error_organization_not_found"
         android:textColor="@color/colorError"
         android:visibility="invisible"
+        android:imeOptions="actionSearch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchButton" />
