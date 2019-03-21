@@ -23,6 +23,7 @@ import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.card_org_full.*
 import kotlinx.android.synthetic.main.fragment_search.*
+import kotlinx.android.synthetic.main.widget_search_bar.*
 import javax.inject.Inject
 
 /**
@@ -223,10 +224,10 @@ class SearchFragment : Fragment() {
     }
 
     private fun generateErrorMessage(): String? = buildString {
-        append(getString(R.string.api_error_loading_org))
-        viewModel.getOrgLoadErrorMessage().value?.let { e ->
-            append(":\n$e")
-        }
+        append("Error: ")
+        val msg = viewModel.getOrgLoadErrorMessage().value
+            ?: "Unknown (error message not provided by GitHub)"
+        append(msg)
     }
 
     private fun hideSoftKeyBoard(parentActivity: Activity) {

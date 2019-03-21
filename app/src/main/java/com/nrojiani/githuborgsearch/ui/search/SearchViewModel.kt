@@ -21,6 +21,7 @@ class SearchViewModel
 
     /* publicly exposed LiveData */
     fun getOrganization(): LiveData<Organization?> = organization
+
     fun getOrgLoadErrorMessage(): LiveData<String?> = orgLoadErrorMessage
     fun isLoading(): LiveData<Boolean> = loading
 

@@ -99,8 +99,6 @@ class OrgDetailsViewModel
                     Log.d(TAG, "restoreFromBundle - Re-fetching repos")
                 }
         }
-
-        // TODO what selectedOrganization != null, but
     }
 
     companion object {

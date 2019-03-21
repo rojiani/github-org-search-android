@@ -23,9 +23,9 @@
             android:layout_height="40dp"
             android:layout_margin="16dp"
             android:contentDescription="@string/organization_avatar_content_desc"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/condensedOrgNameTextView"
