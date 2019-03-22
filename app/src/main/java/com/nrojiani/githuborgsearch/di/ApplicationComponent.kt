@@ -9,6 +9,7 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [
+    ContextModule::class,
     NetworkModule::class,
     ViewModelModule::class
 ])

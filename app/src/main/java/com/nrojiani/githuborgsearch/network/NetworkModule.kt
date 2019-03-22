@@ -1,7 +1,9 @@
 package com.nrojiani.githuborgsearch.network
 
+import android.content.Context
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -23,11 +25,13 @@ abstract class NetworkModule {
         @Singleton
         fun provideRetrofit(): Retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create(
-                Moshi.Builder()
-                    .add(KotlinJsonAdapterFactory())
-                    .build()
-            ))
+            .addConverterFactory(
+                MoshiConverterFactory.create(
+                    Moshi.Builder()
+                        .add(KotlinJsonAdapterFactory())
+                        .build()
+                )
+            )
             .build()
 
         @JvmStatic
@@ -36,6 +40,11 @@ abstract class NetworkModule {
         fun provideGitHubService(retrofit: Retrofit): GitHubService =
             retrofit.create(GitHubService::class.java)
 
+
+        @Provides
+        @Singleton
+        @JvmStatic
+        fun providePicasso(context: Context) = Picasso.Builder(context).build()
 
         /** TODO - combine?
          * ```kotlin

@@ -32,8 +32,8 @@ class OrgDetailsFragment : Fragment() {
 
     private val TAG by lazy { this::class.java.simpleName }
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
+    @Inject lateinit var viewModelFactory: ViewModelFactory
+    @Inject lateinit var picasso: Picasso
     private lateinit var viewModel: OrgDetailsViewModel
 
     override fun onAttach(context: Context) {
@@ -97,10 +97,7 @@ class OrgDetailsFragment : Fragment() {
 
     private fun showCondensedOrgDetails(org: Organization) {
         condensedOrgView.apply {
-            // TODO dependency injection
-            Picasso.with(context)
-                .load(org.avatarUrl)
-                .into(orgAvatarImageView)
+            picasso.load(org.avatarUrl).into(orgAvatarImageView)
 
             condensedOrgNameTextView.text = org.name
             condensedOrgLoginTextView.text = "@${org.login}"

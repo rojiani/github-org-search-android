@@ -34,8 +34,8 @@ class SearchFragment : Fragment() {
 
     private val TAG by lazy { this::class.java.simpleName }
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
+    @Inject lateinit var viewModelFactory: ViewModelFactory
+    @Inject lateinit var picasso: Picasso
 
     private lateinit var viewModel: SearchViewModel
 
@@ -134,10 +134,7 @@ class SearchFragment : Fragment() {
         orgCardView.isVisible = true
 
         orgCardView.apply {
-            // TODO dependency injection
-            Picasso.with(context)
-                .load(org.avatarUrl)
-                .into(orgImageView)
+            picasso.load(org.avatarUrl).into(orgImageView)
 
             orgNameTextView.text = org.name
             orgLoginTextView.text = org.login
