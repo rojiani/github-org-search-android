@@ -12,10 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service
-            android:name=".web.chromecustomtabs.KeepAliveService"
-            android:enabled="true"
-            android:exported="true" />
+        <activity android:name=".ui.web.ServiceConnectionActivity"></activity>
 
         <activity android:name=".ui.web.WebViewActivity" />
 

@@ -22,6 +22,6 @@
     <string name="label_top_repos">Top Repositories</string>
     <string name="example_error_message">Not Found</string>
 
-    <!--<string name="error_invalid_url">URL doesn\'t look valid</string>-->
+    <string name="title_activity_service_connection">ServiceConnectionActivity</string>
 
 </resources>
