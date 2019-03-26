@@ -13,7 +13,7 @@ data class Repo(
     val name: String,
     @Json(name = "html_url") val repoUrl: String,
     val description: String? = "",
-    @Json(name = "stargazers_count") val stars: Long,
-    @Json(name = "forks_count") val forks: Long,
+    @Json(name = "stargazers_count") val stars: Int,
+    @Json(name = "forks_count") val forks: Int,
     val language: String? = ""
 ) : Parcelable

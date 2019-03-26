@@ -11,6 +11,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.nrojiani.githuborgsearch.R
+import com.nrojiani.githuborgsearch.extensions.formatted
 import com.nrojiani.githuborgsearch.model.Repo
 
 /**
@@ -90,8 +91,8 @@ class RepoListAdapter(
                 repoLanguageChip.isVisible = true
                 repoLanguageChip.text = repo.language
             }
-            forksChip.text = repo.forks.toString()
-            starsChip.text = repo.stars.toString()
+            forksChip.text = repo.forks.formatted()
+            starsChip.text = repo.stars.formatted()
         }
     }
 
