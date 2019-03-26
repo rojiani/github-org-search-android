@@ -1,4 +1,4 @@
-package com.nrojiani.githuborgsearch.ui.orgdetails
+package com.nrojiani.githuborgsearch.adapters
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -52,10 +52,10 @@ class RepoListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepoViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_item_repo, parent, false)
-        return RepoListAdapter.RepoViewHolder(view, onRepoSelected)
+        return RepoViewHolder(view, onRepoSelected)
     }
 
-    override fun onBindViewHolder(holder: RepoListAdapter.RepoViewHolder, position: Int) =
+    override fun onBindViewHolder(holder: RepoViewHolder, position: Int) =
         holder.bind(mostStarredRepos[position])
 
     override fun getItemCount(): Int = OrgDetailsViewModel.NUM_REPOS_TO_DISPLAY
