@@ -1,34 +1,6 @@
 buildscript {
-    ext {
-        // Sdk and tools
-        compileSdkVersion = 28
-        minSdkVersion = 19
-        targetSdkVersion = 28
+    apply from: 'dependencies.gradle'
 
-        // Plugins
-        gradlePluginVersion = '3.3.2'
-
-        // App dependencies
-        androidXAnnotationsVersion = '1.0.1'
-        androidXBrowserVersion = '1.0.0'
-        androidXTestVersion = '1.1.0-alpha4'
-        appCompatVersion = '1.1.0-alpha03'
-        constraintLayoutVersion = '2.0.0-alpha3'
-        // customTabsKotlinVersion = '1.0.0'
-        coreTestingVersion = '2.0.0'
-        daggerVersion = '2.21'
-        espressoVersion = '3.1.0-alpha4'
-        junitVersion = '4.12'
-        kotlinVersion = '1.3.21'
-        ktlintVersion = '0.30.0'
-        ktxVersion = '1.1.0-alpha05'
-        lifecycleVersion = '2.1.0-alpha03'
-        materialVersion = '1.1.0-alpha04'
-        moshiVersion = '1.8.0'
-        picassoVersion = '2.5.2'
-        recyclerViewVersion = '1.1.0-alpha02'
-        retrofitVersion = '2.5.0'
-    }
     repositories {
         google()
         jcenter()
@@ -42,6 +14,10 @@ buildscript {
 
 plugins {
     id "com.diffplug.gradle.spotless" version "3.13.0"
+}
+
+subprojects {
+    apply from: '../dependencies.gradle'
 }
 
 allprojects {
