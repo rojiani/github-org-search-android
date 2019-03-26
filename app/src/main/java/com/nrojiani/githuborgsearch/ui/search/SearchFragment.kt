@@ -18,7 +18,8 @@ import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.di.MyApplication
 import com.nrojiani.githuborgsearch.model.Organization
 import com.nrojiani.githuborgsearch.ui.orgdetails.OrgDetailsFragment
-import com.nrojiani.githuborgsearch.ui.orgdetails.OrgDetailsViewModel
+import com.nrojiani.githuborgsearch.viewmodel.OrgDetailsViewModel
+import com.nrojiani.githuborgsearch.viewmodel.SearchViewModel
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.card_org_full.*

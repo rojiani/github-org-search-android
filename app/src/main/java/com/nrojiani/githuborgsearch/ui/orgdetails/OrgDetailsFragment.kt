@@ -17,6 +17,7 @@ import com.nrojiani.githuborgsearch.di.MyApplication
 import com.nrojiani.githuborgsearch.model.Organization
 import com.nrojiani.githuborgsearch.model.Repo
 import com.nrojiani.githuborgsearch.ui.shared.MainActivity
+import com.nrojiani.githuborgsearch.viewmodel.OrgDetailsViewModel
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.card_org_condensed.view.*

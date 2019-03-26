@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.extensions.formatted
 import com.nrojiani.githuborgsearch.model.Repo
+import com.nrojiani.githuborgsearch.viewmodel.OrgDetailsViewModel
 
 /**
  * RecyclerView Adapter for the repos for an organization.

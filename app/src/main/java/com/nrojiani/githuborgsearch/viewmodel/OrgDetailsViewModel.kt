@@ -1,4 +1,4 @@
-package com.nrojiani.githuborgsearch.ui.orgdetails
+package com.nrojiani.githuborgsearch.viewmodel
 
 import android.os.Bundle
 import android.util.Log
@@ -92,7 +92,7 @@ class OrgDetailsViewModel
     fun saveToBundle(outState: Bundle) {
         Log.d(TAG, "saveToBundle")
         selectedOrganization.value?.let { org ->
-            outState.putParcelable(OrgDetailsViewModel.KEY_ORGANIZATION, org)
+            outState.putParcelable(KEY_ORGANIZATION, org)
         }
 
         // TODO save cache
@@ -105,7 +105,7 @@ class OrgDetailsViewModel
         // If selectedOrganization (LiveData) is null, the ViewModel was destroyed.
         // Restore from Bundle. Otherwise we don't need to do anything.
         if (selectedOrganization.value == null) {
-            savedInstanceState?.getParcelable<Organization>(OrgDetailsViewModel.KEY_ORGANIZATION)
+            savedInstanceState?.getParcelable<Organization>(KEY_ORGANIZATION)
                 ?.let { org ->
                     selectedOrganization.value = org
                     Log.d(TAG, "restoreFromBundle - selectedOrganization restored from Bundle")

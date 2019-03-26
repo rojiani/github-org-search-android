@@ -1,8 +1,6 @@
 package com.nrojiani.githuborgsearch.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.nrojiani.githuborgsearch.ui.orgdetails.OrgDetailsViewModel
-import com.nrojiani.githuborgsearch.ui.search.SearchViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

@@ -1,4 +1,4 @@
-package com.nrojiani.githuborgsearch.ui.search
+package com.nrojiani.githuborgsearch.viewmodel
 
 import android.os.Bundle
 import android.util.Log
