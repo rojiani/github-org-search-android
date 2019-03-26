@@ -1,4 +1,4 @@
-package com.nrojiani.githuborgsearch.ui.search
+package com.nrojiani.githuborgsearch.controllers.fragments
 
 import android.app.Activity
 import android.content.Context
@@ -17,7 +17,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.di.MyApplication
 import com.nrojiani.githuborgsearch.model.Organization
-import com.nrojiani.githuborgsearch.ui.orgdetails.OrgDetailsFragment
 import com.nrojiani.githuborgsearch.viewmodel.OrgDetailsViewModel
 import com.nrojiani.githuborgsearch.viewmodel.SearchViewModel
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory

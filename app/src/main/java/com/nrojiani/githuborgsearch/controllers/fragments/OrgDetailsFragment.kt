@@ -1,4 +1,4 @@
-package com.nrojiani.githuborgsearch.ui.orgdetails
+package com.nrojiani.githuborgsearch.controllers.fragments
 
 import android.content.Context
 import android.os.Bundle

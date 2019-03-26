@@ -1,8 +1,8 @@
 package com.nrojiani.githuborgsearch.di
 
 import com.nrojiani.githuborgsearch.network.NetworkModule
-import com.nrojiani.githuborgsearch.ui.orgdetails.OrgDetailsFragment
-import com.nrojiani.githuborgsearch.ui.search.SearchFragment
+import com.nrojiani.githuborgsearch.controllers.fragments.OrgDetailsFragment
+import com.nrojiani.githuborgsearch.controllers.fragments.SearchFragment
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelModule
 import dagger.Component
 import javax.inject.Singleton

@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import com.nrojiani.githuborgsearch.R
-import com.nrojiani.githuborgsearch.ui.search.SearchFragment
+import com.nrojiani.githuborgsearch.controllers.fragments.SearchFragment
 import com.saurabharora.customtabs.CustomTabFallback
 import com.saurabharora.customtabs.extensions.launchWithFallback
 
