@@ -1,4 +1,4 @@
-package com.nrojiani.githuborgsearch.ui.web
+package com.nrojiani.githuborgsearch.controllers.activities
 
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity

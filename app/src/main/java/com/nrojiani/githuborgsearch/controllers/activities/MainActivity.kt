@@ -1,4 +1,4 @@
-package com.nrojiani.githuborgsearch.ui.shared
+package com.nrojiani.githuborgsearch.controllers.activities
 
 import android.app.Activity
 import android.content.Intent
@@ -10,7 +10,6 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.ui.search.SearchFragment
-import com.nrojiani.githuborgsearch.ui.web.WebViewActivity
 import com.saurabharora.customtabs.CustomTabFallback
 import com.saurabharora.customtabs.extensions.launchWithFallback
 

@@ -4,7 +4,7 @@
     android:id="@+id/activity_webview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.web.WebViewActivity">
+    tools:context=".controllers.activities.WebViewActivity">
 
     <WebView
         android:id="@+id/webview_content"

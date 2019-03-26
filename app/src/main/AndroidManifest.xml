@@ -12,9 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.web.ServiceConnectionActivity"></activity>
+        <activity android:name=".controllers.activities.ServiceConnectionActivity"></activity>
 
-        <activity android:name=".ui.web.WebViewActivity" />
+        <activity android:name=".controllers.activities.WebViewActivity" />
 
         <receiver
             android:name=".web.chromecustomtabs.ChromeTabActionReceiver"
@@ -22,7 +22,7 @@
             android:exported="true" />
 
         <activity
-            android:name=".ui.shared.MainActivity"
+            android:name=".controllers.activities.MainActivity"
             android:windowSoftInputMode="stateUnchanged|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
