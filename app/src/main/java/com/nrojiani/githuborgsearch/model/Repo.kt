@@ -11,7 +11,6 @@ import kotlinx.android.parcel.Parcelize
 data class Repo(
     val id: Long,
     val name: String,
-    @Json(name = "full_name") val fullName: String,
     @Json(name = "html_url") val repoUrl: String,
     val description: String? = "",
     @Json(name = "stargazers_count") val stars: Long,

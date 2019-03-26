@@ -41,23 +41,10 @@ abstract class NetworkModule {
             retrofit.create(GitHubService::class.java)
 
 
+        @JvmStatic
         @Provides
         @Singleton
-        @JvmStatic
-        fun providePicasso(context: Context) = Picasso.Builder(context).build()
+        fun providePicasso(context: Context): Picasso = Picasso.Builder(context).build()
 
-        /** TODO - combine?
-         * ```kotlin
-         * @Provides
-         * @Singleton
-         * fun provideGitHubService(): GitHubService {
-         *     Log.d(TAG, "createService: creating GitHubService")
-         *     return Retrofit.Builder()
-         *          .baseUrl(BASE_URL)
-         *          .addConverterFactory(MoshiConverterFactory.create())
-         *          .build()
-         *          .create(GitHubService::class.java)
-         * ```
-         */
     }
 }
