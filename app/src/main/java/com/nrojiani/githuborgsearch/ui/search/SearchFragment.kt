@@ -118,7 +118,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun performSearch() {
-        val orgQuery = searchEditText.text.toString()
+        val orgQuery = searchEditText.text.toString().trim()
         if (orgQuery.isBlank()) {
             searchEditText.error = "Please enter an organization name"
         } else {
