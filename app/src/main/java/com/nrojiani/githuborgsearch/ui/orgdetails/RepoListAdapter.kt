@@ -22,7 +22,7 @@ class RepoListAdapter(
     private val allRepos: MutableList<Repo> = ArrayList()
     private val mostStarredRepos: List<Repo>
         get() = allRepos.sortedByDescending { it.stars }
-            .take(OrgDetailsViewModel.REPO_COUNT_TO_SHOW)
+            .take(OrgDetailsViewModel.NUM_REPOS_TO_DISPLAY)
 
     private val TAG by lazy { this::class.java.simpleName }
 
@@ -54,7 +54,7 @@ class RepoListAdapter(
     override fun onBindViewHolder(holder: RepoListAdapter.RepoViewHolder, position: Int) =
         holder.bind(mostStarredRepos[position])
 
-    override fun getItemCount(): Int = OrgDetailsViewModel.REPO_COUNT_TO_SHOW
+    override fun getItemCount(): Int = OrgDetailsViewModel.NUM_REPOS_TO_DISPLAY
 
     override fun getItemId(position: Int): Long = mostStarredRepos[position].id
 

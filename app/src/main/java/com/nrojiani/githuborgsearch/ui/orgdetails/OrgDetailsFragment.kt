@@ -106,8 +106,21 @@ class OrgDetailsFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.getSelectedOrganization().observe(this, Observer { org: Organization? ->
-            Log.d(TAG, "(Observer): OrgDetailsFragment getSelectedOrganization() changed to $org")
-            org?.let(this::showCondensedOrgDetails)
+            Log.d(TAG, "(Observer): OrgDetailsViewModel getSelectedOrganization() changed to $org")
+            org?.let { newOrg ->
+                // DEBUG
+                if (viewModel.hasTopReposCached(newOrg)) {
+                    Log.d(TAG, "observeViewModel - top repos were cached for $newOrg")
+                } else {
+                    Log.d(TAG, "observeViewModel - top repos were NOT cached for $newOrg. Loading repos...")
+                    viewModel.loadReposForOrg(newOrg)
+                }
+                // DEBUG
+                if (!viewModel.hasTopReposCached(newOrg)) {
+                    viewModel.loadReposForOrg(newOrg)
+                }
+                showCondensedOrgDetails(newOrg)
+            }
         })
 
         viewModel.getAllRepos().observe(this, Observer { repos ->

@@ -44,6 +44,12 @@ class OrgDetailsViewModel
 
     private var repoCall: Call<List<Repo>>? = null
 
+
+    /** Stores the top repos keyed by each organization. */
+    private val topReposCache: MutableMap<Organization, List<Repo>> = HashMap()
+
+    fun hasTopReposCached(org: Organization): Boolean = org in topReposCache
+
     /**
      * Fetch all repositories owned by the organization.
      */
@@ -67,6 +73,12 @@ class OrgDetailsViewModel
                     repoLoadErrorMessage.value = response.message()
                     loading.value = false
                 }
+
+                // Cache top repos
+                allRepos.value?.sortedByDescending { it.stars }
+                    ?.take(NUM_REPOS_TO_DISPLAY)?.let { topRepos ->
+                        topReposCache += (organization to topRepos)
+                    }
             }
 
             override fun onFailure(call: Call<List<Repo>>, t: Throwable) {
@@ -82,6 +94,9 @@ class OrgDetailsViewModel
         selectedOrganization.value?.let { org ->
             outState.putParcelable(OrgDetailsViewModel.KEY_ORGANIZATION, org)
         }
+
+        // TODO save cache
+        // outState.putParcelable(KEY_TOP_REPOS_CACHE, topReposCache)
     }
 
     /** Restore LiveData after app killed */
@@ -99,11 +114,13 @@ class OrgDetailsViewModel
                     Log.d(TAG, "restoreFromBundle - Re-fetching repos")
                 }
         }
+        // TODO restore cache
     }
 
     companion object {
-        const val REPO_COUNT_TO_SHOW = 3
+        const val NUM_REPOS_TO_DISPLAY = 3
         const val KEY_ORGANIZATION = "org_details"
+        const val KEY_TOP_REPOS_CACHE = "top_repos_cache"
     }
 
 }
