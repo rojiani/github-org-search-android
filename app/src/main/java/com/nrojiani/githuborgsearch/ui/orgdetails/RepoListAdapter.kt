@@ -13,13 +13,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.model.Repo
 
+/**
+ * RecyclerView Adapter for the repos for an organization.
+ */
 class RepoListAdapter(
     viewModel: OrgDetailsViewModel,
     lifecycleOwner: LifecycleOwner,
     private val onRepoSelected: (Repo) -> Unit
 ) : RecyclerView.Adapter<RepoListAdapter.RepoViewHolder>() {
 
+    /** All repositories for an organization */
     private val allRepos: MutableList<Repo> = ArrayList()
+
+    /** The most-starred repos */
     private val mostStarredRepos: List<Repo>
         get() = allRepos.sortedByDescending { it.stars }
             .take(OrgDetailsViewModel.NUM_REPOS_TO_DISPLAY)
@@ -41,16 +47,12 @@ class RepoListAdapter(
         setHasStableIds(true)
     }
 
-    // Called when RecyclerView needs a new RecyclerView.ViewHolder of the given type to represent an item.
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepoViewHolder {
-        // inflate the view for a single list item (repo)
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_item_repo, parent, false)
         return RepoListAdapter.RepoViewHolder(view, onRepoSelected)
     }
 
-    // Called by RecyclerView to display the data at the specified position.
-    // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: RepoListAdapter.RepoViewHolder, position: Int) =
         holder.bind(mostStarredRepos[position])
 
@@ -68,13 +70,11 @@ class RepoListAdapter(
         private val repoNameTextView: TextView = itemView.findViewById(R.id.repoNameTextView)
         private val repoDescriptionTextView: TextView =
             itemView.findViewById(R.id.repoDescriptionTextView)
-        private val repoLanguageChip: TextView =
-            itemView.findViewById(R.id.repoLanguageChip)
+        private val repoLanguageChip: TextView = itemView.findViewById(R.id.repoLanguageChip)
         private val starsChip: TextView = itemView.findViewById(R.id.repoStarsChip)
         private val forksChip: TextView = itemView.findViewById(R.id.repoForksChip)
 
         init {
-            // Set click list listener for a list item
             itemView.setOnClickListener {
                 repo?.let { onRepoSelected(it) }
             }
