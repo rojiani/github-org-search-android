@@ -14,7 +14,7 @@ ext {
     androidXTestVersion = '1.1.0-alpha4'
     appCompatVersion = '1.1.0-alpha03'
     constraintLayoutVersion = '2.0.0-alpha3'
-    coreTestingVersion = '2.0.0'
+    coreTestingVersion = '2.0.1'
     customTabsKotlinVersion = '1.1'
     daggerVersion = '2.21'
     espressoVersion = '3.1.0-alpha4'

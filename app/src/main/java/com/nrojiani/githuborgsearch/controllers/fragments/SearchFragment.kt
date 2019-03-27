@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -16,6 +17,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.di.MyApplication
+import com.nrojiani.githuborgsearch.extensions.displayTextOrHide
 import com.nrojiani.githuborgsearch.model.Organization
 import com.nrojiani.githuborgsearch.viewmodel.OrgDetailsViewModel
 import com.nrojiani.githuborgsearch.viewmodel.SearchViewModel
@@ -69,9 +71,6 @@ class SearchFragment : Fragment() {
             )
         }
 
-        // TODO may be unnecessary
-        viewModel.getOrganization().value?.let(this::showOrgDetails)
-
         initViews()
         observeViewModel()
     }
@@ -111,7 +110,7 @@ class SearchFragment : Fragment() {
         }
 
         orgCardView.setOnClickListener {
-            viewModel.getOrganization()?.value?.let {
+            viewModel.getOrganization().value?.let {
                 onOrgSelected(it)
             }
         }
@@ -119,14 +118,17 @@ class SearchFragment : Fragment() {
 
     private fun performSearch() {
         val orgQuery = searchEditText.text.toString().trim()
-        if (orgQuery.isBlank()) {
-            searchEditText.error = "Please enter an organization name"
-        } else {
-            // Dismiss Keyboard
-            searchEditText.onEditorAction(EditorInfo.IME_ACTION_DONE)
 
-            // Fetch Org info
-            viewModel.loadOrgDetails(orgQuery)
+        when {
+            orgQuery.isBlank() -> searchEditText.error = "Please enter an organization name"
+            isRepeatedQuery(orgQuery) -> return
+            else -> {
+                // Dismiss Keyboard
+                searchEditText.onEditorAction(EditorInfo.IME_ACTION_DONE)
+
+                // Fetch Org info
+                viewModel.loadOrgDetails(orgQuery)
+            }
         }
     }
 
@@ -139,25 +141,12 @@ class SearchFragment : Fragment() {
             orgNameTextView.text = org.name
             orgLoginTextView.text = org.login
 
-            if (org.location.isNullOrBlank()) {
-                orgLocationTextView.isVisible = false
-            } else {
-                orgLocationTextView.text = org.location
-                orgLocationTextView.isVisible = true
-            }
-
-            if (org.blogUrl.isNullOrBlank()) {
-                orgBlogTextView.isInvisible = true
-            } else {
-                orgBlogTextView.text = org.blogUrl
-                orgBlogTextView.isVisible = true
-            }
-
-            if (org.description.isNullOrBlank()) {
-                orgDescriptionTextView.isVisible = false
-            } else {
-                orgDescriptionTextView.text = org.description
-                orgDescriptionTextView.isVisible = true
+            mapOf(
+                orgLocationTextView to org.location,
+                orgBlogTextView to org.blogUrl,
+                orgDescriptionTextView to org.description
+            ).forEach { (textView, text) ->
+                textView.displayTextOrHide(text)
             }
         }
     }
@@ -180,7 +169,7 @@ class SearchFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.getOrganization().observe(this, Observer { org: Organization? ->
-            Log.d(TAG, "(Observer) SearchViewModel getSelectedOrganization() changed to $org")
+            Log.d(TAG, "(Observer) SearchViewModel getOrganization() changed to $org")
 
             org?.let {
                 progressBar.isInvisible = true
@@ -234,5 +223,13 @@ class SearchFragment : Fragment() {
         val currentFocus = parentActivity.currentFocus ?: return
         inputMethodManager?.takeIf { it.isAcceptingText }
             ?.apply { hideSoftInputFromWindow(currentFocus.windowToken, 0) }
+    }
+
+    /** Checks if a query is the same as the search before it. */
+    private fun isRepeatedQuery(orgQuery: String): Boolean {
+        val orgFromViewModel = viewModel.getOrganization().value
+        orgFromViewModel ?: return false
+
+        return orgQuery == orgFromViewModel.login
     }
 }
