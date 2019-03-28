@@ -14,11 +14,6 @@
         android:theme="@style/AppTheme">
         <activity android:name=".controllers.activities.WebViewActivity" />
 
-        <receiver
-            android:name=".web.chromecustomtabs.ChromeTabActionReceiver"
-            android:enabled="true"
-            android:exported="true" />
-
         <activity
             android:name=".controllers.activities.MainActivity"
             android:windowSoftInputMode="stateUnchanged|adjustResize">
