@@ -1,6 +1,5 @@
-package com.nrojiani.githuborgsearch
+package com.nrojiani.githuborgsearch.controllers.fragments
 
-import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.*
@@ -10,8 +9,8 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.controllers.activities.MainActivity
-import com.nrojiani.githuborgsearch.controllers.fragments.SearchFragment
 import com.nrojiani.githuborgsearch.util.EspressoIdlingResource
 import org.hamcrest.Matchers.not
 import org.junit.After
@@ -28,6 +27,52 @@ import org.junit.runner.RunWith
 @LargeTest
 class SearchFragmentTest {
 
+    /* TODO
+        hide keyboard
+
+        orgCardView clicked ->
+            isInvisible -> nothing
+            isVisible -> see onOrgSelected()
+                setSelectedOrganization called
+                fragment transition stuff
+
+
+        searchButton clicked ->
+            null or blank -> searchEditText.error set to "Please enter an organization name"
+            viewModel.loadOrgDetails(orgQuery) is called
+
+
+    LiveData/Observers:
+
+        getOrganization():
+            null ->
+                orgCardView.isInvisible
+            present ->
+                orgCardView.isVisible
+                progressBar.isInvisible
+                errorTextView.isGone
+
+                each view in orgCardView has data (see showOrgDetails)
+                - https://mdswanson.com/blog/2013/12/16/reliable-android-http-testing-with-retrofit-and-mockito.html
+
+        isLoading():
+            true ->
+                progressBar.isVisible
+                errorTextView.isGone
+                orgCardView.isInvisible
+            false ->
+                progressBar.isInvisible
+
+        getOrgLoadErrorMessage():
+            null or blank ->
+                errorTextView.isGone
+                errorTextView.text = ""
+            has valid msg ->
+                errorTextView.isVisible
+                orgCardView.isInvisible
+                progressBar.isGone
+
+     */
 
     /**
      * Use [ActivityScenarioRule] to create and launch the activity under test before each test,
@@ -61,8 +106,10 @@ class SearchFragmentTest {
     @Test
     fun searchWidgetViewsAreVisible() {
         val searchWidgetViewIds = setOf(
-            R.id.searchBarWidget, R.id.textInputLayout,
-            R.id.searchEditText, R.id.searchButton
+            R.id.searchBarWidget,
+            R.id.textInputLayout,
+            R.id.searchEditText,
+            R.id.searchButton
         )
         searchWidgetViewIds.forEach { id ->
             onView(withId(id))
@@ -169,7 +216,11 @@ class SearchFragmentTest {
         }
 
         // location, blog, description missing -> views hidden
-        setOf(R.id.orgLocationTextView, R.id.orgBlogTextView, R.id.orgDescriptionTextView)
+        setOf(
+            R.id.orgLocationTextView,
+            R.id.orgBlogTextView,
+            R.id.orgDescriptionTextView
+        )
             .forEach { id ->
                 onView(withId(id))
                     .check(matches(not(isDisplayed())))
@@ -204,5 +255,24 @@ class SearchFragmentTest {
 
         // TODO fragment transaction
     }
+
+    //    @Test
+//    fun whenOutsideOfSearchWidgetClicked_keyboardIsDismissed() {
+//        // keyboard open, text entered
+//        onView(withId(R.id.searchEditText)).perform(typeText("spotify"))
+//
+//        // click outside of EditText
+//        onView(withId(R.id.searchFragment)).perform(click())
+//
+//        assert
+//    }
+//
+//    private fun isKeyboardShown(): Boolean {
+//        val inputMethodManager =
+//            InstrumentationRegistry.getInstrumentation().targetContext.getSystemService(
+//                Context.INPUT_METHOD_SERVICE
+//            ) as InputMethodManager
+//        return inputMethodManager.isAcceptingText
+//    }
 
 }
