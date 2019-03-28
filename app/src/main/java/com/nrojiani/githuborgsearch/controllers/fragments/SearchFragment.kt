@@ -35,14 +35,15 @@ class SearchFragment : Fragment() {
 
     private val TAG by lazy { this::class.java.simpleName }
 
-    @Inject lateinit var viewModelFactory: ViewModelFactory
-    @Inject lateinit var picasso: Picasso
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+    @Inject
+    lateinit var picasso: Picasso
 
     private lateinit var viewModel: SearchViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        Log.d(TAG, "onAttach")
         MyApplication.getApplicationComponent(context).inject(this)
     }
 
@@ -53,21 +54,16 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "onViewCreated: savedInstanceState: $savedInstanceState")
 
         viewModel = ViewModelProviders.of(activity!!, viewModelFactory)
             .get(SearchViewModel::class.java)
-
-        Log.d(TAG, "onViewCreated: savedInstanceState: $savedInstanceState")
 
         savedInstanceState?.let {
             viewModel.restoreFromBundle(savedInstanceState)
             viewModel.getOrganization().value?.let {
                 orgCardView.isVisible = true
             }
-            Log.d(
-                TAG, "onViewCreated: after viewModel.restoreFromBundle, " +
-                        "org: ${viewModel.getOrganization().value}"
-            )
         }
 
         initViews()
@@ -76,10 +72,8 @@ class SearchFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        Log.d(TAG, "onSaveInstanceState: outState: $outState")
 
-        Log.d(TAG, "onSaveInstanceState: outState (Bundle): $outState")
-
-        // TODO: Use Data Binding on searchEditText. Its text should be in ViewModel.
         searchEditText?.text?.toString()?.run {
             if (isNotBlank()) {
                 outState.putString(SearchViewModel.KEY_ORG_SEARCH_INPUT, this)
@@ -151,7 +145,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun onOrgSelected(org: Organization) {
-        Log.d(TAG, "onOrgSelected: org = $org")
+        Log.d(TAG, "onOrgSelected($org)")
         // Scope the ViewModel to the Activity, not the fragment
         val orgDetailsViewModel = ViewModelProviders.of(activity!!, viewModelFactory)
             .get(OrgDetailsViewModel::class.java)
@@ -168,8 +162,7 @@ class SearchFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.getOrganization().observe(this, Observer { org: Organization? ->
-            Log.d(TAG, "(Observer) SearchViewModel getOrganization() changed to $org")
-
+            Log.d(TAG, "(Observer) getOrganization() => $org")
             org?.let {
                 progressBar.isInvisible = true
                 errorTextView.isVisible = false
@@ -177,11 +170,8 @@ class SearchFragment : Fragment() {
             }
         })
 
-        // Error message
         viewModel.getOrgLoadErrorMessage().observe(this, Observer { errorMessage: String? ->
-            Log.d(TAG,
-                "(Observer) SearchViewModel getOrgLoadErrorMessage() changed to $errorMessage"
-            )
+            Log.d(TAG, "(Observer) getOrgLoadErrorMessage() => $errorMessage")
             when {
                 errorMessage.isNullOrBlank() -> {
                     errorTextView.isVisible = false
@@ -195,9 +185,8 @@ class SearchFragment : Fragment() {
             }
         })
 
-        // If loading
         viewModel.isLoading().observe(this, Observer<Boolean> { isLoading ->
-            Log.d(TAG, "(Observer) SearchViewModel isLoading() changed to $isLoading")
+            Log.d(TAG, "(Observer) isLoading() => $isLoading")
             if (isLoading) {
                 progressBar.isVisible = true
                 errorTextView.isVisible = false
@@ -234,6 +223,7 @@ class SearchFragment : Fragment() {
 
 
     companion object {
-        internal const val EMPTY_SEARCH_ERROR_MESSAGE = "Please enter an organization name (e.g., 'nytimes')"
+        internal const val EMPTY_SEARCH_ERROR_MESSAGE =
+            "Please enter an organization name (e.g., 'nytimes')"
     }
 }

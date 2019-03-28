@@ -69,12 +69,7 @@ dependencies {
     testImplementation "androidx.test.ext:junit:$junitKtxVersion"
     testImplementation "androidx.test.ext:junit-ktx:$junitKtxVersion"
 
-    testImplementation "androidx.arch.core:core-testing:2.0.1"
-
-    testImplementation "org.mockito:mockito-core:$mockitoVersion"
-
     // Android Instrumented Test Dependencies
-    androidTestImplementation "androidx.arch.core:core-testing:2.0.1"
     androidTestImplementation "androidx.test:core:$coreVersion"
     androidTestImplementation "androidx.test:core-ktx:$coreVersion"
     androidTestImplementation "androidx.test.ext:junit:$junitKtxVersion"

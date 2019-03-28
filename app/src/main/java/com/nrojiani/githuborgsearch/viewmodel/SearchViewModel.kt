@@ -47,11 +47,8 @@ class SearchViewModel
 
         orgCall?.enqueue(object : Callback<Organization> {
             override fun onResponse(call: Call<Organization>, response: Response<Organization>) {
-                // DEBUG
                 Log.d(TAG, "loadOrgDetails - onResponse: response = $response")
                 Log.d(TAG, "loadOrgDetails - onResponse: response.body = ${response.body()}")
-                Log.d(TAG, "loadOrgDetails - onResponse: response.code = ${response.code()}")
-                Log.d(TAG, "loadOrgDetails - onResponse: response.message = ${response.message()}")
 
                 organization.value = response.body()
 
@@ -69,7 +66,6 @@ class SearchViewModel
             override fun onFailure(call: Call<Organization>, t: Throwable) {
                 Log.e(TAG, t.message, t)
 
-                // TODO check internet connectivity status
                 orgLoadErrorMessage.value = "GitHubService call failed"
                 loading.value = false
 

@@ -47,27 +47,23 @@ class OrgDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d(TAG, "onCreateView")
         return inflater.inflate(R.layout.fragment_org_details, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "onViewCreated")
 
         viewModel = ViewModelProviders.of(activity!!, viewModelFactory)
             .get(OrgDetailsViewModel::class.java)
 
         viewModel.restoreFromBundle(savedInstanceState)
 
-        // DEBUG
         requireNotNull(viewModel.getSelectedOrganization().value) {
             "ERROR - selectedOrganization is null after restoreFromBundle"
         }
 
         val repos: List<Repo>? = viewModel.getAllRepos().value
         if (repos.isNullOrEmpty()) {
-            Log.d(TAG, "onViewCreated: repos null or empty. calling viewModel.loadReposForOrg()")
             viewModel.getSelectedOrganization().value?.let {
                 showCondensedOrgDetails(it)
                 viewModel.loadReposForOrg(it)
@@ -105,16 +101,8 @@ class OrgDetailsFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.getSelectedOrganization().observe(this, Observer { org: Organization? ->
-            Log.d(TAG, "(Observer): OrgDetailsViewModel getSelectedOrganization() changed to $org")
+            Log.d(TAG, "(Observer): getSelectedOrganization() => $org")
             org?.let { newOrg ->
-                // DEBUG
-                if (viewModel.hasTopReposCached(newOrg)) {
-                    Log.d(TAG, "observeViewModel - top repos were cached for $newOrg")
-                } else {
-                    Log.d(TAG, "observeViewModel - top repos were NOT cached for $newOrg. Loading repos...")
-                    viewModel.loadReposForOrg(newOrg)
-                }
-                // DEBUG
                 if (!viewModel.hasTopReposCached(newOrg)) {
                     viewModel.loadReposForOrg(newOrg)
                 }
@@ -123,16 +111,15 @@ class OrgDetailsFragment : Fragment() {
         })
 
         viewModel.getAllRepos().observe(this, Observer { repos ->
-            Log.d(TAG, "(Observer): OrgDetailsViewModel getAllRepos() changed to $repos")
+            Log.d(TAG, "(Observer): getAllRepos() => $repos")
             if (repos.isNullOrEmpty()) {
             } else {
                 recyclerView.isVisible = true
             }
         })
 
-        // Error message
         viewModel.getRepoLoadErrorMessage().observe(this, Observer { errorMessage ->
-            Log.d(TAG, "(Observer): OrgDetailsViewModel getRepoLoadErrorMessage() changed to $errorMessage")
+            Log.d(TAG, "(Observer): getRepoLoadErrorMessage() => $errorMessage")
             if (errorMessage.isNullOrBlank()) {
                 repoErrorTextView.isVisible = false
             } else {
@@ -142,9 +129,8 @@ class OrgDetailsFragment : Fragment() {
             }
         })
 
-        // If loading
         viewModel.isLoading().observe(this, Observer<Boolean> { isLoading ->
-            Log.d(TAG, "(Observer): OrgDetailsViewModel isLoading() changed to $isLoading")
+            Log.d(TAG, "(Observer): isLoading() => $isLoading")
             repoProgressBar.isVisible = isLoading
             if (isLoading) {
                 repoErrorTextView.isVisible = false

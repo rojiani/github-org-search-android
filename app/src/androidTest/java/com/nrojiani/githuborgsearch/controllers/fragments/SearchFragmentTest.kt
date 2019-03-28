@@ -27,53 +27,6 @@ import org.junit.runner.RunWith
 @LargeTest
 class SearchFragmentTest {
 
-    /* TODO
-        hide keyboard
-
-        orgCardView clicked ->
-            isInvisible -> nothing
-            isVisible -> see onOrgSelected()
-                setSelectedOrganization called
-                fragment transition stuff
-
-
-        searchButton clicked ->
-            null or blank -> searchEditText.error set to "Please enter an organization name"
-            viewModel.loadOrgDetails(orgQuery) is called
-
-
-    LiveData/Observers:
-
-        getOrganization():
-            null ->
-                orgCardView.isInvisible
-            present ->
-                orgCardView.isVisible
-                progressBar.isInvisible
-                errorTextView.isGone
-
-                each view in orgCardView has data (see showOrgDetails)
-                - https://mdswanson.com/blog/2013/12/16/reliable-android-http-testing-with-retrofit-and-mockito.html
-
-        isLoading():
-            true ->
-                progressBar.isVisible
-                errorTextView.isGone
-                orgCardView.isInvisible
-            false ->
-                progressBar.isInvisible
-
-        getOrgLoadErrorMessage():
-            null or blank ->
-                errorTextView.isGone
-                errorTextView.text = ""
-            has valid msg ->
-                errorTextView.isVisible
-                orgCardView.isInvisible
-                progressBar.isGone
-
-     */
-
     /**
      * Use [ActivityScenarioRule] to create and launch the activity under test before each test,
      * and close it after each test. This is a replacement for [androidx.test.rule.ActivityTestRule].
@@ -113,13 +66,12 @@ class SearchFragmentTest {
         )
         searchWidgetViewIds.forEach { id ->
             onView(withId(id))
-                .check(matches(isCompletelyDisplayed()))
+                .check(matches(isDisplayed()))
         }
     }
 
     @Test
     fun whenSearchEditTextIsVisible_displayHint() {
-        // TODO get with R.string.hint_enter_an_organization
         onView(withId(R.id.searchEditText))
             .check(
                 matches(
@@ -192,7 +144,6 @@ class SearchFragmentTest {
         }
     }
 
-
     @Test
     fun whenValidSearch_withSomeMissingInfo_orgCardViewIsDisplayedWithMissingTextHidden() {
         // initially not visible
@@ -257,24 +208,5 @@ class SearchFragmentTest {
         onView(withId(R.id.orgDetailsFragment))
             .check(matches(isDisplayed()))
     }
-
-    //    @Test
-//    fun whenOutsideOfSearchWidgetClicked_keyboardIsDismissed() {
-//        // keyboard open, text entered
-//        onView(withId(R.id.searchEditText)).perform(typeText("spotify"))
-//
-//        // click outside of EditText
-//        onView(withId(R.id.searchFragment)).perform(click())
-//
-//        assert
-//    }
-//
-//    private fun isKeyboardShown(): Boolean {
-//        val inputMethodManager =
-//            InstrumentationRegistry.getInstrumentation().targetContext.getSystemService(
-//                Context.INPUT_METHOD_SERVICE
-//            ) as InputMethodManager
-//        return inputMethodManager.isAcceptingText
-//    }
 
 }

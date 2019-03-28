@@ -36,7 +36,6 @@ class GitHubServiceTest : MockWebServerTest() {
         super.setUp()
         val mockWebServerEndpoint = baseEndpoint
 
-        // TODO - Dagger-ize
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl(mockWebServerEndpoint)
             .addConverterFactory(

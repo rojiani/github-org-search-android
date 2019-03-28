@@ -83,9 +83,4 @@ class OrgDetailsFragmentTest {
             .check(matches(isDisplayed()))
     }
 
-    @Ignore("Unimplemented")
-    @Test
-    fun recyclerViewDisplaysRepos() {
-        // TODO
-    }
 }

@@ -14,8 +14,7 @@ import com.nrojiani.githuborgsearch.R
 
 /**
  * This Activity is used as a fallback when there is no browser installed that supports
- * Chrome Custom Tabs
- * https://github.com/GoogleChrome/custom-tabs-client/blob/master/demos/src/main/java/org/chromium/customtabsdemos/WebviewActivity.java
+ * Chrome Custom Tabs.
  */
 class WebViewActivity : AppCompatActivity() {
 
@@ -70,9 +69,6 @@ class WebViewActivity : AppCompatActivity() {
                 super.onProgressChanged(view, newProgress)
             }
         }
-
-        // JS disabled
-        // webView.settings.javaScriptEnabled = true
     }
 
     /** Private webview client to handle visibility of progress */

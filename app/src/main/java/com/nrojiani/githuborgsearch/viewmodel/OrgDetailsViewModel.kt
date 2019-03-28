@@ -45,7 +45,7 @@ class OrgDetailsViewModel
     private var repoCall: Call<List<Repo>>? = null
 
 
-    /** Stores the top repos keyed by each organization. */
+    /** Stores the top repos keyed by each owning Organization. */
     private val topReposCache: MutableMap<Organization, List<Repo>> = HashMap()
 
     fun hasTopReposCached(org: Organization): Boolean = org in topReposCache
@@ -60,9 +60,7 @@ class OrgDetailsViewModel
 
         repoCall?.enqueue(object : Callback<List<Repo>> {
             override fun onResponse(call: Call<List<Repo>>, response: Response<List<Repo>>) {
-                // DEBUG
                 Log.d(TAG, "loadReposForOrg - onResponse: response = $response")
-                Log.d(TAG, "loadReposForOrg - response body: ${response.body()}")
 
                 allRepos.value = response.body()
 
@@ -90,37 +88,27 @@ class OrgDetailsViewModel
     }
 
     fun saveToBundle(outState: Bundle) {
-        Log.d(TAG, "saveToBundle")
         selectedOrganization.value?.let { org ->
             outState.putParcelable(KEY_ORGANIZATION, org)
         }
-
-        // TODO save cache
-        // outState.putParcelable(KEY_TOP_REPOS_CACHE, topReposCache)
     }
 
     /** Restore LiveData after app killed */
     fun restoreFromBundle(savedInstanceState: Bundle?) {
-        Log.d(TAG, "restoreFromBundle")
         // If selectedOrganization (LiveData) is null, the ViewModel was destroyed.
         // Restore from Bundle. Otherwise we don't need to do anything.
         if (selectedOrganization.value == null) {
             savedInstanceState?.getParcelable<Organization>(KEY_ORGANIZATION)
                 ?.let { org ->
                     selectedOrganization.value = org
-                    Log.d(TAG, "restoreFromBundle - selectedOrganization restored from Bundle")
-
                     loadReposForOrg(org)
-                    Log.d(TAG, "restoreFromBundle - Re-fetching repos")
                 }
         }
-        // TODO restore cache
     }
 
     companion object {
         const val NUM_REPOS_TO_DISPLAY = 3
         const val KEY_ORGANIZATION = "org_details"
-        const val KEY_TOP_REPOS_CACHE = "top_repos_cache"
     }
 
 }
