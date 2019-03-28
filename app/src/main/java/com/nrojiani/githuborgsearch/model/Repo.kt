@@ -2,11 +2,13 @@ package com.nrojiani.githuborgsearch.model
 
 import android.os.Parcelable
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
 
 /**
  * Models data about a GitHub repository.
  */
+@JsonClass(generateAdapter = true)
 @Parcelize
 data class Repo(
     val id: Long,

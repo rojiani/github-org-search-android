@@ -1,25 +1,14 @@
 package com.nrojiani.githuborgsearch.viewmodel
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.nrojiani.githuborgsearch.network.GitHubService
 import org.junit.Before
-
-import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
-import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.MockitoAnnotations
 
-@RunWith(JUnit4::class)
 class SearchViewModelTest {
 
     object OrgQueries {
         internal const val VALID = "nytimes"
         internal const val INVALID = "googlez"
     }
-
 //    companion object {
 //        private const val ORG_QUERY_VALID = "nytimes"
 //        private const val ORG_QUERY_NOT_FOUND = "googlez"
@@ -29,27 +18,33 @@ class SearchViewModelTest {
     // A JUnit Test Rule that swaps the background executor used by the Architecture Components
     // with a different one which executes each task synchronously.
     // @Rule
-    @get:Rule
-    @JvmField
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
-
-    @Mock
-    lateinit var gitHubService: GitHubService
+//    @get:Rule
+//    @JvmField
+//    val instantTaskExecutorRule = InstantTaskExecutorRule()
+//
+//    @Mock
+//    lateinit var gitHubService: GitHubService
 
     private lateinit var searchViewModel: SearchViewModel
     @Before
     fun setUp() {
-        MockitoAnnotations.initMocks(this)
-        searchViewModel = SearchViewModel(gitHubService)
+//        MockitoAnnotations.initMocks(this)
+//        searchViewModel = SearchViewModel(gitHubService)
     }
 
     @Test
     fun `loadOrgDetails success`() {
-        Mockito.`when`(
-            gitHubService.getOrg(OrgQueries.VALID)
-        ).thenReturn(
+//        val jsonLines = readJsonLines("repos-404.json")
+//        val jsonString = jsonLines.joinToString("\n")
+//        println(jsonString)
 
-        )
+//        println(readMockApiResponse("repos-404.json"))
+
+//        Mockito.`when`(
+//            gitHubService.getOrg(OrgQueries.VALID)
+//        ).thenReturn(
+//
+//        )
     }
 
     /*
