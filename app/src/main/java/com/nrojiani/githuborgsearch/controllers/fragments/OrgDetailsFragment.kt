@@ -74,8 +74,6 @@ class OrgDetailsFragment : Fragment() {
             }
         }
 
-        // TODO set click listeners on repo cards
-
         // RecyclerView setup
         recyclerView.addItemDecoration(
             DividerItemDecoration(context, DividerItemDecoration.VERTICAL)

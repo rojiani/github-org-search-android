@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     // TODO remove
     companion object DebugConstants {
-        const val HAS_CHROMIUM = false
+        const val HAS_CHROMIUM = true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

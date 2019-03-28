@@ -185,7 +185,7 @@ class GitHubServiceTest : MockWebServerTest() {
 
     @Test
     fun `getRepositoriesForOrg 404 not found`() {
-        enqueueMockApiResponse(MockApiResponse.REPOS_SUCCESS_WITH_MISSING_AND_NULL_PROPS)
+        enqueueMockApiResponse(MockApiResponse.REPOS_NOT_FOUND)
         val response: Response<List<Repo>> = gitHubClient.getRepositoriesForOrg("foobar").execute()
         assertNull(response.body())
         assertEquals(404, response.code())
