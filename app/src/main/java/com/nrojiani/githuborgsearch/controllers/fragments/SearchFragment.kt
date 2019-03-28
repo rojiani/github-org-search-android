@@ -120,7 +120,7 @@ class SearchFragment : Fragment() {
         val orgQuery = searchEditText.text.toString().trim()
 
         when {
-            orgQuery.isBlank() -> searchEditText.error = "Please enter an organization name"
+            orgQuery.isBlank() -> searchEditText.error = EMPTY_SEARCH_ERROR_MESSAGE
             isRepeatedQuery(orgQuery) -> return
             else -> {
                 // Dismiss Keyboard
@@ -231,5 +231,10 @@ class SearchFragment : Fragment() {
         orgFromViewModel ?: return false
 
         return orgQuery == orgFromViewModel.login
+    }
+
+
+    companion object {
+        internal const val EMPTY_SEARCH_ERROR_MESSAGE = "Please enter an organization name (e.g., 'nytimes')"
     }
 }

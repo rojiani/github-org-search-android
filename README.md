@@ -13,8 +13,13 @@ Android Architecture Components:
 * ViewModel
 Dagger 2
 Retrofit+Moshi
-Espresso + JUnit
 Picasso
+
+Testing:
+JUnit
+Espresso
+Mockito
+OkHttp3 MockWebServer
 
 ## Instructions ##
 
