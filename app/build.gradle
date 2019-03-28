@@ -61,36 +61,28 @@ dependencies {
     implementation 'androidx.fragment:fragment:1.1.0-alpha04'
     implementation "androidx.fragment:fragment-ktx:1.1.0-alpha04"
 
-    // Test dependencies
-
-
     // Local Unit Test Dependencies
     testImplementation "com.squareup.okhttp3:mockwebserver:$mockWebServerVersion"
     testImplementation "junit:junit:$junitVersion"
-    // testImplementation "androidx.test:core:$coreVersion"
-    // testImplementation "androidx.test:core-ktx:$coreVersion"
+    testImplementation "androidx.test:core:$coreVersion"
+    testImplementation "androidx.test:core-ktx:$coreVersion"
     testImplementation "androidx.test.ext:junit:$junitKtxVersion"
     testImplementation "androidx.test.ext:junit-ktx:$junitKtxVersion"
-    // testImplementation "org.mockito:mockito-core:$mockitoVersion"
-    // testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
-    // testImplementation "org.mockito:mockito-inline:$mockitoVersion"
+
+    testImplementation "androidx.arch.core:core-testing:2.0.1"
+
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
 
     // Android Instrumented Test Dependencies
-    // androidTestImplementation "androidx.arch.core:core-common:$coreTestingVersion"
-    // androidTestImplementation "androidx.arch.core:core-testing:$coreTestingVersion"
-    // androidTestImplementation "androidx.arch.core:core-runtime:$coreTestingVersion"
-    // TODO need both x & x-ktx? or only ktx?
+    androidTestImplementation "androidx.arch.core:core-testing:2.0.1"
     androidTestImplementation "androidx.test:core:$coreVersion"
     androidTestImplementation "androidx.test:core-ktx:$coreVersion"
     androidTestImplementation "androidx.test.ext:junit:$junitKtxVersion"
     androidTestImplementation "androidx.test.ext:junit-ktx:$junitKtxVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
-    // androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
-    // androidTestImplementation "androidx.test.espresso:espresso-web:$espressoVersion"
     androidTestImplementation "androidx.test:runner:$runnerVersion"
-
 
     debugImplementation 'androidx.fragment:fragment-testing:1.1.0-alpha04'
 }

@@ -90,14 +90,7 @@ class OrgDetailsFragment : Fragment() {
     }
 
     private fun onRepoSelected(repo: Repo) {
-        Log.d(TAG, "onRepoSelected(repo = $repo)")
-        // TODO ServiceConnectionActivity
-        // serviceConnectionTextView.setOnClickListener {
-        //     startActivity(Intent(this, ServiceConnectionActivity::class.java))
-        // }
-
-
-        // TODO https://developer.android.com/training/basics/fragments/communicating
+        Log.d(TAG, "onRepoSelected($repo)")
         (activity as MainActivity).openWebContent(repo.repoUrl)
     }
 
