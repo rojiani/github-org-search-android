@@ -253,7 +253,9 @@ class SearchFragmentTest {
             .check(matches(isDisplayed()))
             .perform(click())
 
-        // TODO fragment transaction
+        // OrgDetailsFragment is now displayed
+        onView(withId(R.id.orgDetailsFragment))
+            .check(matches(isDisplayed()))
     }
 
     //    @Test
