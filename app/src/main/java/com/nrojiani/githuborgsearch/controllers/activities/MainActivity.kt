@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
+import androidx.test.espresso.idling.CountingIdlingResource
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.controllers.fragments.SearchFragment
 import com.saurabharora.customtabs.CustomTabFallback
@@ -16,6 +17,9 @@ import com.saurabharora.customtabs.extensions.launchWithFallback
 class MainActivity : AppCompatActivity() {
 
     private val TAG by lazy { this::class.java.simpleName }
+
+    /** See https://android.jlelse.eu/integrate-espresso-idling-resources-in-your-app-to-build-flexible-ui-tests-c779e24f5057 */
+    val idlingResource = CountingIdlingResource("idling-resource")
 
     // TODO remove
     companion object DebugConstants {

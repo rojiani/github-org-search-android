@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.nrojiani.githuborgsearch.model.Organization
 import com.nrojiani.githuborgsearch.network.GitHubService
+import com.nrojiani.githuborgsearch.util.EspressoIdlingResource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -42,6 +43,8 @@ class SearchViewModel
         loading.value = true
         orgCall = gitHubService.getOrg(searchInput)
 
+        EspressoIdlingResource.increment() // Set app as busy.
+
         orgCall?.enqueue(object : Callback<Organization> {
             override fun onResponse(call: Call<Organization>, response: Response<Organization>) {
                 // DEBUG
@@ -59,6 +62,8 @@ class SearchViewModel
                     orgLoadErrorMessage.value = response.message()
                     loading.value = false
                 }
+
+                EspressoIdlingResource.decrement() // Set app as idle.
             }
 
             override fun onFailure(call: Call<Organization>, t: Throwable) {
@@ -67,6 +72,8 @@ class SearchViewModel
                 // TODO check internet connectivity status
                 orgLoadErrorMessage.value = "GitHubService call failed"
                 loading.value = false
+
+                EspressoIdlingResource.decrement() // Set app as idle.
             }
         })
     }
