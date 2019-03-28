@@ -1,12 +1,13 @@
 package com.nrojiani.githuborgsearch.network
 
-import com.nrojiani.githuborgsearch.testing.readMockApiResponse
+import com.nrojiani.githuborgsearch.testutils.readJsonFile
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import java.io.File
 
 
 /**
@@ -23,7 +24,7 @@ open class MockWebServerTest {
     protected enum class HttpRequestMethod {
         GET, HEAD, PUT, POST, PATCH, DELETE, CONNECT, OPTIONS, TRACE 
     }
-    
+
     @Before
     open fun setUp() {
         server.start()
@@ -34,11 +35,14 @@ open class MockWebServerTest {
         server.shutdown()
     }
 
-    fun enqueueMockResponse(code: Int = 200, fileName: String? = null) {
-        val mockResponse = MockResponse()
-        val fileContent = readMockApiResponse(fileName!!)
-        mockResponse.setBody(fileContent)
-        mockResponse.setResponseCode(code)
+    fun enqueueMockResponse(code: Int = 200, fileName: String) {
+        val json: String = readMockApiResponseJsonFile(fileName)
+        
+        val mockResponse = MockResponse().apply {
+            setBody(json)
+            setResponseCode(code)
+        }
+
         server.enqueue(mockResponse)
     }
 
@@ -61,4 +65,24 @@ open class MockWebServerTest {
 
     private fun getRecordedRequestAtIndex(requestIndex: Int): RecordedRequest =
         (0..requestIndex).map { server.takeRequest() }.last()
+
+
+    /**
+     * Reads a JSON file rooted in [MOCK_API_RESPONSES_DIR].
+     */
+    private fun readMockApiResponseJsonFile(filename: String): String =
+        filename.run(::mockApiResponseFile)
+                .run(::readJsonFile)
+
+    /**
+     * Return a mock response JSON file located in [MOCK_API_RESPONSES_DIR]
+     */
+    private fun mockApiResponseFile(filename: String): File = File("$MOCK_API_RESPONSES_DIR/$filename")
+
+    
+    companion object {
+        private const val TEST_RESOURCES_DIR = "src/test/resources"
+        private const val MOCK_API_DIR = "$TEST_RESOURCES_DIR/mock-api"
+        private const val MOCK_API_RESPONSES_DIR = "$MOCK_API_DIR/responses"
+    }
 }
