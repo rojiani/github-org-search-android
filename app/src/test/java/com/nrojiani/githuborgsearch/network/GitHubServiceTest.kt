@@ -150,7 +150,7 @@ class GitHubServiceTest : MockWebServerTest() {
         assertNotNull(repos)
         assertEquals(30, repos!!.size)
         assertTrue(repos is List)
-        val firstRepo = repos!!.first()
+        val firstRepo = repos.first()
         assertTrue(firstRepo is Repo)
 
         firstRepo.apply {
@@ -178,7 +178,7 @@ class GitHubServiceTest : MockWebServerTest() {
         assertNotNull(repos)
         assertEquals(30, repos!!.size)
         assertTrue(repos is List)
-        val firstRepo = repos!!.first()
+        val firstRepo = repos.first()
         assertTrue(firstRepo is Repo)
     }
 

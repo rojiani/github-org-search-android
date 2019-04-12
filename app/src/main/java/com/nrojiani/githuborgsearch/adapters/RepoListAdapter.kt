@@ -78,7 +78,7 @@ class RepoListAdapter(
 
         init {
             itemView.setOnClickListener {
-                repo?.let { onRepoSelected(it) }
+                repo.let { onRepoSelected(it) }
             }
         }
 

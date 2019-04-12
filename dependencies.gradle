@@ -2,7 +2,7 @@ ext {
     // ************ Android **************
     // Sdk and tools
     compileSdkVersion = 28
-    minSdkVersion = 19
+    minSdkVersion = 21
     targetSdkVersion = 28
 
     // Plugins
@@ -18,6 +18,7 @@ ext {
     customTabsKotlinVersion = '1.1'
     daggerVersion = '2.21'
     espressoVersion = '3.1.1'
+    fragmentVersion = '1.1.0-alpha05'
     junitVersion = '4.12'
     junitKtxVersion = '1.1.0'
     kotlinVersion = '1.3.21'
@@ -28,7 +29,7 @@ ext {
     mockWebServerVersion = '3.12.0'
     moshiVersion = '1.8.0'
     picassoVersion = '2.5.2'
-    recyclerViewVersion = '1.1.0-alpha02'
+    recyclerViewVersion = '1.1.0-alpha03'
     retrofitVersion = '2.5.0'
     runnerVersion = '1.1.1'
 }
