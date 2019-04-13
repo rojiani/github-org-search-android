@@ -38,7 +38,7 @@ class OrgDetailsViewModel
     // wouldn't expose this as MutableLiveData?
     val selectedOrganization = MutableLiveData<Organization>()
 
-    private var repoCall: Call<List<Repo>>? = null
+    private lateinit var repoCall: Call<List<Repo>>
 
     /** Stores the top repos keyed by each owning Organization. */
     private val topReposCache: MutableMap<Organization, List<Repo>> = HashMap()
@@ -53,7 +53,7 @@ class OrgDetailsViewModel
         _loading.value = true
         repoCall = gitHubService.getRepositoriesForOrg(organization.login)
 
-        repoCall?.enqueue(object : Callback<List<Repo>> {
+        repoCall.enqueue(object : Callback<List<Repo>> {
             override fun onResponse(call: Call<List<Repo>>, response: Response<List<Repo>>) {
                 Log.d(TAG, "loadReposForOrg - onResponse: response = $response")
 
