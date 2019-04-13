@@ -159,7 +159,7 @@ class SearchFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.organization.observe(this, Observer { org: Organization? ->
-            Log.d(TAG, "(Observer) getOrganization() => $org")
+            Log.d(TAG, "(Observer) organization => $org")
             org?.let {
                 progressBar.isInvisible = true
                 errorTextView.isVisible = false
@@ -168,7 +168,7 @@ class SearchFragment : Fragment() {
         })
 
         viewModel.orgLoadErrorMessage.observe(this, Observer { errorMessage: String? ->
-            Log.d(TAG, "(Observer) getOrgLoadErrorMessage() => $errorMessage")
+            Log.d(TAG, "(Observer) orgLoadErrorMessage => $errorMessage")
             when {
                 errorMessage.isNullOrBlank() -> {
                     errorTextView.isVisible = false
@@ -183,7 +183,7 @@ class SearchFragment : Fragment() {
         })
 
         viewModel.loading.observe(this, Observer<Boolean> { isLoading ->
-            Log.d(TAG, "(Observer) isLoading() => $isLoading")
+            Log.d(TAG, "(Observer) loading => $isLoading")
             if (isLoading) {
                 progressBar.isVisible = true
                 errorTextView.isVisible = false

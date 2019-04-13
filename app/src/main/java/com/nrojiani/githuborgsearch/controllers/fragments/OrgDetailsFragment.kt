@@ -99,7 +99,7 @@ class OrgDetailsFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.selectedOrganization.observe(this, Observer { org: Organization? ->
-            Log.d(TAG, "(Observer): getSelectedOrganization() => $org")
+            Log.d(TAG, "(Observer): selectedOrganization => $org")
             org?.let { newOrg ->
                 if (!viewModel.hasTopReposCached(newOrg)) {
                     viewModel.loadReposForOrg(newOrg)
@@ -109,7 +109,7 @@ class OrgDetailsFragment : Fragment() {
         })
 
         viewModel.allRepos.observe(this, Observer { repos ->
-            Log.d(TAG, "(Observer): getAllRepos() => $repos")
+            Log.d(TAG, "(Observer): allRepos => $repos")
             if (repos.isNullOrEmpty()) {
             } else {
                 recyclerView.isVisible = true
@@ -117,7 +117,7 @@ class OrgDetailsFragment : Fragment() {
         })
 
         viewModel.repoLoadErrorMessage.observe(this, Observer { errorMessage ->
-            Log.d(TAG, "(Observer): getRepoLoadErrorMessage() => $errorMessage")
+            Log.d(TAG, "(Observer): repoLoadErrorMessage => $errorMessage")
             if (errorMessage.isNullOrBlank()) {
                 repoErrorTextView.isVisible = false
             } else {
@@ -128,7 +128,7 @@ class OrgDetailsFragment : Fragment() {
         })
 
         viewModel.isLoading.observe(this, Observer<Boolean> { isLoading ->
-            Log.d(TAG, "(Observer): isLoading() => $isLoading")
+            Log.d(TAG, "(Observer): isLoading => $isLoading")
             repoProgressBar.isVisible = isLoading
             if (isLoading) {
                 repoErrorTextView.isVisible = false
