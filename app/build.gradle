@@ -42,6 +42,8 @@ dependencies {
     implementation "androidx.browser:browser:$androidXBrowserVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
     implementation "androidx.core:core-ktx:$ktxVersion"
+    implementation "androidx.fragment:fragment:$fragmentVersion"
+    implementation "androidx.fragment:fragment-ktx:$fragmentVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
     implementation "androidx.recyclerview:recyclerview:$recyclerViewVersion"
@@ -57,8 +59,6 @@ dependencies {
     implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-    implementation "androidx.fragment:fragment:$fragmentVersion"
-    implementation "androidx.fragment:fragment-ktx:$fragmentVersion"
 
     // Local Unit Test Dependencies
     testImplementation "com.squareup.okhttp3:mockwebserver:$mockWebServerVersion"
