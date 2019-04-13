@@ -1,7 +1,7 @@
 package com.nrojiani.githuborgsearch.network
 
-import com.nrojiani.githuborgsearch.model.Organization
-import com.nrojiani.githuborgsearch.model.Repo
+import com.nrojiani.githuborgsearch.data.model.Organization
+import com.nrojiani.githuborgsearch.data.model.Repo
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import org.junit.Assert.*

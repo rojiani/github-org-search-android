@@ -1,7 +1,7 @@
 package com.nrojiani.githuborgsearch.network
 
-import com.nrojiani.githuborgsearch.model.Organization
-import com.nrojiani.githuborgsearch.model.Repo
+import com.nrojiani.githuborgsearch.data.model.Organization
+import com.nrojiani.githuborgsearch.data.model.Repo
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Headers

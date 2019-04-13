@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.nrojiani.githuborgsearch.model.Organization
+import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.network.GitHubService
 import com.nrojiani.githuborgsearch.util.EspressoIdlingResource
 import retrofit2.Call

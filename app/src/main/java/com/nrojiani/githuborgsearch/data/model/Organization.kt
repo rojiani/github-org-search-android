@@ -1,4 +1,4 @@
-package com.nrojiani.githuborgsearch.model
+package com.nrojiani.githuborgsearch.data.model
 
 import android.os.Parcelable
 import com.squareup.moshi.Json

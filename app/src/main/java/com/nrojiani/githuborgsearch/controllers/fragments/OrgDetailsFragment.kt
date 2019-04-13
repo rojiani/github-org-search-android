@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.adapters.RepoListAdapter
 import com.nrojiani.githuborgsearch.di.MyApplication
-import com.nrojiani.githuborgsearch.model.Organization
-import com.nrojiani.githuborgsearch.model.Repo
+import com.nrojiani.githuborgsearch.data.model.Organization
+import com.nrojiani.githuborgsearch.data.model.Repo
 import com.nrojiani.githuborgsearch.controllers.activities.MainActivity
 import com.nrojiani.githuborgsearch.viewmodel.OrgDetailsViewModel
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory
