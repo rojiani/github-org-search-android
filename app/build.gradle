@@ -38,7 +38,6 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "androidx.annotation:annotation:$androidXAnnotationsVersion"
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
     implementation "androidx.browser:browser:$androidXBrowserVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
