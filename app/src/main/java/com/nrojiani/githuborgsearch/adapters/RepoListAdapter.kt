@@ -36,7 +36,7 @@ class RepoListAdapter(
 
     init {
         // Subscribe to changes in the fetched repositories.
-        viewModel.getAllRepos().observe(lifecycleOwner, Observer { newRepoList ->
+        viewModel.allRepos.observe(lifecycleOwner, Observer { newRepoList ->
             Log.d(TAG, "(Observer) OrgDetailsViewModel getAllRepos() changed to $newRepoList")
             allRepos.clear()
             newRepoList?.let(allRepos::addAll)

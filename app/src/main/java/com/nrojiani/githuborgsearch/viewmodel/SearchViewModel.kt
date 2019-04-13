@@ -20,16 +20,19 @@ class SearchViewModel
 
     private val TAG by lazy { this::class.java.simpleName }
 
-    /* publicly exposed LiveData */
-    fun getOrganization(): LiveData<Organization?> = organization
+    /* Mutable backing fields */
+    private val _organization = MutableLiveData<Organization?>()
+    private val _orgLoadErrorMessage = MutableLiveData<String?>()
+    private val _loading = MutableLiveData<Boolean>()
 
-    fun getOrgLoadErrorMessage(): LiveData<String?> = orgLoadErrorMessage
-    fun isLoading(): LiveData<Boolean> = loading
-
-    private val organization: MutableLiveData<Organization?>
-            by lazy { MutableLiveData<Organization?>() }
-    private val orgLoadErrorMessage: MutableLiveData<String?> by lazy { MutableLiveData<String?>() }
-    private val loading: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
+    /* Publicly exposed immutable LiveData */
+    val organization: LiveData<Organization?> = _organization
+    val orgLoadErrorMessage: LiveData<String?> = _orgLoadErrorMessage
+    // TODO: Remove isLoading (also orgLoadErrorMessage?)
+    // Expose information about the state of your data using a wrapper or another LiveData.
+    // https://medium.com/androiddevelopers/viewmodels-and-livedata-patterns-antipatterns-21efaef74a54
+    // Example: https://developer.android.com/jetpack/docs/guide#addendum
+    val loading: LiveData<Boolean> = _loading
 
     /** Search EditText contents */
     private var orgSearchInput: String = ""
@@ -40,7 +43,7 @@ class SearchViewModel
      * Try to retrieve the details for a GitHub Organization.
      */
     fun loadOrgDetails(searchInput: String) {
-        loading.value = true
+        _loading.value = true
         orgCall = gitHubService.getOrg(searchInput)
 
         EspressoIdlingResource.increment() // Set app as busy.
@@ -50,14 +53,14 @@ class SearchViewModel
                 Log.d(TAG, "loadOrgDetails - onResponse: response = $response")
                 Log.d(TAG, "loadOrgDetails - onResponse: response.body = ${response.body()}")
 
-                organization.value = response.body()
+                _organization.value = response.body()
 
-                if (organization.value != null) {
-                    orgLoadErrorMessage.value = null
-                    loading.value = false
+                if (_organization.value != null) {
+                    _orgLoadErrorMessage.value = null
+                    _loading.value = false
                 } else {
-                    orgLoadErrorMessage.value = response.message()
-                    loading.value = false
+                    _orgLoadErrorMessage.value = response.message()
+                    _loading.value = false
                 }
 
                 EspressoIdlingResource.decrement() // Set app as idle.
@@ -66,8 +69,8 @@ class SearchViewModel
             override fun onFailure(call: Call<Organization>, t: Throwable) {
                 Log.e(TAG, t.message, t)
 
-                orgLoadErrorMessage.value = "GitHubService call failed"
-                loading.value = false
+                _orgLoadErrorMessage.value = "GitHubService call failed"
+                _loading.value = false
 
                 EspressoIdlingResource.decrement() // Set app as idle.
             }
@@ -79,17 +82,21 @@ class SearchViewModel
         orgCall?.cancel()
     }
 
+    // TODO:
+    // ViewModel shouldn't know about Android. Move to Fragment
     fun saveToBundle(outState: Bundle) {
         organization.value?.let { org ->
             outState.putParcelable(KEY_ORGANIZATION, org)
         }
     }
 
+    // TODO:
+    // ViewModel shouldn't know about Android. Move to Fragment
     /** Restore LiveData after app killed by system */
     fun restoreFromBundle(savedInstanceState: Bundle?) {
         // Restore organization data (if it was present)
         savedInstanceState?.getParcelable<Organization>(KEY_ORGANIZATION)?.let { org ->
-            organization.value = org
+            _organization.value = org
         }
 
         // Restore search field contents

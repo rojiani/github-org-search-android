@@ -24,26 +24,21 @@ class OrgDetailsViewModel
 
     private val TAG by lazy { this::class.java.simpleName }
 
-    /* publicly exposed LiveData */
-    fun getAllRepos(): LiveData<List<Repo>?> = allRepos
+    /* Mutable backing fields */
+    private val _allRepos = MutableLiveData<List<Repo>?>()
+    private val _loading = MutableLiveData<Boolean>()
+    private val _repoLoadErrorMessage = MutableLiveData<String?>()
 
-    fun getRepoLoadErrorMessage(): LiveData<String?> = repoLoadErrorMessage
-    fun isLoading(): LiveData<Boolean> = loading
-    fun getSelectedOrganization(): LiveData<Organization> = selectedOrganization
-    fun setSelectedOrganization(org: Organization) {
-        selectedOrganization.value = org
-    }
+    /* Publicly exposed LiveData */
+    val allRepos: LiveData<List<Repo>?> = _allRepos
+    val repoLoadErrorMessage: LiveData<String?> = _repoLoadErrorMessage
+    val isLoading: LiveData<Boolean> = _loading
 
-    private val selectedOrganization: MutableLiveData<Organization>
-            by lazy { MutableLiveData<Organization>() }
-
-
-    private val allRepos: MutableLiveData<List<Repo>?> by lazy { MutableLiveData<List<Repo>?>() }
-    private val loading: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
-    private val repoLoadErrorMessage: MutableLiveData<String?> by lazy { MutableLiveData<String?>() }
+    // TODO - revisit later. Need to pass data between fragments. Is there a better way that
+    // wouldn't expose this as MutableLiveData?
+    val selectedOrganization = MutableLiveData<Organization>()
 
     private var repoCall: Call<List<Repo>>? = null
-
 
     /** Stores the top repos keyed by each owning Organization. */
     private val topReposCache: MutableMap<Organization, List<Repo>> = HashMap()
@@ -55,21 +50,21 @@ class OrgDetailsViewModel
      */
     fun loadReposForOrg(organization: Organization) {
         Log.d(TAG, "loadReposForOrg($organization)")
-        loading.value = true
+        _loading.value = true
         repoCall = gitHubService.getRepositoriesForOrg(organization.login)
 
         repoCall?.enqueue(object : Callback<List<Repo>> {
             override fun onResponse(call: Call<List<Repo>>, response: Response<List<Repo>>) {
                 Log.d(TAG, "loadReposForOrg - onResponse: response = $response")
 
-                allRepos.value = response.body()
+                _allRepos.value = response.body()
 
                 if (allRepos.value != null) {
-                    repoLoadErrorMessage.value = null
-                    loading.value = false
+                    _repoLoadErrorMessage.value = null
+                    _loading.value = false
                 } else {
-                    repoLoadErrorMessage.value = response.message()
-                    loading.value = false
+                    _repoLoadErrorMessage.value = response.message()
+                    _loading.value = false
                 }
 
                 // Cache top repos
@@ -81,8 +76,8 @@ class OrgDetailsViewModel
 
             override fun onFailure(call: Call<List<Repo>>, t: Throwable) {
                 Log.e(TAG, t.message, t)
-                repoLoadErrorMessage.value = "GitHubService call failed"
-                loading.value = false
+                _repoLoadErrorMessage.value = "GitHubService call failed"
+                _loading.value = false
             }
         })
     }

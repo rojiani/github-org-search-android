@@ -58,7 +58,7 @@ class SearchFragment : Fragment() {
 
         savedInstanceState?.let {
             viewModel.restoreFromBundle(savedInstanceState)
-            viewModel.getOrganization().value?.let {
+            viewModel.organization.value?.let {
                 orgCardView.isVisible = true
             }
         }
@@ -100,7 +100,7 @@ class SearchFragment : Fragment() {
         }
 
         orgCardView.setOnClickListener {
-            viewModel.getOrganization().value?.let {
+            viewModel.organization.value?.let {
                 onOrgSelected(it)
             }
         }
@@ -148,7 +148,7 @@ class SearchFragment : Fragment() {
             .get(OrgDetailsViewModel::class.java)
 
         // set the selected organization in that ViewModel
-        orgDetailsViewModel.setSelectedOrganization(org)
+        orgDetailsViewModel.selectedOrganization.value = org
 
         // Replace SearchFragment with OrgDetailsFragment
         activity?.supportFragmentManager?.beginTransaction()
@@ -158,7 +158,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.getOrganization().observe(this, Observer { org: Organization? ->
+        viewModel.organization.observe(this, Observer { org: Organization? ->
             Log.d(TAG, "(Observer) getOrganization() => $org")
             org?.let {
                 progressBar.isInvisible = true
@@ -167,7 +167,7 @@ class SearchFragment : Fragment() {
             }
         })
 
-        viewModel.getOrgLoadErrorMessage().observe(this, Observer { errorMessage: String? ->
+        viewModel.orgLoadErrorMessage.observe(this, Observer { errorMessage: String? ->
             Log.d(TAG, "(Observer) getOrgLoadErrorMessage() => $errorMessage")
             when {
                 errorMessage.isNullOrBlank() -> {
@@ -182,7 +182,7 @@ class SearchFragment : Fragment() {
             }
         })
 
-        viewModel.isLoading().observe(this, Observer<Boolean> { isLoading ->
+        viewModel.loading.observe(this, Observer<Boolean> { isLoading ->
             Log.d(TAG, "(Observer) isLoading() => $isLoading")
             if (isLoading) {
                 progressBar.isVisible = true
@@ -196,7 +196,7 @@ class SearchFragment : Fragment() {
 
     private fun generateErrorMessage(): String? = buildString {
         append("Error: ")
-        val msg = viewModel.getOrgLoadErrorMessage().value
+        val msg = viewModel.orgLoadErrorMessage.value
             ?: "Unknown (error message not provided by GitHub)"
         append(msg)
     }
@@ -212,12 +212,11 @@ class SearchFragment : Fragment() {
 
     /** Checks if a query is the same as the search before it. */
     private fun isRepeatedQuery(orgQuery: String): Boolean {
-        val orgFromViewModel = viewModel.getOrganization().value
+        val orgFromViewModel = viewModel.organization.value
         orgFromViewModel ?: return false
 
         return orgQuery == orgFromViewModel.login
     }
-
 
     companion object {
         internal const val EMPTY_SEARCH_ERROR_MESSAGE =
