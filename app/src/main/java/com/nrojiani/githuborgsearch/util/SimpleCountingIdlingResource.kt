@@ -3,7 +3,6 @@ package com.nrojiani.githuborgsearch.util
 import androidx.test.espresso.IdlingResource
 import java.util.concurrent.atomic.AtomicInteger
 
-
 /**
  * Source: [GitHub: googlesamples/android-architecture - todo-mvvm-live-kotlin](https://github.com/googlesamples/android-architecture/tree/todo-mvvm-live-kotlin)
  *

@@ -15,9 +15,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.nrojiani.githuborgsearch.R
+import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.di.MyApplication
 import com.nrojiani.githuborgsearch.extensions.displayTextOrHide
-import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.viewmodel.OrgDetailsViewModel
 import com.nrojiani.githuborgsearch.viewmodel.SearchViewModel
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory

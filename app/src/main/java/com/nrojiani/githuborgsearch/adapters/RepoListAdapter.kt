@@ -11,8 +11,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.nrojiani.githuborgsearch.R
-import com.nrojiani.githuborgsearch.extensions.formatted
 import com.nrojiani.githuborgsearch.data.model.Repo
+import com.nrojiani.githuborgsearch.extensions.formatted
 import com.nrojiani.githuborgsearch.viewmodel.OrgDetailsViewModel
 
 /**
@@ -78,7 +78,7 @@ class RepoListAdapter(
 
         init {
             itemView.setOnClickListener {
-                repo.let { onRepoSelected(it) }
+                onRepoSelected(repo)
             }
         }
 

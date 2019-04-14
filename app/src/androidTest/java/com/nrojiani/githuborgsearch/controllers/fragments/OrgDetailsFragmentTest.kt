@@ -11,7 +11,10 @@ import androidx.test.rule.ActivityTestRule
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.controllers.activities.MainActivity
 import com.nrojiani.githuborgsearch.util.EspressoIdlingResource
-import org.junit.*
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)

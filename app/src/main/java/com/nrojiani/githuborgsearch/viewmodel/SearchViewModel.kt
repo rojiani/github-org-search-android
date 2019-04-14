@@ -19,6 +19,7 @@ class SearchViewModel
     val orgLoadErrorMessage: LiveData<String?> = gitHubRepository.orgLoadErrorMessage
     val isLoadingOrg: LiveData<Boolean> = gitHubRepository.isLoadingOrg
 
+    // TODO: see usages. does this ever save anything other than ""?
     /** Search EditText contents */
     private var orgSearchInput: String = ""
 

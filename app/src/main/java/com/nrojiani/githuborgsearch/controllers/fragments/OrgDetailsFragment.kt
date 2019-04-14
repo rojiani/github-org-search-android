@@ -93,7 +93,7 @@ class OrgDetailsFragment : Fragment() {
             picasso.load(org.avatarUrl).into(orgAvatarImageView)
 
             condensedOrgNameTextView.text = org.name
-            condensedOrgLoginTextView.text = "@${org.login}"
+            condensedOrgLoginTextView.text = getString(R.string.org_login_condensed, org.login)
         }
     }
 

@@ -8,7 +8,7 @@ import androidx.test.espresso.IdlingResource
  */
 object EspressoIdlingResource {
 
-    private val RESOURCE = "GLOBAL"
+    private const val RESOURCE = "GLOBAL"
 
     @JvmField val countingIdlingResource = SimpleCountingIdlingResource(RESOURCE)
 

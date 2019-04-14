@@ -18,6 +18,7 @@ class OrgDetailsViewModel
     private val gitHubRepository: GitHubRepository
 ) : ViewModel() {
 
+    // TODO - logic for # to display
 
     val allRepos: LiveData<List<Repo>?> = gitHubRepository.allRepos
     val repoLoadErrorMessage: LiveData<String?> = gitHubRepository.repoLoadErrorMessage

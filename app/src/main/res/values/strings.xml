@@ -7,14 +7,15 @@
     <string name="search_button_content_desc">Search Button</string>
     <string name="error_label">Error: </string>
     <string name="api_error_loading_repos">Error loading Repos</string>
+    <string name="label_top_repos">Top Repositories</string>
+    <string name="organization_avatar_content_desc">Organization Avatar</string>
+    <string name="org_login_condensed">\@%1$s</string>
     <string name="sample_org_name">The New York Times</string>
     <string name="sample_org_login">nytimes</string>
-    <string name="organization_avatar_content_desc">Organization Avatar</string>
     <string name="sample_org_location">New York, NY</string>
     <string name="sample_org_blog">nytimes.com</string>
     <string name="sample_org_desc">We are working to build community through open source technology. NB: members must have two-factor auth</string>
     <string name="sample_repo_name">NYTPhotoViewer</string>
     <string name="sample_repo_desc">A modern photo viewing experience for iOS.</string>
     <string name="sample_repo_lang">Objective-C</string>
-    <string name="label_top_repos">Top Repositories</string>
 </resources>

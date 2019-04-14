@@ -8,8 +8,8 @@
  */
 package com.nrojiani.githuborgsearch.extensions
 
-import java.util.Locale
 import java.text.NumberFormat
+import java.util.*
 
 /**
  * Format an integer using the default [Locale] (unless explicitly provided).
