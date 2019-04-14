@@ -15,11 +15,9 @@ class SearchViewModel
 
     private val TAG by lazy { this::class.java.simpleName }
 
-
-    /* Publicly exposed immutable LiveData */
     val organization: LiveData<Organization?> = gitHubRepository.organization
     val orgLoadErrorMessage: LiveData<String?> = gitHubRepository.orgLoadErrorMessage
-    val loading: LiveData<Boolean> = gitHubRepository.loading
+    val isLoadingOrg: LiveData<Boolean> = gitHubRepository.isLoadingOrg
 
     /** Search EditText contents */
     private var orgSearchInput: String = ""

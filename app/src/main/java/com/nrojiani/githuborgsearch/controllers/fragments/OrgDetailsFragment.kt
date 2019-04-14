@@ -14,10 +14,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.adapters.RepoListAdapter
-import com.nrojiani.githuborgsearch.di.MyApplication
+import com.nrojiani.githuborgsearch.controllers.activities.MainActivity
 import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.data.model.Repo
-import com.nrojiani.githuborgsearch.controllers.activities.MainActivity
+import com.nrojiani.githuborgsearch.di.MyApplication
 import com.nrojiani.githuborgsearch.viewmodel.OrgDetailsViewModel
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory
 import com.squareup.picasso.Picasso
@@ -64,7 +64,7 @@ class OrgDetailsFragment : Fragment() {
         if (repos.isNullOrEmpty()) {
             viewModel.selectedOrganization.value?.let {
                 showCondensedOrgDetails(it)
-                viewModel.loadReposForOrg(it)
+                viewModel.getReposForOrg(it)
             }
         }
 
@@ -101,9 +101,7 @@ class OrgDetailsFragment : Fragment() {
         viewModel.selectedOrganization.observe(this, Observer { org: Organization? ->
             Log.d(TAG, "(Observer): selectedOrganization => $org")
             org?.let { newOrg ->
-                if (!viewModel.hasTopReposCached(newOrg)) {
-                    viewModel.loadReposForOrg(newOrg)
-                }
+                viewModel.getReposForOrg(newOrg)
                 showCondensedOrgDetails(newOrg)
             }
         })
@@ -127,8 +125,8 @@ class OrgDetailsFragment : Fragment() {
             }
         })
 
-        viewModel.isLoading.observe(this, Observer<Boolean> { isLoading ->
-            Log.d(TAG, "(Observer): isLoading => $isLoading")
+        viewModel.isLoadingRepos.observe(this, Observer<Boolean> { isLoading ->
+            Log.d(TAG, "(Observer): isLoadingOrg => $isLoading")
             repoProgressBar.isVisible = isLoading
             if (isLoading) {
                 repoErrorTextView.isVisible = false

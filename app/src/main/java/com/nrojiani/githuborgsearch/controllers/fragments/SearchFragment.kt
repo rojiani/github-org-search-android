@@ -182,8 +182,8 @@ class SearchFragment : Fragment() {
             }
         })
 
-        viewModel.loading.observe(this, Observer<Boolean> { isLoading ->
-            Log.d(TAG, "(Observer) loading => $isLoading")
+        viewModel.isLoadingOrg.observe(this, Observer<Boolean> { isLoading ->
+            Log.d(TAG, "(Observer) isLoadingOrg => $isLoading")
             if (isLoading) {
                 progressBar.isVisible = true
                 errorTextView.isVisible = false
