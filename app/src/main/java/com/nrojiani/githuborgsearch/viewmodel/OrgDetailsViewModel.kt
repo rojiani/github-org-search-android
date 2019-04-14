@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.data.model.Repo
-import com.nrojiani.githuborgsearch.data.repository.GitHubRepository
+import com.nrojiani.githuborgsearch.data.repository.ReposRepository
 import javax.inject.Inject
 
 
@@ -15,20 +15,20 @@ import javax.inject.Inject
  */
 class OrgDetailsViewModel
 @Inject constructor(
-    private val gitHubRepository: GitHubRepository
+    private val reposRepository: ReposRepository
 ) : ViewModel() {
 
     // TODO - logic for # to display
 
-    val allRepos: LiveData<List<Repo>?> = gitHubRepository.allRepos
-    val repoLoadErrorMessage: LiveData<String?> = gitHubRepository.repoLoadErrorMessage
-    val isLoadingRepos: LiveData<Boolean> = gitHubRepository.isLoadingRepos
+    val allRepos: LiveData<List<Repo>?> = reposRepository.allRepos
+    val repoLoadErrorMessage: LiveData<String?> = reposRepository.repoLoadErrorMessage
+    val isLoadingRepos: LiveData<Boolean> = reposRepository.isLoadingRepos
 
     // TODO - revisit later. Need to pass data between fragments. Is there a better way that
     // wouldn't expose this as MutableLiveData?
     val selectedOrganization = MutableLiveData<Organization>()
 
-    fun getReposForOrg(organization: Organization) = gitHubRepository.getReposForOrg(organization)
+    fun getReposForOrg(organization: Organization) = reposRepository.getReposForOrg(organization)
 
     fun saveToBundle(outState: Bundle) {
         selectedOrganization.value?.let { org ->
@@ -51,7 +51,7 @@ class OrgDetailsViewModel
 
     override fun onCleared() {
         super.onCleared()
-        gitHubRepository.cancelGetReposCall()
+        reposRepository.cancelGetReposCall()
     }
 
     companion object {

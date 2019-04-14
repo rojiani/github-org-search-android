@@ -5,19 +5,19 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.nrojiani.githuborgsearch.data.model.Organization
-import com.nrojiani.githuborgsearch.data.repository.GitHubRepository
+import com.nrojiani.githuborgsearch.data.repository.OrganizationRepository
 import javax.inject.Inject
 
 class SearchViewModel
 @Inject constructor(
-    private val gitHubRepository: GitHubRepository
+    private val orgRepository: OrganizationRepository
 ) : ViewModel() {
 
     private val TAG by lazy { this::class.java.simpleName }
 
-    val organization: LiveData<Organization?> = gitHubRepository.organization
-    val orgLoadErrorMessage: LiveData<String?> = gitHubRepository.orgLoadErrorMessage
-    val isLoadingOrg: LiveData<Boolean> = gitHubRepository.isLoadingOrg
+    val organization: LiveData<Organization?> = orgRepository.organization
+    val orgLoadErrorMessage: LiveData<String?> = orgRepository.orgLoadErrorMessage
+    val isLoadingOrg: LiveData<Boolean> = orgRepository.isLoadingOrg
 
     // TODO: see usages. does this ever save anything other than ""?
     /** Search EditText contents */
@@ -28,12 +28,12 @@ class SearchViewModel
      */
     fun loadOrgDetails(searchInput: String) {
         Log.d(TAG, "loadOrgDetails")
-        gitHubRepository.getOrganization(searchInput)
+        orgRepository.getOrganization(searchInput)
     }
 
     override fun onCleared() {
         super.onCleared()
-        gitHubRepository.cancelGetOrganizationCall()
+        orgRepository.cancelGetOrganizationCall()
     }
 
     // TODO:
