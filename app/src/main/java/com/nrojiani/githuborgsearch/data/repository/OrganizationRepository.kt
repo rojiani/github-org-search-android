@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.network.GitHubService
-import com.nrojiani.githuborgsearch.util.EspressoIdlingResource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,8 +55,6 @@ class OrganizationRepository
 
         orgCall = gitHubService.getOrg(organizationName)
 
-        EspressoIdlingResource.increment() // Set app as busy.
-
         orgCall?.enqueue(object : Callback<Organization> {
             override fun onResponse(call: Call<Organization>, response: Response<Organization>) {
                 Log.d(TAG, "loadOrgDetails - onResponse: response = $response")
@@ -72,8 +69,6 @@ class OrganizationRepository
                     _orgLoadErrorMessage.value = response.message()
                     _isLoadingOrg.value = false
                 }
-
-                EspressoIdlingResource.decrement() // Set app as idle.
             }
 
             override fun onFailure(call: Call<Organization>, t: Throwable) {
@@ -81,8 +76,6 @@ class OrganizationRepository
 
                 _orgLoadErrorMessage.value = "GitHubService call failed"
                 _isLoadingOrg.value = false
-
-                EspressoIdlingResource.decrement() // Set app as idle.
             }
         })
     }

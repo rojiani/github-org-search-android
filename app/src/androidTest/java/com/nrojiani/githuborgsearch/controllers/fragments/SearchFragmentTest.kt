@@ -1,7 +1,6 @@
 package com.nrojiani.githuborgsearch.controllers.fragments
 
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -11,10 +10,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.controllers.activities.MainActivity
-import com.nrojiani.githuborgsearch.util.EspressoIdlingResource
 import org.hamcrest.Matchers.not
-import org.junit.After
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -33,28 +29,6 @@ class SearchFragmentTest {
      */
     @get:Rule
     var activityScenarioRule = activityScenarioRule<MainActivity>()
-
-    /**
-     * Source: [GitHub: googlesamples/android-architecture - todo-mvvm-live-kotlin](https://github.com/googlesamples/android-architecture/tree/todo-mvvm-live-kotlin)
-     *
-     * Prepare your test fixture for this test. In this case we register an IdlingResources with
-     * Espresso. IdlingResource resource is a great way to tell Espresso when your app is in an
-     * idle state. This helps Espresso to synchronize your test actions, which makes tests
-     * significantly more reliable.
-     */
-    @Before
-    fun registerIdlingResource() {
-        IdlingRegistry.getInstance().register(EspressoIdlingResource.countingIdlingResource)
-    }
-
-
-    /**
-     * Unregister your Idling Resource so it can be garbage collected and does not leak any memory.
-     */
-    @After
-    fun unregisterIdlingResource() {
-        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.countingIdlingResource)
-    }
 
     @Test
     fun searchWidgetViewsAreVisible() {
