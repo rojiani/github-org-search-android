@@ -27,7 +27,7 @@ ext {
     mockWebServerVersion = '3.12.0'
     moshiVersion = '1.8.0'
     picassoVersion = '2.5.2'
-    recyclerViewVersion = '1.1.0-alpha03'
+    recyclerViewVersion = '1.1.0-alpha04'
     retrofitVersion = '2.5.0'
     runnerVersion = '1.1.1'
 }
