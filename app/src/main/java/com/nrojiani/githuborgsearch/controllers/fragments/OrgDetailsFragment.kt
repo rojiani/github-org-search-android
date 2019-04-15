@@ -106,20 +106,11 @@ class OrgDetailsFragment : Fragment() {
             }
         })
 
-        viewModel.allRepos.observe(this, Observer { repos ->
-            Log.d(TAG, "(Observer): allRepos => $repos")
-            if (repos.isNullOrEmpty()) {
-            } else {
-                recyclerView.isVisible = true
-            }
-        })
-
         viewModel.repoLoadErrorMessage.observe(this, Observer { errorMessage ->
             Log.d(TAG, "(Observer): repoLoadErrorMessage => $errorMessage")
             if (errorMessage.isNullOrBlank()) {
                 repoErrorTextView.isVisible = false
             } else {
-                recyclerView.isVisible = false
                 repoErrorTextView.isVisible = true
                 repoErrorTextView.text = getString(R.string.api_error_loading_repos)
             }
@@ -130,7 +121,6 @@ class OrgDetailsFragment : Fragment() {
             repoProgressBar.isVisible = isLoading
             if (isLoading) {
                 repoErrorTextView.isVisible = false
-                recyclerView.isVisible = false
             }
         })
     }

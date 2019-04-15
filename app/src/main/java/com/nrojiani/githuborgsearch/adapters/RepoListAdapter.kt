@@ -58,7 +58,7 @@ class RepoListAdapter(
     override fun onBindViewHolder(holder: RepoViewHolder, position: Int) =
         holder.bind(mostStarredRepos[position])
 
-    override fun getItemCount(): Int = OrgDetailsViewModel.NUM_REPOS_TO_DISPLAY
+    override fun getItemCount(): Int = mostStarredRepos.size
 
     override fun getItemId(position: Int): Long = mostStarredRepos[position].id
 
