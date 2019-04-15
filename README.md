@@ -2,7 +2,7 @@ Github Organization Search
 ==========================
 
 ## About ##
-A small Android app using the GitHub API with an MVVM architecture, using Kotlin, some Android Architecture Components (LiveData & ViewModel), Dagger 2, Retrofit, Moshi, & Picasso. Initially done as a take-home project as part of the interview process for a company and to learn about modern Android development (I had done a bit of Android years ago, but quite a lot has changed). I intend to use this app to add some new things I want to learn (e.g., RxJava, Room).
+A small Android app using the GitHub API with an MVVM architecture, Kotlin, some Android Architecture Components (LiveData & ViewModel), Dagger 2, Retrofit, Moshi, & Picasso. Initially done as a take-home project as part of the interview process for a company and to learn about modern Android development (I had done a bit of Android years ago, but quite a lot has changed). I intend to use this app to add some new things I want to learn (e.g., RxJava, Room).
 
 ### What the App Does ###
 I'm going to leave this ambiguous since the company likely wants to continue using the prompt in their interview process. Basically you can search for an organization on GitHub (e.g., 'Apple', or 'Google').
@@ -28,6 +28,8 @@ Android Architecture Components:
 
 ### TODO List ###
 
+Improvements to be made:
+
 - [x] Use Repository Pattern
 - [ ] Improve networking code
     - [ ] Encapsulate API response (result, error message, isLoading)
@@ -37,6 +39,7 @@ Android Architecture Components:
 - [ ] Room
 - [ ] App icon - only works on some devices?
 - [ ] Toolbar Up button
+- [ ] Logging/Build variant
 
 ## Instructions ##
 
