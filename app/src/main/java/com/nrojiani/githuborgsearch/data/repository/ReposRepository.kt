@@ -49,7 +49,7 @@ class ReposRepository
 
         // Check cache
         if (organization in reposCache) {
-            _allRepos.value = reposCache.getValue(organization)
+            _allRepos.value = reposCache[organization]
             return
         }
 
@@ -60,19 +60,16 @@ class ReposRepository
             override fun onResponse(call: Call<List<Repo>>, response: Response<List<Repo>>) {
                 Log.d(TAG, "getReposForOrg - onResponse: response = $response")
 
-                _allRepos.value = response.body()
+                val orgRepos = response.body()
+                _allRepos.value = orgRepos
 
-                if (_allRepos.value != null) {
+                if (orgRepos != null) {
                     _repoLoadErrorMessage.value = null
                     _isLoadingRepos.value = false
+                    reposCache[organization] = orgRepos
                 } else {
                     _repoLoadErrorMessage.value = response.message()
                     _isLoadingRepos.value = false
-                }
-
-                // Cache repos for org
-                _allRepos.value?.let { repos ->
-                    reposCache += (organization to repos)
                 }
             }
 

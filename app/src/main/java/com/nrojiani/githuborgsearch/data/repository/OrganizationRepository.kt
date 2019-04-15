@@ -21,7 +21,8 @@ class OrganizationRepository
 
     private val TAG by lazy { this::class.java.simpleName }
 
-    // TODO: basic in-memory cache (orgName: String => Organization)
+    // basic in-memory cache (orgName: String => Organization)
+    private val orgCache: MutableMap<String, Organization> = HashMap()
 
     /* Mutable backing fields */
     private val _organization = MutableLiveData<Organization?>()
@@ -48,11 +49,12 @@ class OrganizationRepository
     fun getOrganization(organizationName: String) {
         Log.d(TAG, "getOrganization($organizationName)")
 
+        if (organizationName in orgCache) {
+            _organization.value = orgCache[organizationName]
+            return
+        }
+
         _isLoadingOrg.value = true
-
-        // TODO: This isn't an optimal implementation. We'll fix it later.
-        // https://developer.android.com/jetpack/docs/guide
-
         orgCall = gitHubService.getOrg(organizationName)
 
         orgCall?.enqueue(object : Callback<Organization> {
@@ -60,11 +62,13 @@ class OrganizationRepository
                 Log.d(TAG, "loadOrgDetails - onResponse: response = $response")
                 Log.d(TAG, "loadOrgDetails - onResponse: response.body = ${response.body()}")
 
-                _organization.value = response.body()
+                val orgDetails = response.body()
+                 _organization.value = orgDetails
 
-                if (_organization.value != null) {
+                if (orgDetails != null) {
                     _orgLoadErrorMessage.value = null
                     _isLoadingOrg.value = false
+                    orgCache[organizationName] = orgDetails
                 } else {
                     _orgLoadErrorMessage.value = response.message()
                     _isLoadingOrg.value = false
