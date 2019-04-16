@@ -117,7 +117,6 @@ class SearchFragment : Fragment() {
 
         when {
             orgQuery.isBlank() -> searchEditText.error = EMPTY_SEARCH_ERROR_MESSAGE
-            isRepeatedQuery(orgQuery) -> return
             else -> {
                 // Dismiss Keyboard
                 searchEditText.onEditorAction(EditorInfo.IME_ACTION_DONE)
@@ -226,14 +225,6 @@ class SearchFragment : Fragment() {
         val currentFocus = parentActivity.currentFocus ?: return
         inputMethodManager?.takeIf { it.isAcceptingText }
             ?.apply { hideSoftInputFromWindow(currentFocus.windowToken, 0) }
-    }
-
-    /** Checks if a query is the same as the search before it. */
-    private fun isRepeatedQuery(orgQuery: String): Boolean {
-        val orgFromViewModel = viewModel.organization.value
-        orgFromViewModel ?: return false
-
-        return orgQuery == orgFromViewModel.login
     }
 
     companion object {
