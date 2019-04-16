@@ -42,6 +42,9 @@ class SearchFragment : Fragment() {
 
     private lateinit var viewModel: SearchViewModel
 
+    /** OrgDetailsViewModel reference used for pre-fetching view data for next screen, and setting the selected org */
+    private var orgDetailsViewModel: OrgDetailsViewModel? = null
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         MyApplication.getApplicationComponent(context).inject(this)
@@ -144,14 +147,24 @@ class SearchFragment : Fragment() {
         }
     }
 
+    private fun prefetchTopRepos() {
+        val queriedOrg = viewModel.organization.value ?: return
+        if (orgDetailsViewModel == null) {
+            orgDetailsViewModel = ViewModelProviders.of(activity!!, viewModelFactory)
+                .get(OrgDetailsViewModel::class.java)
+        }
+        orgDetailsViewModel?.getReposForOrg(queriedOrg)
+    }
+
     private fun onOrgSelected(org: Organization) {
         Log.d(TAG, "onOrgSelected($org)")
-        // Scope the ViewModel to the Activity, not the fragment
-        val orgDetailsViewModel = ViewModelProviders.of(activity!!, viewModelFactory)
-            .get(OrgDetailsViewModel::class.java)
+        if (orgDetailsViewModel == null) {
+            orgDetailsViewModel = ViewModelProviders.of(activity!!, viewModelFactory)
+                .get(OrgDetailsViewModel::class.java)
+        }
 
         // set the selected organization in that ViewModel
-        orgDetailsViewModel.selectedOrganization.value = org
+        orgDetailsViewModel?.selectedOrganization?.value = org
 
         // Replace SearchFragment with OrgDetailsFragment
         activity?.supportFragmentManager?.beginTransaction()
@@ -167,6 +180,8 @@ class SearchFragment : Fragment() {
                 progressBar.isInvisible = true
                 errorTextView.isVisible = false
                 showOrgDetails(org)
+                // Prefetch Top Repos for the org, so that they are ready if the org is selected.
+                prefetchTopRepos()
             }
         })
 
