@@ -35,8 +35,11 @@ class SearchFragment : Fragment() {
 
     private val TAG by lazy { this::class.java.simpleName }
 
-    @Inject lateinit var picasso: Picasso
-    @Inject lateinit var viewModelFactory: ViewModelFactory
+    @Inject
+    lateinit var picasso: Picasso
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
     private lateinit var viewModel: SearchViewModel
 
     override fun onAttach(context: Context) {

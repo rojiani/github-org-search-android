@@ -1,8 +1,10 @@
 package com.nrojiani.githuborgsearch.viewmodel
 
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.data.model.Repo
@@ -18,9 +20,17 @@ class OrgDetailsViewModel
     private val reposRepository: ReposRepository
 ) : ViewModel() {
 
-    // TODO - logic for # to display
+    private val TAG by lazy { this::class.java.simpleName }
 
-    val allRepos: LiveData<List<Repo>?> = reposRepository.allRepos
+    /**
+     * The top `n` most starred repos for the [selectedOrganization] in decreasing order,
+     * where `n` is [NUM_REPOS_TO_DISPLAY].
+     */
+    val topRepos: LiveData<List<Repo>?> =
+        Transformations.map(reposRepository.allRepos) { allRepos ->
+            allRepos?.sortedByDescending { it.stars }?.take(NUM_REPOS_TO_DISPLAY)
+        }
+
     val repoLoadErrorMessage: LiveData<String?> = reposRepository.repoLoadErrorMessage
     val isLoadingRepos: LiveData<Boolean> = reposRepository.isLoadingRepos
 

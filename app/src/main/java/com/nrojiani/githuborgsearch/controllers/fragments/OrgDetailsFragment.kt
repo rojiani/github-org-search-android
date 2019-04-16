@@ -34,8 +34,11 @@ class OrgDetailsFragment : Fragment() {
 
     private val TAG by lazy { this::class.java.simpleName }
 
-    @Inject lateinit var viewModelFactory: ViewModelFactory
-    @Inject lateinit var picasso: Picasso
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+    @Inject
+    lateinit var picasso: Picasso
+
     private lateinit var viewModel: OrgDetailsViewModel
 
     override fun onAttach(context: Context) {

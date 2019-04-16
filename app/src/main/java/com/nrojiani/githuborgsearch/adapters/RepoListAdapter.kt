@@ -24,22 +24,21 @@ class RepoListAdapter(
     private val onRepoSelected: (Repo) -> Unit
 ) : RecyclerView.Adapter<RepoListAdapter.RepoViewHolder>() {
 
-    /** All repositories for an organization */
-    private val allRepos: MutableList<Repo> = ArrayList()
-
-    /** The most-starred repos */
-    private val mostStarredRepos: List<Repo>
-        get() = allRepos.sortedByDescending { it.stars }
-            .take(OrgDetailsViewModel.NUM_REPOS_TO_DISPLAY)
-
     private val TAG by lazy { this::class.java.simpleName }
+
+    /**
+     * The data source for the RecyclerView. Observes and mirrors the `topRepos` LiveData
+     * in [OrgDetailsViewModel].
+     */
+    private val mostStarredRepos: MutableList<Repo> = ArrayList()
 
     init {
         // Subscribe to changes in the fetched repositories.
-        viewModel.allRepos.observe(lifecycleOwner, Observer { newRepoList ->
-            Log.d(TAG, "(Observer) OrgDetailsViewModel getAllRepos() changed to $newRepoList")
-            allRepos.clear()
-            newRepoList?.let(allRepos::addAll)
+        viewModel.topRepos.observe(lifecycleOwner, Observer { newRepoList ->
+            Log.d(TAG, "(Observer) topRepos => $newRepoList")
+
+            mostStarredRepos.clear()
+            newRepoList?.let(mostStarredRepos::addAll)
 
             // Notifies the attached observers that the underlying data has been changed and any
             // View reflecting the data set should refresh itself.
@@ -82,6 +81,7 @@ class RepoListAdapter(
             }
         }
 
+        /** Binds the data from the data source (a Repo) to the view. */
         fun bind(repo: Repo) {
             this.repo = repo
             repoNameTextView.text = repo.name
