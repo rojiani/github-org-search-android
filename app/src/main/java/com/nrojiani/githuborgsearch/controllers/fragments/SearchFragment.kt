@@ -110,16 +110,17 @@ class SearchFragment : Fragment() {
     private fun showOrgDetails(org: Organization) {
         orgCardView.isVisible = true
 
-        orgCardView.apply {
-            picasso.load(org.avatarUrl).into(orgImageView)
 
-            orgNameTextView.text = org.name
-            orgLoginTextView.text = org.login
+        org.apply {
+            picasso.load(avatarUrl).into(orgImageView)
+
+            orgNameTextView.text = name
+            orgLoginTextView.text = login
 
             mapOf(
-                orgLocationTextView to org.location,
-                orgBlogTextView to org.blogUrl,
-                orgDescriptionTextView to org.description
+                orgLocationTextView to location,
+                orgBlogTextView to blogUrl,
+                orgDescriptionTextView to description
             ).forEach { (textView, text) ->
                 textView.displayTextOrHide(text)
             }

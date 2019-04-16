@@ -21,7 +21,7 @@ import com.nrojiani.githuborgsearch.di.MyApplication
 import com.nrojiani.githuborgsearch.viewmodel.OrgDetailsViewModel
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.card_org_condensed.view.*
+import kotlinx.android.synthetic.main.card_org_condensed.*
 import kotlinx.android.synthetic.main.fragment_org_details.*
 import kotlinx.android.synthetic.main.screen_list.*
 import javax.inject.Inject
@@ -78,9 +78,6 @@ class OrgDetailsFragment : Fragment() {
         }
     }
 
-    private fun onRepoSelected(repo: Repo) {
-        Log.d(TAG, "onRepoSelected($repo)")
-        (activity as MainActivity).openWebContent(repo.repoUrl)
     private fun restoreFromBundle(savedInstanceState: Bundle?) {
         if (viewModel.selectedOrganization.value == null) {
             savedInstanceState?.getParcelable<Organization>(KEY_SELECTED_ORGANIZATION)?.let {
@@ -89,12 +86,14 @@ class OrgDetailsFragment : Fragment() {
         }
     }
 
-    private fun showCondensedOrgDetails(org: Organization) {
-        condensedOrgView.apply {
-            picasso.load(org.avatarUrl).into(orgAvatarImageView)
+    private fun onRepoSelected(repo: Repo) =
+        (activity as MainActivity).openWebContent(repo.repoUrl)
 
-            condensedOrgNameTextView.text = org.name
-            condensedOrgLoginTextView.text = getString(R.string.org_login_condensed, org.login)
+    private fun showCondensedOrgDetails(org: Organization) {
+        org.apply {
+            picasso.load(avatarUrl).into(orgAvatarImageView)
+            condensedOrgNameTextView.text = name
+            condensedOrgLoginTextView.text = getString(R.string.org_login_condensed, login)
         }
     }
 
