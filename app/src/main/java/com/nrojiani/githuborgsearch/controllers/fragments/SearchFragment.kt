@@ -77,12 +77,6 @@ class SearchFragment : Fragment() {
         super.onSaveInstanceState(outState)
         Log.d(TAG, "onSaveInstanceState: outState: $outState")
 
-        searchEditText?.text?.toString()?.run {
-            if (isNotBlank()) {
-                outState.putString(SearchViewModel.KEY_ORG_SEARCH_INPUT, this)
-            }
-        }
-
         viewModel.saveToBundle(outState)
     }
 

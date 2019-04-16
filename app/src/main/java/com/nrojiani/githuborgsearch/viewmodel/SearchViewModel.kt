@@ -19,10 +19,6 @@ class SearchViewModel
     val orgLoadErrorMessage: LiveData<String?> = orgRepository.orgLoadErrorMessage
     val isLoadingOrg: LiveData<Boolean> = orgRepository.isLoadingOrg
 
-    // TODO: see usages. does this ever save anything other than ""?
-    /** Search EditText contents */
-    private var orgSearchInput: String = ""
-
     /**
      * Try to retrieve the details for a GitHub Organization.
      */
@@ -54,14 +50,10 @@ class SearchViewModel
             Log.d(TAG, "restoreFromBundle: TODO")
         }
 
-        // Restore search field contents
-        savedInstanceState?.getString(KEY_ORG_SEARCH_INPUT)?.let {
-            orgSearchInput = it
         }
     }
 
     companion object {
-        const val KEY_ORG_SEARCH_INPUT = "search_input"
         const val KEY_ORGANIZATION = "org_parcelable"
     }
 }
