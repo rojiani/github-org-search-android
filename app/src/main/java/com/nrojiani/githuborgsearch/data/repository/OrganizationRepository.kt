@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.network.GitHubService
+import com.nrojiani.githuborgsearch.network.Resource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,19 +25,11 @@ class OrganizationRepository
     // basic in-memory cache (orgName: String => Organization)
     private val orgCache: MutableMap<String, Organization> = HashMap()
 
-    /* Mutable backing fields */
-    private val _organization = MutableLiveData<Organization?>()
-    private val _orgLoadErrorMessage = MutableLiveData<String?>()
-    private val _isLoadingOrg = MutableLiveData<Boolean>()
+    /* Mutable backing field */
+    private val _organization = MutableLiveData<Resource<Organization>>()
 
     /* Publicly exposed immutable LiveData */
-    val organization: LiveData<Organization?> = _organization
-    val orgLoadErrorMessage: LiveData<String?> = _orgLoadErrorMessage
-    // TODO: Encapsulate errorMessage & isLoading in new class
-    // Expose information about the state of your data using a wrapper or another LiveData.
-    // https://medium.com/androiddevelopers/viewmodels-and-livedata-patterns-antipatterns-21efaef74a54
-    // Example: https://developer.android.com/jetpack/docs/guide#addendum
-    val isLoadingOrg: LiveData<Boolean> = _isLoadingOrg
+    val organization: LiveData<Resource<Organization>> = _organization
 
     private var orgCall: Call<Organization>? = null
 
@@ -50,11 +43,12 @@ class OrganizationRepository
         Log.d(TAG, "getOrganization($organizationName)")
 
         if (organizationName in orgCache) {
-            _organization.value = orgCache[organizationName]
+            _organization.value = Resource.success(orgCache[organizationName])
             return
         }
 
-        _isLoadingOrg.value = true
+        _organization.value = Resource.loading()
+
         orgCall = gitHubService.getOrg(organizationName)
 
         orgCall?.enqueue(object : Callback<Organization> {
@@ -63,23 +57,20 @@ class OrganizationRepository
                 Log.d(TAG, "loadOrgDetails - onResponse: response.body = ${response.body()}")
 
                 val orgDetails = response.body()
-                 _organization.value = orgDetails
-
                 if (orgDetails != null) {
-                    _orgLoadErrorMessage.value = null
-                    _isLoadingOrg.value = false
                     orgCache[organizationName] = orgDetails
+                    _organization.value = Resource.success(orgDetails)
                 } else {
-                    _orgLoadErrorMessage.value = response.message()
-                    _isLoadingOrg.value = false
+                    // TODO response strategy
+                    // TODO get error message based on status code
+                    _organization.value = Resource.error(response.message())
                 }
             }
 
             override fun onFailure(call: Call<Organization>, t: Throwable) {
                 Log.e(TAG, t.message, t)
-
-                _orgLoadErrorMessage.value = "GitHubService call failed"
-                _isLoadingOrg.value = false
+                // TODO response strategy
+                _organization.value = Resource.error(t.message)
             }
         })
     }

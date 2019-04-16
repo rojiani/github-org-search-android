@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.data.repository.OrganizationRepository
+import com.nrojiani.githuborgsearch.network.Resource
 import javax.inject.Inject
 
 class SearchViewModel
@@ -11,9 +12,7 @@ class SearchViewModel
     private val orgRepository: OrganizationRepository
 ) : ViewModel() {
 
-    val organization: LiveData<Organization?> = orgRepository.organization
-    val orgLoadErrorMessage: LiveData<String?> = orgRepository.orgLoadErrorMessage
-    val isLoadingOrg: LiveData<Boolean> = orgRepository.isLoadingOrg
+    val organization: LiveData<Resource<Organization>> = orgRepository.organization
 
     /**
      * Try to retrieve the details for a GitHub Organization.

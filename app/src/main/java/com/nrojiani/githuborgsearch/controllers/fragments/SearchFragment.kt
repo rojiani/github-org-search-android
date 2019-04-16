@@ -18,6 +18,8 @@ import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.di.MyApplication
 import com.nrojiani.githuborgsearch.extensions.displayTextOrHide
+import com.nrojiani.githuborgsearch.network.Resource
+import com.nrojiani.githuborgsearch.network.Status
 import com.nrojiani.githuborgsearch.viewmodel.OrgDetailsViewModel
 import com.nrojiani.githuborgsearch.viewmodel.SearchViewModel
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory
@@ -86,7 +88,8 @@ class SearchFragment : Fragment() {
         }
 
         orgCardView.setOnClickListener {
-            viewModel.organization.value?.let {
+            val org = viewModel.organization.value?.data
+            org?.let {
                 onOrgSelected(it)
             }
         }
@@ -128,7 +131,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun prefetchTopRepos() {
-        val queriedOrg = viewModel.organization.value ?: return
+        val queriedOrg = viewModel.organization.value?.data ?: return
         if (orgDetailsViewModel == null) {
             orgDetailsViewModel = ViewModelProviders.of(activity!!, viewModelFactory)
                 .get(OrgDetailsViewModel::class.java)
@@ -154,21 +157,27 @@ class SearchFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.organization.observe(this, Observer { org: Organization? ->
-            Log.d(TAG, "(Observer) organization => $org")
-            org?.let {
-                progressBar.isInvisible = true
-                errorTextView.isVisible = false
-                showOrgDetails(org)
-                // Prefetch Top Repos for the org, so that they are ready if the org is selected.
-                prefetchTopRepos()
-            }
+        viewModel.organization.observe(this, Observer { orgResource ->
+            Log.d(TAG, "(Observer) orgResource => $orgResource")
+            orgResource?.let {
+                updateUI(orgResource)
+            } ?: Log.d(TAG, "orgResource null")
         })
+    }
 
-        viewModel.orgLoadErrorMessage.observe(this, Observer { errorMessage: String? ->
-            Log.d(TAG, "(Observer) orgLoadErrorMessage => $errorMessage")
+    /**
+     * Update UI in response to change in observed ViewModel data.
+     */
+    private fun updateUI(orgResource: Resource<Organization>) = when (orgResource.status) {
+        Status.LOADING -> {
+            progressBar.isVisible = true
+            errorTextView.isVisible = false
+            orgCardView.isInvisible = true
+        }
+        Status.ERROR -> {
+            progressBar.isInvisible = true
             when {
-                errorMessage.isNullOrBlank() -> {
+                orgResource.message.isNullOrBlank() -> {
                     errorTextView.isVisible = false
                     errorTextView.text = ""
                 }
@@ -178,23 +187,21 @@ class SearchFragment : Fragment() {
                     errorTextView.text = generateErrorMessage()
                 }
             }
-        })
-
-        viewModel.isLoadingOrg.observe(this, Observer<Boolean> { isLoading ->
-            Log.d(TAG, "(Observer) isLoadingOrg => $isLoading")
-            if (isLoading) {
-                progressBar.isVisible = true
-                errorTextView.isVisible = false
-                orgCardView.isInvisible = true
-            } else {
+        }
+        Status.SUCCESS -> {
+            orgResource.data?.let { org ->
                 progressBar.isInvisible = true
+                errorTextView.isVisible = false
+                showOrgDetails(org)
+                // Prefetch Top Repos for the org, so that they are ready if the org is selected.
+                prefetchTopRepos()
             }
-        })
+        }
     }
 
     private fun generateErrorMessage(): String? = buildString {
         append("Error: ")
-        val msg = viewModel.orgLoadErrorMessage.value
+        val msg = viewModel.organization.value?.message
             ?: "Unknown (error message not provided by GitHub)"
         append(msg)
     }
