@@ -2,6 +2,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-allopen'
+
+allOpen {
+    // allows mocking for classes w/o directly opening them for release builds
+    annotation("com.nrojiani.githuborgsearch.misc.OpenForTesting")
+}
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -67,6 +73,9 @@ dependencies {
     testImplementation "androidx.test:core-ktx:$coreVersion"
     testImplementation "androidx.test.ext:junit:$junitKtxVersion"
     testImplementation "androidx.test.ext:junit-ktx:$junitKtxVersion"
+    testImplementation "androidx.arch.core:core-testing:2.0.1"
+    testImplementation "org.mockito:mockito-all:$mockitoAllVersion"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
 
     // Android Instrumented Test Dependencies
     androidTestImplementation "androidx.test:core:$coreVersion"
@@ -77,6 +86,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
     androidTestImplementation "androidx.test:runner:$runnerVersion"
+    androidTestImplementation "org.mockito:mockito-android:$mockitoAndroidVersion"
 
     debugImplementation "androidx.fragment:fragment-testing:$fragmentVersion"
 }
