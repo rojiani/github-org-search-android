@@ -62,22 +62,8 @@ class SearchFragment : Fragment() {
         viewModel = ViewModelProviders.of(activity!!, viewModelFactory)
             .get(SearchViewModel::class.java)
 
-        savedInstanceState?.let {
-            viewModel.restoreFromBundle(savedInstanceState)
-            viewModel.organization.value?.let {
-                orgCardView.isVisible = true
-            }
-        }
-
         initViews()
         observeViewModel()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        Log.d(TAG, "onSaveInstanceState: outState: $outState")
-
-        viewModel.saveToBundle(outState)
     }
 
     private fun initViews() {
@@ -225,4 +211,5 @@ class SearchFragment : Fragment() {
         internal const val EMPTY_SEARCH_ERROR_MESSAGE =
             "Please enter an organization name (e.g., 'nytimes')"
     }
+
 }

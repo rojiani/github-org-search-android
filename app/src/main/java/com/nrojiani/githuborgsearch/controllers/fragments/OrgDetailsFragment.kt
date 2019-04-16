@@ -57,11 +57,9 @@ class OrgDetailsFragment : Fragment() {
         viewModel = ViewModelProviders.of(activity!!, viewModelFactory)
             .get(OrgDetailsViewModel::class.java)
 
-        viewModel.restoreFromBundle(savedInstanceState)
-
-        requireNotNull(viewModel.selectedOrganization.value) {
-            "ERROR - selectedOrganization is null after restoreFromBundle"
-        }
+        // If selectedOrganization (LiveData) is null, the ViewModel was destroyed.
+        // Restore from Bundle. Otherwise we don't need to do anything.
+        restoreFromBundle(savedInstanceState)
 
         // RecyclerView setup
         recyclerView.addItemDecoration(
@@ -75,12 +73,20 @@ class OrgDetailsFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        viewModel.saveToBundle(outState)
+        viewModel.selectedOrganization.value?.let { org ->
+            outState.putParcelable(KEY_SELECTED_ORGANIZATION, org)
+        }
     }
 
     private fun onRepoSelected(repo: Repo) {
         Log.d(TAG, "onRepoSelected($repo)")
         (activity as MainActivity).openWebContent(repo.repoUrl)
+    private fun restoreFromBundle(savedInstanceState: Bundle?) {
+        if (viewModel.selectedOrganization.value == null) {
+            savedInstanceState?.getParcelable<Organization>(KEY_SELECTED_ORGANIZATION)?.let {
+                viewModel.selectedOrganization.value = it
+            }
+        }
     }
 
     private fun showCondensedOrgDetails(org: Organization) {
@@ -123,5 +129,9 @@ class OrgDetailsFragment : Fragment() {
             // If an org. exists but owns 0 repos, display an error message (e.g. 'nytime')
             orgOwnsNoReposErrorMessage.isVisible = topRepos?.isEmpty() ?: false
         })
+    }
+
+    companion object {
+        const val KEY_SELECTED_ORGANIZATION = "selected_org_details"
     }
 }
