@@ -18,4 +18,5 @@
     <string name="sample_repo_name">NYTPhotoViewer</string>
     <string name="sample_repo_desc">A modern photo viewing experience for iOS.</string>
     <string name="sample_repo_lang">Objective-C</string>
+    <string name="error_msg_no_repos">This organization does not own any repos</string>
 </resources>

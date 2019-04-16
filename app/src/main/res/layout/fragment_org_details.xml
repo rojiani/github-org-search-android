@@ -43,4 +43,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mostStarredTextView" />
 
+    <TextView
+        android:id="@+id/orgOwnsNoReposErrorMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/error_msg_no_repos"
+        android:textColor="@color/colorError"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/repoList" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

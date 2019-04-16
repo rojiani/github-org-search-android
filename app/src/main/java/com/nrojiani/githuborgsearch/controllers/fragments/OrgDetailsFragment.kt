@@ -118,5 +118,10 @@ class OrgDetailsFragment : Fragment() {
                 repoErrorTextView.isVisible = false
             }
         })
+
+        viewModel.topRepos.observe(this, Observer { topRepos ->
+            // If an org. exists but owns 0 repos, display an error message (e.g. 'nytime')
+            orgOwnsNoReposErrorMessage.isVisible = topRepos?.isEmpty() ?: false
+        })
     }
 }
