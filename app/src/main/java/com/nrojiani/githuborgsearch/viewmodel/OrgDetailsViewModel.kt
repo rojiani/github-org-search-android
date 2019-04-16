@@ -44,7 +44,6 @@ class OrgDetailsViewModel
             savedInstanceState?.getParcelable<Organization>(KEY_ORGANIZATION)
                 ?.let { org ->
                     selectedOrganization.value = org
-                    getReposForOrg(org)
                 }
         }
     }

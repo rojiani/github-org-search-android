@@ -60,14 +60,6 @@ class OrgDetailsFragment : Fragment() {
             "ERROR - selectedOrganization is null after restoreFromBundle"
         }
 
-        val repos: List<Repo>? = viewModel.allRepos.value
-        if (repos.isNullOrEmpty()) {
-            viewModel.selectedOrganization.value?.let {
-                showCondensedOrgDetails(it)
-                viewModel.getReposForOrg(it)
-            }
-        }
-
         // RecyclerView setup
         recyclerView.addItemDecoration(
             DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
