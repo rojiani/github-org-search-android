@@ -18,6 +18,8 @@ import com.nrojiani.githuborgsearch.controllers.activities.MainActivity
 import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.data.model.Repo
 import com.nrojiani.githuborgsearch.di.MyApplication
+import com.nrojiani.githuborgsearch.network.Resource
+import com.nrojiani.githuborgsearch.network.Status
 import com.nrojiani.githuborgsearch.viewmodel.OrgDetailsViewModel
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory
 import com.squareup.picasso.Picasso
@@ -106,28 +108,33 @@ class OrgDetailsFragment : Fragment() {
             }
         })
 
-        viewModel.repoLoadErrorMessage.observe(this, Observer { errorMessage ->
-            Log.d(TAG, "(Observer): repoLoadErrorMessage => $errorMessage")
-            if (errorMessage.isNullOrBlank()) {
+        viewModel.topRepos.observe(this, Observer { topReposResource ->
+            Log.d(TAG, "(Observer): topRepos => $topReposResource")
+            topReposResource?.let { updateUI(it) }
+        })
+    }
+
+    private fun updateUI(topReposResource: Resource<List<Repo>>) = when (topReposResource.status) {
+        Status.SUCCESS -> {
+            // If an org. exists but owns 0 repos, display an error message (e.g. 'nytime')
+            // Other updates handled by RepoListAdapter.
+            orgOwnsNoReposErrorMessage.isVisible = topReposResource.data?.isEmpty() ?: false
+            repoProgressBar.isVisible = false
+            repoErrorTextView.isVisible = false
+        }
+        Status.LOADING -> {
+            repoProgressBar.isVisible = true
+            repoErrorTextView.isVisible = false
+        }
+        Status.ERROR -> {
+            repoProgressBar.isVisible = false
+            if (topReposResource.message.isNullOrBlank()) {
                 repoErrorTextView.isVisible = false
             } else {
                 repoErrorTextView.isVisible = true
                 repoErrorTextView.text = getString(R.string.api_error_loading_repos)
             }
-        })
-
-        viewModel.isLoadingRepos.observe(this, Observer<Boolean> { isLoading ->
-            Log.d(TAG, "(Observer): isLoadingOrg => $isLoading")
-            repoProgressBar.isVisible = isLoading
-            if (isLoading) {
-                repoErrorTextView.isVisible = false
-            }
-        })
-
-        viewModel.topRepos.observe(this, Observer { topRepos ->
-            // If an org. exists but owns 0 repos, display an error message (e.g. 'nytime')
-            orgOwnsNoReposErrorMessage.isVisible = topRepos?.isEmpty() ?: false
-        })
+        }
     }
 
     companion object {

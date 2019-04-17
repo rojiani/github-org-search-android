@@ -36,8 +36,6 @@ class OrganizationRepository
     /**
      * Retrieve the details for a GitHub Organization from database (currently unimplemented)
      * or network.
-     *
-     * TODO: suboptimal since it never checks if call has already been made
      */
     fun getOrganization(organizationName: String) {
         Log.d(TAG, "getOrganization($organizationName)")
@@ -53,8 +51,7 @@ class OrganizationRepository
 
         orgCall?.enqueue(object : Callback<Organization> {
             override fun onResponse(call: Call<Organization>, response: Response<Organization>) {
-                Log.d(TAG, "loadOrgDetails - onResponse: response = $response")
-                Log.d(TAG, "loadOrgDetails - onResponse: response.body = ${response.body()}")
+                Log.d(TAG, "getOrganization - onResponse: response.body = ${response.body()}")
 
                 val orgDetails = response.body()
                 if (orgDetails != null) {

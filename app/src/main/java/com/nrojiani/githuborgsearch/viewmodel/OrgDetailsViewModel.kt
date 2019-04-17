@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.data.model.Repo
 import com.nrojiani.githuborgsearch.data.repository.ReposRepository
+import com.nrojiani.githuborgsearch.network.Resource
+import com.nrojiani.githuborgsearch.network.Status
 import javax.inject.Inject
 
 
@@ -22,13 +24,18 @@ class OrgDetailsViewModel
      * The top `n` most starred repos for the [selectedOrganization] in decreasing order,
      * where `n` is [NUM_REPOS_TO_DISPLAY].
      */
-    val topRepos: LiveData<List<Repo>?> =
-        Transformations.map(reposRepository.allRepos) { allRepos ->
-            allRepos?.sortedByDescending { it.stars }?.take(NUM_REPOS_TO_DISPLAY)
+    val topRepos: LiveData<Resource<List<Repo>>> =
+        Transformations.map(reposRepository.allRepos) { allReposResource ->
+            when (allReposResource.status) {
+                Status.SUCCESS -> {
+                    val mostStarred = allReposResource.data
+                        ?.sortedByDescending { it.stars }
+                        ?.take(NUM_REPOS_TO_DISPLAY)
+                    Resource.success(mostStarred)
+                }
+                else -> allReposResource
+            }
         }
-
-    val repoLoadErrorMessage: LiveData<String?> = reposRepository.repoLoadErrorMessage
-    val isLoadingRepos: LiveData<Boolean> = reposRepository.isLoadingRepos
 
     val selectedOrganization = MutableLiveData<Organization>()
 

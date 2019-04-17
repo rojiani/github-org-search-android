@@ -1,12 +1,9 @@
 package com.nrojiani.githuborgsearch.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.nhaarman.mockitokotlin2.verify
-import com.nrojiani.githuborgsearch.data.model.Repo
 import com.nrojiani.githuborgsearch.data.repository.ReposRepository
 import org.junit.Before
 import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.mockito.Mockito
@@ -28,9 +25,4 @@ class OrgDetailsViewModelTest {
         mockReposRepository = Mockito.mock(ReposRepository::class.java)
         orgDetailsViewModel = OrgDetailsViewModel(mockReposRepository)
     }
-
-    @Test
-    fun whenViewModelIsLoadingAccessed_repositoryIsLoadingIsCalled() {
-        orgDetailsViewModel.isLoadingRepos
-        verify(mockReposRepository).isLoadingRepos
-    }
+}

@@ -34,11 +34,11 @@ class RepoListAdapter(
 
     init {
         // Subscribe to changes in the fetched repositories.
-        viewModel.topRepos.observe(lifecycleOwner, Observer { newRepoList ->
-            Log.d(TAG, "(Observer) topRepos => $newRepoList")
-
+        viewModel.topRepos.observe(lifecycleOwner, Observer { topReposResource ->
+            Log.d(TAG, "(Observer) topRepos => $topReposResource")
+            val topReposList = topReposResource.data
             mostStarredRepos.clear()
-            newRepoList?.let(mostStarredRepos::addAll)
+            topReposList?.let(mostStarredRepos::addAll)
 
             // Notifies the attached observers that the underlying data has been changed and any
             // View reflecting the data set should refresh itself.
