@@ -26,7 +26,6 @@ import javax.inject.Singleton
 class ReposRepository
 @Inject constructor(private val gitHubService: GitHubService) {
 
-    private val TAG by lazy { this::class.java.simpleName }
     val responseConverter: ResponseConverter<List<Repo>> = ::defaultResponseConverter
 
     /* Mutable backing field */
@@ -83,5 +82,9 @@ class ReposRepository
     fun cancelGetReposCall(): Unit? {
         return repoCall?.cancel()
         _allRepos.value = ApiResult.Cancelled
+    }
+
+    companion object {
+        private const val TAG = "ReposRepository"
     }
 }

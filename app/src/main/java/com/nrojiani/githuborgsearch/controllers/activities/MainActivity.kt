@@ -1,14 +1,11 @@
 package com.nrojiani.githuborgsearch.controllers.activities
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.controllers.fragments.SearchFragment
 
 class MainActivity : AppCompatActivity() {
-
-    private val TAG by lazy { this::class.java.simpleName }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,8 +19,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun openWebContent(url: String) {
-        Log.d(TAG, "openWebContent")
         val webDelegate = WebContentDelegate(this)
         webDelegate.openWebContent(url)
     }
+
 }

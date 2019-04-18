@@ -25,8 +25,6 @@ class RepoListAdapter(
     private val onRepoSelected: (Repo) -> Unit
 ) : RecyclerView.Adapter<RepoListAdapter.RepoViewHolder>() {
 
-    private val TAG by lazy { this::class.java.simpleName }
-
     /**
      * The data source for the RecyclerView. Observes and mirrors the `topRepos` LiveData
      * in [OrgDetailsViewModel].
@@ -98,4 +96,7 @@ class RepoListAdapter(
         }
     }
 
+    companion object {
+        private const val TAG = "RepoListAdapter"
+    }
 }

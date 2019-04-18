@@ -17,8 +17,6 @@ import com.saurabharora.customtabs.extensions.launchWithFallback
  */
 class WebContentDelegate(private val delegatingActivity: Activity) {
 
-    private val TAG by lazy { this::class.java.simpleName }
-
     fun openWebContent(url: String) {
         openChromeCustomTab(Uri.parse(url))
     }
@@ -73,5 +71,9 @@ class WebContentDelegate(private val delegatingActivity: Activity) {
         }
 
         return intentBuilder.build()
+    }
+
+    companion object {
+        private const val TAG = "WebContentDelegate"
     }
 }

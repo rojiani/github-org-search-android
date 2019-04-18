@@ -25,8 +25,6 @@ class OrganizationRepository
     private val gitHubService: GitHubService
 ) {
 
-    private val TAG by lazy { this::class.java.simpleName }
-
     private val responseConverter: ResponseConverter<Organization> =
         ::defaultResponseConverter
 
@@ -85,5 +83,9 @@ class OrganizationRepository
     fun cancelGetOrganizationCall() {
         orgCall?.cancel()
         _organization.value = ApiResult.Cancelled
+    }
+
+    companion object {
+        private const val TAG = "OrganizationRepository"
     }
 }

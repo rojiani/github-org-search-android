@@ -36,8 +36,6 @@ import javax.inject.Inject
  */
 class SearchFragment : Fragment() {
 
-    private val TAG by lazy { this::class.java.simpleName }
-
     @Inject
     lateinit var picasso: Picasso
     @Inject
@@ -221,8 +219,8 @@ class SearchFragment : Fragment() {
     }
 
     companion object {
+        private const val TAG = "SearchFragment"
         internal const val EMPTY_SEARCH_ERROR_MESSAGE =
             "Please enter an organization name (e.g., 'nytimes')"
     }
-
 }

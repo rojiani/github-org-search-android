@@ -34,8 +34,6 @@ import javax.inject.Inject
  */
 class OrgDetailsFragment : Fragment() {
 
-    private val TAG by lazy { this::class.java.simpleName }
-
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     @Inject
@@ -150,6 +148,7 @@ class OrgDetailsFragment : Fragment() {
     }
 
     companion object {
-        const val KEY_SELECTED_ORGANIZATION = "selected_org_details"
+        private const val TAG = "OrgDetailsFragment"
+        private const val KEY_SELECTED_ORGANIZATION = "selected_org_details"
     }
 }
