@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.network.GitHubService
 import com.nrojiani.githuborgsearch.network.Resource
+import com.nrojiani.githuborgsearch.network.responsehandler.ApiResult
+import com.nrojiani.githuborgsearch.network.responsehandler.ResponseInterpreter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -53,13 +55,15 @@ class OrganizationRepository
             override fun onResponse(call: Call<Organization>, response: Response<Organization>) {
                 Log.d(TAG, "getOrganization - onResponse: response.body = ${response.body()}")
 
+                // TODO inject
+                val responseInterpreter = ResponseInterpreter<Organization>()
+                val apiResult = responseInterpreter.interpret(response)
+                // TODO if ApiResult.Error, propagate errorMessage to UI
                 val orgDetails = response.body()
                 if (orgDetails != null) {
                     orgCache[organizationName] = orgDetails
                     _organization.value = Resource.success(orgDetails)
                 } else {
-                    // TODO response strategy
-                    // TODO get error message based on status code
                     _organization.value = Resource.error(response.message())
                 }
             }
@@ -68,6 +72,9 @@ class OrganizationRepository
                 Log.e(TAG, t.message, t)
                 // TODO response strategy
                 _organization.value = Resource.error(t.message)
+
+                val apiResult = ApiResult.Exception(t)
+                // TODO
             }
         })
     }

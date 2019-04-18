@@ -1,7 +1,7 @@
 package com.nrojiani.githuborgsearch.network
 
 /**
- * Encapsulates the state of a network request.
+ * Encapsulates the state of data from either network or database.
  */
 data class Resource<out T>(
     val status: Status,
@@ -16,7 +16,7 @@ data class Resource<out T>(
 }
 
 /**
- * Status of a Resource.
+ * Status of a [Resource].
  */
 enum class Status {
     SUCCESS, ERROR, LOADING
