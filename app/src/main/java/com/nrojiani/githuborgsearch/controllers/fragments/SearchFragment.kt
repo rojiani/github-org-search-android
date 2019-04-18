@@ -121,29 +121,19 @@ class SearchFragment : Fragment() {
             orgCardView.isInvisible = true
         }
         is ApiResult.Exception -> {
-            progressBar.isInvisible = true
-
             Log.e(TAG, "updateUI: ApiResult.Exception: $apiResult")
-            apiResult.throwable.printStackTrace()
             Log.e(TAG, "stack trace: ${apiResult.throwable.stackTrace}")
-            errorTextView.isVisible = true
-            errorTextView.text = apiResult.formattedErrorMessage
-            // TODO use UIResolver
-        }
-        is ApiResult.Error -> {
+
             progressBar.isInvisible = true
             orgCardView.isInvisible = true
-
-            Log.e(TAG, "updateUI: ApiResult.Error: $apiResult")
-
             // TODO use UIResolver
-            if (apiResult.errorMessage.isNullOrBlank()) {
-                errorTextView.isVisible = false
-                errorTextView.text = ""
-            } else {
-                errorTextView.isVisible = true
-                errorTextView.text = apiResult.formattedErrorMessage
-            }
+            displayErrorMessage(apiResult.formattedErrorMessage)
+        }
+        is ApiResult.Error -> {
+            Log.e(TAG, "updateUI: ApiResult.Error: $apiResult")
+            progressBar.isInvisible = true
+            orgCardView.isInvisible = true
+            displayErrorMessage(apiResult.formattedErrorMessage)
         }
         is ApiResult.Success -> {
             val org = apiResult.data
@@ -220,6 +210,14 @@ class SearchFragment : Fragment() {
         val currentFocus = parentActivity.currentFocus ?: return
         inputMethodManager?.takeIf { it.isAcceptingText }
             ?.apply { hideSoftInputFromWindow(currentFocus.windowToken, 0) }
+    }
+
+    private fun displayErrorMessage(errorMessage: String?) = if (errorMessage.isNullOrBlank()) {
+        errorTextView.isVisible = false
+        errorTextView.text = ""
+    } else {
+        errorTextView.isVisible = true
+        errorTextView.text = errorMessage
     }
 
     companion object {

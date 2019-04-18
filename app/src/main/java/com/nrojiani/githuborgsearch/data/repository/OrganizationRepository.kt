@@ -6,7 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.network.GitHubService
 import com.nrojiani.githuborgsearch.network.responsehandler.ApiResult
-import com.nrojiani.githuborgsearch.network.responsehandler.ResponseInterpreter
+import com.nrojiani.githuborgsearch.network.responsehandler.ResponseConverter
+import com.nrojiani.githuborgsearch.network.responsehandler.defaultResponseConverter
 import com.nrojiani.githuborgsearch.network.responsehandler.isCompleted
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,9 +21,14 @@ import javax.inject.Singleton
  */
 @Singleton
 class OrganizationRepository
-@Inject constructor(private val gitHubService: GitHubService) {
+@Inject constructor(
+    private val gitHubService: GitHubService
+) {
 
     private val TAG by lazy { this::class.java.simpleName }
+
+    private val responseConverter: ResponseConverter<Organization> =
+        ::defaultResponseConverter
 
     // basic in-memory cache (orgName: String => Organization)
     private val orgCache: MutableMap<String, ApiResult<Organization>> = HashMap()
@@ -47,7 +53,7 @@ class OrganizationRepository
             val cachedResult = orgCache[organizationName]
             if (cachedResult.isCompleted) {
                 Log.d(TAG, "$organizationName in orgCache & completed")
-                _organization.value = orgCache[organizationName]
+                _organization.value = cachedResult
                 return
             } else {
                 Log.d(TAG, "$organizationName in orgCache, but result not completed")
@@ -62,9 +68,7 @@ class OrganizationRepository
             override fun onResponse(call: Call<Organization>, response: Response<Organization>) {
                 Log.d(TAG, "getOrganization - onResponse: response.body = ${response.body()}")
 
-                // TODO inject
-                val responseInterpreter = ResponseInterpreter<Organization>()
-                val apiResult = responseInterpreter.interpret(response)
+                val apiResult = responseConverter(response)
                 _organization.value = apiResult
                 orgCache[organizationName] = apiResult
             }

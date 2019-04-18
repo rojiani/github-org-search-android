@@ -36,18 +36,13 @@ val <T> ApiResult<T>?.formattedErrorMessage: String?
 
 
 /**
- * Check if the ApiResult is a Success type.
- */
-val <T> ApiResult<T>?.isSuccess: Boolean
-    get() = this is ApiResult.Success
-
-/**
- * Check if the ApiResult is a finished type.
+ * Check if the ApiResult is a finished type (i.e., an HTTP response was received).
  */
 val <T> ApiResult<T>?.isCompleted: Boolean
-    get() = (this != null) && (this != ApiResult.Loading) && (this != ApiResult.Cancelled)
-            && (this !is ApiResult.Exception)
-
+    get() = (this != null) &&
+            (this != ApiResult.Loading) &&
+            (this != ApiResult.Cancelled) &&
+            (this !is ApiResult.Exception)
 
 /**
  * Return [ApiResult.Success.data] if the [ApiResult] type is [ApiResult.Success], or

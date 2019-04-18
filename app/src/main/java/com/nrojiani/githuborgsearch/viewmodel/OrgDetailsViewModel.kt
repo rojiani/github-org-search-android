@@ -7,8 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.data.model.Repo
 import com.nrojiani.githuborgsearch.data.repository.ReposRepository
-import com.nrojiani.githuborgsearch.network.Resource
-import com.nrojiani.githuborgsearch.network.Status
+import com.nrojiani.githuborgsearch.network.responsehandler.ApiResult
 import javax.inject.Inject
 
 
@@ -24,16 +23,16 @@ class OrgDetailsViewModel
      * The top `n` most starred repos for the [selectedOrganization] in decreasing order,
      * where `n` is [NUM_REPOS_TO_DISPLAY].
      */
-    val topRepos: LiveData<Resource<List<Repo>>> =
-        Transformations.map(reposRepository.allRepos) { allReposResource ->
-            when (allReposResource.status) {
-                Status.SUCCESS -> {
-                    val mostStarred = allReposResource.data
+    val topRepos: LiveData<ApiResult<List<Repo>>> =
+        Transformations.map(reposRepository.allRepos) { allReposResult ->
+            when (allReposResult) {
+                is ApiResult.Success<List<Repo>> -> {
+                    val mostStarred = allReposResult.data
                         ?.sortedByDescending { it.stars }
                         ?.take(NUM_REPOS_TO_DISPLAY)
-                    Resource.success(mostStarred)
+                    ApiResult.Success(mostStarred, allReposResult.httpStatus)
                 }
-                else -> allReposResource
+                else -> allReposResult
             }
         }
 

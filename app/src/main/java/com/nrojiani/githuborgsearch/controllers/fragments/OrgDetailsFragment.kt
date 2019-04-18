@@ -18,8 +18,8 @@ import com.nrojiani.githuborgsearch.controllers.activities.MainActivity
 import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.data.model.Repo
 import com.nrojiani.githuborgsearch.di.MyApplication
-import com.nrojiani.githuborgsearch.network.Resource
-import com.nrojiani.githuborgsearch.network.Status
+import com.nrojiani.githuborgsearch.network.responsehandler.ApiResult
+import com.nrojiani.githuborgsearch.network.responsehandler.formattedErrorMessage
 import com.nrojiani.githuborgsearch.viewmodel.OrgDetailsViewModel
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory
 import com.squareup.picasso.Picasso
@@ -91,14 +91,6 @@ class OrgDetailsFragment : Fragment() {
     private fun onRepoSelected(repo: Repo) =
         (activity as MainActivity).openWebContent(repo.repoUrl)
 
-    private fun showCondensedOrgDetails(org: Organization) {
-        org.apply {
-            picasso.load(avatarUrl).into(orgAvatarImageView)
-            condensedOrgNameTextView.text = name
-            condensedOrgLoginTextView.text = getString(R.string.org_login_condensed, login)
-        }
-    }
-
     private fun observeViewModel() {
         viewModel.selectedOrganization.observe(this, Observer { org: Organization? ->
             Log.d(TAG, "(Observer): selectedOrganization => $org")
@@ -114,27 +106,47 @@ class OrgDetailsFragment : Fragment() {
         })
     }
 
-    private fun updateUI(topReposResource: Resource<List<Repo>>) = when (topReposResource.status) {
-        Status.SUCCESS -> {
-            // If an org. exists but owns 0 repos, display an error message (e.g. 'nytime')
-            // Other updates handled by RepoListAdapter.
-            orgOwnsNoReposErrorMessage.isVisible = topReposResource.data?.isEmpty() ?: false
-            repoProgressBar.isVisible = false
-            repoErrorTextView.isVisible = false
-        }
-        Status.LOADING -> {
+    private fun updateUI(apiResult: ApiResult<List<Repo>>) = when (apiResult) {
+        is ApiResult.Loading -> {
             repoProgressBar.isVisible = true
             repoErrorTextView.isVisible = false
         }
-        Status.ERROR -> {
+        is ApiResult.Cancelled -> {
             repoProgressBar.isVisible = false
-            if (topReposResource.message.isNullOrBlank()) {
-                repoErrorTextView.isVisible = false
-            } else {
-                repoErrorTextView.isVisible = true
-                repoErrorTextView.text = getString(R.string.api_error_loading_repos)
-            }
+            repoErrorTextView.isVisible = false
         }
+        is ApiResult.Exception -> {
+            repoProgressBar.isVisible = false
+            // TODO use UIResolver
+            displayErrorMessage(apiResult.formattedErrorMessage)
+        }
+        is ApiResult.Error -> {
+            repoProgressBar.isVisible = false
+            displayErrorMessage(apiResult.formattedErrorMessage)
+        }
+        is ApiResult.Success -> {
+            // If an org. exists but owns 0 repos, display an error message (e.g. 'nytime')
+            // Other updates handled by RepoListAdapter.
+            orgOwnsNoReposErrorMessage.isVisible = apiResult.data.isEmpty()
+            repoProgressBar.isVisible = false
+            repoErrorTextView.isVisible = false
+        }
+    }
+
+    private fun showCondensedOrgDetails(org: Organization) {
+        org.apply {
+            picasso.load(avatarUrl).into(orgAvatarImageView)
+            condensedOrgNameTextView.text = name
+            condensedOrgLoginTextView.text = getString(R.string.org_login_condensed, login)
+        }
+    }
+
+    private fun displayErrorMessage(errorMessage: String?) = if (errorMessage.isNullOrBlank()) {
+        repoErrorTextView.isVisible = false
+        repoErrorTextView.text = ""
+    } else {
+        repoErrorTextView.isVisible = true
+        repoErrorTextView.text = errorMessage
     }
 
     companion object {

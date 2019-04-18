@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.data.model.Repo
 import com.nrojiani.githuborgsearch.extensions.formatted
+import com.nrojiani.githuborgsearch.network.responsehandler.responseData
 import com.nrojiani.githuborgsearch.viewmodel.OrgDetailsViewModel
 
 /**
@@ -34,11 +35,11 @@ class RepoListAdapter(
 
     init {
         // Subscribe to changes in the fetched repositories.
-        viewModel.topRepos.observe(lifecycleOwner, Observer { topReposResource ->
-            Log.d(TAG, "(Observer) topRepos => $topReposResource")
-            val topReposList = topReposResource.data
+        viewModel.topRepos.observe(lifecycleOwner, Observer { apiResult ->
+            Log.d(TAG, "(Observer) topRepos => $apiResult")
             mostStarredRepos.clear()
-            topReposList?.let(mostStarredRepos::addAll)
+
+            apiResult.responseData?.let(mostStarredRepos::addAll)
 
             // Notifies the attached observers that the underlying data has been changed and any
             // View reflecting the data set should refresh itself.

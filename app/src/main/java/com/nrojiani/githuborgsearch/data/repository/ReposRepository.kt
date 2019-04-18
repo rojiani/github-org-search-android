@@ -7,7 +7,10 @@ import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.data.model.Repo
 import com.nrojiani.githuborgsearch.misc.OpenForTesting
 import com.nrojiani.githuborgsearch.network.GitHubService
-import com.nrojiani.githuborgsearch.network.Resource
+import com.nrojiani.githuborgsearch.network.responsehandler.ApiResult
+import com.nrojiani.githuborgsearch.network.responsehandler.ResponseConverter
+import com.nrojiani.githuborgsearch.network.responsehandler.defaultResponseConverter
+import com.nrojiani.githuborgsearch.network.responsehandler.isCompleted
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,14 +27,15 @@ class ReposRepository
 @Inject constructor(private val gitHubService: GitHubService) {
 
     private val TAG by lazy { this::class.java.simpleName }
+    val responseConverter: ResponseConverter<List<Repo>> = ::defaultResponseConverter
 
     /* Mutable backing field */
-    private val _allRepos = MutableLiveData<Resource<List<Repo>>>()
+    private val _allRepos = MutableLiveData<ApiResult<List<Repo>>>()
     /* Publicly exposed immutable LiveData */
-    val allRepos: LiveData<Resource<List<Repo>>> = _allRepos
+    val allRepos: LiveData<ApiResult<List<Repo>>> = _allRepos
 
     /** Stores the top repos keyed by each owning Organization. */
-    private val reposCache: MutableMap<Organization, List<Repo>> = HashMap()
+    private val reposCache: MutableMap<Organization, ApiResult<List<Repo>>> = HashMap()
 
     private var repoCall: Call<List<Repo>>? = null
 
@@ -42,35 +46,42 @@ class ReposRepository
     fun getReposForOrg(organization: Organization) {
         Log.d(TAG, "getReposForOrg(${organization.login})")
 
+        // Check if response cached
         if (organization in reposCache) {
-            _allRepos.value = Resource.success(reposCache[organization])
-            return
+            val cachedResult = reposCache[organization]
+            if (cachedResult.isCompleted) {
+                Log.d(TAG, "${organization.login} in reposCache & completed")
+                _allRepos.value = cachedResult
+                return
+            } else {
+                Log.d(TAG, "${organization.login} in reposCache, but result not completed")
+            }
         }
 
-        _allRepos.value = Resource.loading()
-        repoCall = gitHubService.getRepositoriesForOrg(organization.login)
+        // Set as loading
+        _allRepos.value = ApiResult.Loading
 
+        repoCall = gitHubService.getRepositoriesForOrg(organization.login)
         repoCall?.enqueue(object : Callback<List<Repo>> {
             override fun onResponse(call: Call<List<Repo>>, response: Response<List<Repo>>) {
                 Log.d(TAG, "getReposForOrg - onResponse: response.body() = ${response.body()}")
 
-                val orgRepos = response.body()
-                if (orgRepos != null) {
-                    reposCache[organization] = orgRepos
-                    _allRepos.value = Resource.success(orgRepos)
-                } else {
-                    // TODO response strategy
-                    // TODO get error message based on status code
-                    _allRepos.value = Resource.error(response.message())
-                }
+                val apiResult = responseConverter(response)
+                _allRepos.value = apiResult
+                reposCache[organization] = apiResult
             }
 
             override fun onFailure(call: Call<List<Repo>>, t: Throwable) {
                 Log.e(TAG, t.message, t)
-                _allRepos.value = Resource.error(t.message)
+                val apiResult = ApiResult.Exception(t)
+                reposCache[organization] = apiResult
+                _allRepos.value = apiResult
             }
         })
     }
 
-    fun cancelGetReposCall() = repoCall?.cancel()
+    fun cancelGetReposCall(): Unit? {
+        return repoCall?.cancel()
+        _allRepos.value = ApiResult.Cancelled
+    }
 }
