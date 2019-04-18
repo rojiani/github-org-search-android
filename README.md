@@ -32,7 +32,8 @@ Improvements to be made:
 
 - [x] Use Repository Pattern
 - [ ] Improve networking code
-    - [ ] Encapsulate API response (result, error message, isLoading)
+    - [x] Encapsulate API response (result, error message, isLoading)
+    - [ ] Error & Exception handling
     - [ ] Retries
 - [ ] Full Test coverage - ViewModels, RecyclerView, Mockito tests
 - [ ] RxJava
