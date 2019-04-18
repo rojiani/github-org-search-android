@@ -18,8 +18,9 @@ import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.di.MyApplication
 import com.nrojiani.githuborgsearch.extensions.displayTextOrHide
-import com.nrojiani.githuborgsearch.network.Resource
-import com.nrojiani.githuborgsearch.network.Status
+import com.nrojiani.githuborgsearch.network.responsehandler.ApiResult
+import com.nrojiani.githuborgsearch.network.responsehandler.formattedErrorMessage
+import com.nrojiani.githuborgsearch.network.responsehandler.responseData
 import com.nrojiani.githuborgsearch.viewmodel.OrgDetailsViewModel
 import com.nrojiani.githuborgsearch.viewmodel.SearchViewModel
 import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory
@@ -64,11 +65,12 @@ class SearchFragment : Fragment() {
         viewModel = ViewModelProviders.of(activity!!, viewModelFactory)
             .get(SearchViewModel::class.java)
 
-        initViews()
+        registerListeners()
         observeViewModel()
     }
 
-    private fun initViews() {
+    /** Set listeners */
+    private fun registerListeners() {
         /* Trigger GitHub Org search call when either the Search button is pressed
            or the search key is pressed on keyboard */
         searchButton.setOnClickListener { performSearch() }
@@ -88,10 +90,67 @@ class SearchFragment : Fragment() {
         }
 
         orgCardView.setOnClickListener {
-            val org = viewModel.organization.value?.data
-            org?.let {
+            val apiResult = viewModel.organization.value
+            apiResult?.responseData?.let {
                 onOrgSelected(it)
+            } ?: Log.e(TAG, "registerListeners: cardView clicked but not success - apiResult = $apiResult")
+        }
+    }
+
+    private fun observeViewModel() {
+        viewModel.organization.observe(this, Observer { orgApiResult ->
+            Log.d(TAG, "(Observer) orgApiResult => $orgApiResult")
+            orgApiResult?.let {
+                updateUI(it)
+            } ?: Log.d(TAG, "orgApiResult null")
+        })
+    }
+
+    /**
+     * Update UI in response to change in observed ViewModel data.
+     */
+    private fun updateUI(apiResult: ApiResult<Organization>) = when (apiResult) {
+        is ApiResult.Loading -> {
+            progressBar.isVisible = true
+            errorTextView.isVisible = false
+            orgCardView.isInvisible = true
+        }
+        is ApiResult.Cancelled -> {
+            progressBar.isVisible = false
+            errorTextView.isVisible = false
+            orgCardView.isInvisible = true
+        }
+        is ApiResult.Exception -> {
+            progressBar.isInvisible = true
+
+            Log.e(TAG, "updateUI: ApiResult.Exception: $apiResult")
+            apiResult.throwable.printStackTrace()
+            Log.e(TAG, "stack trace: ${apiResult.throwable.stackTrace}")
+            errorTextView.isVisible = true
+            errorTextView.text = apiResult.formattedErrorMessage
+            // TODO use UIResolver
+        }
+        is ApiResult.Error -> {
+            progressBar.isInvisible = true
+            orgCardView.isInvisible = true
+
+            Log.e(TAG, "updateUI: ApiResult.Error: $apiResult")
+
+            // TODO use UIResolver
+            if (apiResult.errorMessage.isNullOrBlank()) {
+                errorTextView.isVisible = false
+                errorTextView.text = ""
+            } else {
+                errorTextView.isVisible = true
+                errorTextView.text = apiResult.formattedErrorMessage
             }
+        }
+        is ApiResult.Success -> {
+            val org = apiResult.data
+            progressBar.isInvisible = true
+            errorTextView.isVisible = false
+            showOrgDetails(org)
+            prefetchTopRepos(org)
         }
     }
 
@@ -113,7 +172,6 @@ class SearchFragment : Fragment() {
     private fun showOrgDetails(org: Organization) {
         orgCardView.isVisible = true
 
-
         org.apply {
             picasso.load(avatarUrl).into(orgImageView)
 
@@ -130,13 +188,12 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun prefetchTopRepos() {
-        val queriedOrg = viewModel.organization.value?.data ?: return
+    private fun prefetchTopRepos(org: Organization) {
         if (orgDetailsViewModel == null) {
             orgDetailsViewModel = ViewModelProviders.of(activity!!, viewModelFactory)
                 .get(OrgDetailsViewModel::class.java)
         }
-        orgDetailsViewModel?.getReposForOrg(queriedOrg)
+        orgDetailsViewModel?.getReposForOrg(org)
     }
 
     private fun onOrgSelected(org: Organization) {
@@ -154,56 +211,6 @@ class SearchFragment : Fragment() {
             ?.replace(R.id.fragment_container, OrgDetailsFragment())
             ?.addToBackStack(null)
             ?.commit()
-    }
-
-    private fun observeViewModel() {
-        viewModel.organization.observe(this, Observer { orgResource ->
-            Log.d(TAG, "(Observer) orgResource => $orgResource")
-            orgResource?.let {
-                updateUI(orgResource)
-            } ?: Log.d(TAG, "orgResource null")
-        })
-    }
-
-    /**
-     * Update UI in response to change in observed ViewModel data.
-     */
-    private fun updateUI(orgResource: Resource<Organization>) = when (orgResource.status) {
-        Status.LOADING -> {
-            progressBar.isVisible = true
-            errorTextView.isVisible = false
-            orgCardView.isInvisible = true
-        }
-        Status.ERROR -> {
-            progressBar.isInvisible = true
-            when {
-                orgResource.message.isNullOrBlank() -> {
-                    errorTextView.isVisible = false
-                    errorTextView.text = ""
-                }
-                else -> {
-                    orgCardView.isInvisible = true
-                    errorTextView.isVisible = true
-                    errorTextView.text = generateErrorMessage()
-                }
-            }
-        }
-        Status.SUCCESS -> {
-            orgResource.data?.let { org ->
-                progressBar.isInvisible = true
-                errorTextView.isVisible = false
-                showOrgDetails(org)
-                // Prefetch Top Repos for the org, so that they are ready if the org is selected.
-                prefetchTopRepos()
-            }
-        }
-    }
-
-    private fun generateErrorMessage(): String? = buildString {
-        append("Error: ")
-        val msg = viewModel.organization.value?.message
-            ?: "Unknown (error message not provided by GitHub)"
-        append(msg)
     }
 
     private fun hideSoftKeyBoard(parentActivity: Activity) {

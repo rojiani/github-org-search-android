@@ -5,7 +5,6 @@
     <string name="search_edit_text_autofill_hint">Organization Name</string>
 
     <string name="search_button_content_desc">Search Button</string>
-    <string name="error_label">Error: </string>
     <string name="api_error_loading_repos">Error loading Repos</string>
     <string name="label_top_repos">Top Repositories</string>
     <string name="organization_avatar_content_desc">Organization Avatar</string>

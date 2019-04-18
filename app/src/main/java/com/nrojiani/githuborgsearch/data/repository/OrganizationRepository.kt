@@ -5,9 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.network.GitHubService
-import com.nrojiani.githuborgsearch.network.Resource
 import com.nrojiani.githuborgsearch.network.responsehandler.ApiResult
 import com.nrojiani.githuborgsearch.network.responsehandler.ResponseInterpreter
+import com.nrojiani.githuborgsearch.network.responsehandler.isCompleted
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,13 +25,13 @@ class OrganizationRepository
     private val TAG by lazy { this::class.java.simpleName }
 
     // basic in-memory cache (orgName: String => Organization)
-    private val orgCache: MutableMap<String, Organization> = HashMap()
+    private val orgCache: MutableMap<String, ApiResult<Organization>> = HashMap()
 
     /* Mutable backing field */
-    private val _organization = MutableLiveData<Resource<Organization>>()
+    private val _organization = MutableLiveData<ApiResult<Organization>>()
 
     /* Publicly exposed immutable LiveData */
-    val organization: LiveData<Resource<Organization>> = _organization
+    val organization: LiveData<ApiResult<Organization>> = _organization
 
     private var orgCall: Call<Organization>? = null
 
@@ -42,15 +42,22 @@ class OrganizationRepository
     fun getOrganization(organizationName: String) {
         Log.d(TAG, "getOrganization($organizationName)")
 
+        // Check if response cached
         if (organizationName in orgCache) {
-            _organization.value = Resource.success(orgCache[organizationName])
-            return
+            val cachedResult = orgCache[organizationName]
+            if (cachedResult.isCompleted) {
+                Log.d(TAG, "$organizationName in orgCache & completed")
+                _organization.value = orgCache[organizationName]
+                return
+            } else {
+                Log.d(TAG, "$organizationName in orgCache, but result not completed")
+            }
         }
 
-        _organization.value = Resource.loading()
+        // Set as loading
+        _organization.value = ApiResult.Loading
 
         orgCall = gitHubService.getOrg(organizationName)
-
         orgCall?.enqueue(object : Callback<Organization> {
             override fun onResponse(call: Call<Organization>, response: Response<Organization>) {
                 Log.d(TAG, "getOrganization - onResponse: response.body = ${response.body()}")
@@ -58,26 +65,21 @@ class OrganizationRepository
                 // TODO inject
                 val responseInterpreter = ResponseInterpreter<Organization>()
                 val apiResult = responseInterpreter.interpret(response)
-                // TODO if ApiResult.Error, propagate errorMessage to UI
-                val orgDetails = response.body()
-                if (orgDetails != null) {
-                    orgCache[organizationName] = orgDetails
-                    _organization.value = Resource.success(orgDetails)
-                } else {
-                    _organization.value = Resource.error(response.message())
-                }
+                _organization.value = apiResult
+                orgCache[organizationName] = apiResult
             }
 
             override fun onFailure(call: Call<Organization>, t: Throwable) {
                 Log.e(TAG, t.message, t)
-                // TODO response strategy
-                _organization.value = Resource.error(t.message)
-
                 val apiResult = ApiResult.Exception(t)
-                // TODO
+                orgCache[organizationName] = apiResult
+                _organization.value = apiResult
             }
         })
     }
 
-    fun cancelGetOrganizationCall() = orgCall?.cancel()
+    fun cancelGetOrganizationCall() {
+        orgCall?.cancel()
+        _organization.value = ApiResult.Cancelled
+    }
 }

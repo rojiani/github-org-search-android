@@ -4,6 +4,10 @@ import com.nrojiani.githuborgsearch.network.responsehandler.HttpStatus.Series.*
 
 /**
  * HTTP status code & metadata.
+ *
+ * Example:
+ * `val httpStatus = HttpStatus(code = 404, message = "Not Found")`
+ *
  */
 data class HttpStatus(
     val code: Int,

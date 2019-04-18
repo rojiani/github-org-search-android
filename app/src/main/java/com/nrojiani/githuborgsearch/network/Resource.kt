@@ -1,6 +1,7 @@
 package com.nrojiani.githuborgsearch.network
 
 /**
+ * TODO remove or merge with ApiResult
  * Encapsulates the state of data from either network or database.
  */
 data class Resource<out T>(
