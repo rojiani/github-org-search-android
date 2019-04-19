@@ -11,7 +11,7 @@ import com.nrojiani.githuborgsearch.network.responsehandler.HttpStatus.Series.*
  */
 data class HttpStatus(
     val code: Int,
-    val message: String = "default"
+    val message: String = ""
 ) {
     val category: Series = when (code) {
         in 100..199 -> INFORMATIONAL
@@ -22,7 +22,7 @@ data class HttpStatus(
         else -> throw IllegalArgumentException("Invalid HTTP status code")
     }
 
-    enum class Series(private val codeRange: String) {
+    enum class Series(val codeRange: String) {
         INFORMATIONAL("1xx"),
         SUCCESSFUL("2xx"),
         REDIRECTION("3xx"),

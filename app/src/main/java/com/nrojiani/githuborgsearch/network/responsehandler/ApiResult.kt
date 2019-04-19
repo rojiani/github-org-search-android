@@ -21,7 +21,7 @@ val <T> ApiResult<T>?.formattedErrorMessage: String?
         is ApiResult.Error -> buildString {
             val (errMsg, code) = errorMessage to httpStatus.code
             append("Error: ")
-            val msg = if (errMsg.isNullOrBlank()) "Unknown Error ($code)"
+            val msg = if (errMsg.isBlank()) "Unknown Error ($code)"
             else "$errMsg ($code)"
             append(msg)
         }
