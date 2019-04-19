@@ -31,8 +31,7 @@ abstract class NetworkModule {
                         .add(KotlinJsonAdapterFactory())
                         .build()
                 )
-            )
-            .build()
+            ).build()
 
         @JvmStatic
         @Provides
