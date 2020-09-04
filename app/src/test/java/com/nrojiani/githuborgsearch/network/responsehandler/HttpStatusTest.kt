@@ -1,6 +1,6 @@
 package com.nrojiani.githuborgsearch.network.responsehandler
 
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class HttpStatusTest {

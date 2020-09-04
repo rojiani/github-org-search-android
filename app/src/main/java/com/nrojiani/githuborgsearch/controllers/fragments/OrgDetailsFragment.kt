@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nrojiani.githuborgsearch.R
@@ -35,10 +35,13 @@ class OrgDetailsFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
+
     @Inject
     lateinit var picasso: Picasso
 
-    private lateinit var viewModel: OrgDetailsViewModel
+    private val viewModel: OrgDetailsViewModel by lazy {
+        viewModelFactory.create(OrgDetailsViewModel::class.java)
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -52,9 +55,6 @@ class OrgDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel = ViewModelProviders.of(activity!!, viewModelFactory)
-            .get(OrgDetailsViewModel::class.java)
 
         // If selectedOrganization (LiveData) is null, the ViewModel was destroyed.
         // Restore from Bundle. Otherwise we don't need to do anything.

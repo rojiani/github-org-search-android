@@ -69,8 +69,8 @@ dependencies {
     // Local Unit Test Dependencies
     testImplementation "com.squareup.okhttp3:mockwebserver:$mockWebServerVersion"
     testImplementation "junit:junit:$junitVersion"
-    testImplementation "androidx.test:core:$coreVersion"
-    testImplementation "androidx.test:core-ktx:$coreVersion"
+    testImplementation "androidx.test:core:$testCoreVersion"
+    testImplementation "androidx.test:core-ktx:$testCoreVersion"
     testImplementation "androidx.test.ext:junit:$junitKtxVersion"
     testImplementation "androidx.test.ext:junit-ktx:$junitKtxVersion"
     testImplementation "androidx.arch.core:core-testing:2.0.1"
@@ -78,14 +78,15 @@ dependencies {
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
 
     // Android Instrumented Test Dependencies
-    androidTestImplementation "androidx.test:core:$coreVersion"
-    androidTestImplementation "androidx.test:core-ktx:$coreVersion"
+    androidTestImplementation "androidx.test:core:$testCoreVersion"
+    androidTestImplementation "androidx.test:core-ktx:$testCoreVersion"
     androidTestImplementation "androidx.test.ext:junit:$junitKtxVersion"
     androidTestImplementation "androidx.test.ext:junit-ktx:$junitKtxVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
-    androidTestImplementation "androidx.test:runner:$runnerVersion"
+    androidTestImplementation "androidx.test:runner:$testRunnerVersion"
+    androidTestImplementation "androidx.test:rules:$testRulesVersion"
     androidTestImplementation "org.mockito:mockito-android:$mockitoAndroidVersion"
 
     debugImplementation "androidx.fragment:fragment-testing:$fragmentVersion"
