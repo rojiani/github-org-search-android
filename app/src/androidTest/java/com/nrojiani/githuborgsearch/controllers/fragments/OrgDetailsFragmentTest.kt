@@ -4,8 +4,9 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.ActivityTestRule
+import androidx.test.filters.LargeTest
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.controllers.activities.MainActivity
 import org.hamcrest.Matchers.not
@@ -14,16 +15,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
+@LargeTest
 class OrgDetailsFragmentTest {
 
-    companion object {
-        private const val DEFAULT_ORG = "nytimes"
-        private const val ORG_WITH_NO_REPOS = "nytime"
-    }
-
-    @Rule
-    @JvmField
-    val activityTestRule = ActivityTestRule(MainActivity::class.java)
+    @get:Rule var activityScenarioRule = activityScenarioRule<MainActivity>()
 
     @Test
     fun whenOrgDetailsFragmentLoaded_condensedOrgDetailsCardViewIsVisible() {
@@ -41,7 +36,7 @@ class OrgDetailsFragmentTest {
 
         onView(withId(R.id.condensedOrgLoginTextView))
             .check(matches(isDisplayed()))
-            .check(matches(withText("@nytimes")))
+            .check(matches(withText("nytimes")))
     }
 
     @Test
@@ -83,4 +78,8 @@ class OrgDetailsFragmentTest {
             .perform(ViewActions.click())
     }
 
+    companion object {
+        private const val DEFAULT_ORG = "nytimes"
+        private const val ORG_WITH_NO_REPOS = "nytime"
+    }
 }

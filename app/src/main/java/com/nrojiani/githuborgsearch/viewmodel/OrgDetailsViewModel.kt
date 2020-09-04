@@ -28,8 +28,8 @@ class OrgDetailsViewModel
             when (allReposResult) {
                 is ApiResult.Success<List<Repo>> -> {
                     val mostStarred = allReposResult.data
-                        ?.sortedByDescending { it.stars }
-                        ?.take(NUM_REPOS_TO_DISPLAY)
+                        .sortedByDescending { it.stars }
+                        .take(NUM_REPOS_TO_DISPLAY)
                     ApiResult.Success(mostStarred, allReposResult.httpStatus)
                 }
                 else -> allReposResult

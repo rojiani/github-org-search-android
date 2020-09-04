@@ -12,8 +12,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.di.MyApplication
@@ -41,9 +39,12 @@ class SearchFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel: SearchViewModel by lazy {
+        viewModelFactory.create(SearchViewModel::class.java)
+    }
 
-    /** OrgDetailsViewModel reference used for pre-fetching view data for next screen, and setting the selected org */
+    /** OrgDetailsViewModel reference used for pre-fetching view data for next screen, and setting
+        the selected org */
     private var orgDetailsViewModel: OrgDetailsViewModel? = null
 
     override fun onAttach(context: Context) {
@@ -59,9 +60,6 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: savedInstanceState: $savedInstanceState")
-
-        viewModel = ViewModelProviders.of(activity!!, viewModelFactory)
-            .get(SearchViewModel::class.java)
 
         registerListeners()
         observeViewModel()
@@ -96,12 +94,12 @@ class SearchFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.organization.observe(this, Observer { orgApiResult ->
+        viewModel.organization.observe(this) { orgApiResult ->
             Log.d(TAG, "(Observer) orgApiResult => $orgApiResult")
             orgApiResult?.let {
                 updateUI(it)
             } ?: Log.d(TAG, "orgApiResult null")
-        })
+        }
     }
 
     /**
@@ -178,8 +176,7 @@ class SearchFragment : Fragment() {
 
     private fun prefetchTopRepos(org: Organization) {
         if (orgDetailsViewModel == null) {
-            orgDetailsViewModel = ViewModelProviders.of(activity!!, viewModelFactory)
-                .get(OrgDetailsViewModel::class.java)
+            orgDetailsViewModel = viewModelFactory.create(OrgDetailsViewModel::class.java)
         }
         orgDetailsViewModel?.getReposForOrg(org)
     }
@@ -187,8 +184,7 @@ class SearchFragment : Fragment() {
     private fun onOrgSelected(org: Organization) {
         Log.d(TAG, "onOrgSelected($org)")
         if (orgDetailsViewModel == null) {
-            orgDetailsViewModel = ViewModelProviders.of(activity!!, viewModelFactory)
-                .get(OrgDetailsViewModel::class.java)
+            orgDetailsViewModel = viewModelFactory.create(OrgDetailsViewModel::class.java)
         }
 
         // set the selected organization in that ViewModel

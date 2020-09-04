@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.data.model.Repo
@@ -33,7 +32,7 @@ class RepoListAdapter(
 
     init {
         // Subscribe to changes in the fetched repositories.
-        viewModel.topRepos.observe(lifecycleOwner, Observer { apiResult ->
+        viewModel.topRepos.observe(lifecycleOwner) { apiResult ->
             Log.d(TAG, "(Observer) topRepos => $apiResult")
             mostStarredRepos.clear()
 
@@ -42,7 +41,7 @@ class RepoListAdapter(
             // Notifies the attached observers that the underlying data has been changed and any
             // View reflecting the data set should refresh itself.
             notifyDataSetChanged()
-        })
+        }
         // Sets whether the item ids are stable across changes to the underlying data.
         setHasStableIds(true)
     }
