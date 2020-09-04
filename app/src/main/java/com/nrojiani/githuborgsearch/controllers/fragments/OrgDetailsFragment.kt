@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -90,18 +89,18 @@ class OrgDetailsFragment : Fragment() {
         (activity as MainActivity).openWebContent(repo.repoUrl)
 
     private fun observeViewModel() {
-        viewModel.selectedOrganization.observe(this, Observer { org: Organization? ->
+        viewModel.selectedOrganization.observe(this) { org: Organization? ->
             Log.d(TAG, "(Observer): selectedOrganization => $org")
             org?.let { newOrg ->
                 viewModel.getReposForOrg(newOrg)
                 showCondensedOrgDetails(newOrg)
             }
-        })
+        }
 
-        viewModel.topRepos.observe(this, Observer { topReposResource ->
+        viewModel.topRepos.observe(this) { topReposResource ->
             Log.d(TAG, "(Observer): topRepos => $topReposResource")
             topReposResource?.let { updateUI(it) }
-        })
+        }
     }
 
     private fun updateUI(apiResult: ApiResult<List<Repo>>) = when (apiResult) {
