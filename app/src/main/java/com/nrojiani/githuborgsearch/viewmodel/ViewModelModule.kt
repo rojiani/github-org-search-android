@@ -20,5 +20,4 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(OrgDetailsViewModel::class)
     abstract fun bindOrgDetailsViewModel(viewModel: OrgDetailsViewModel): ViewModel
-
 }

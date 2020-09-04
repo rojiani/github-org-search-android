@@ -39,11 +39,9 @@ abstract class NetworkModule {
         fun provideGitHubService(retrofit: Retrofit): GitHubService =
             retrofit.create(GitHubService::class.java)
 
-
         @JvmStatic
         @Provides
         @Singleton
         fun providePicasso(context: Context): Picasso = Picasso.Builder(context).build()
-
     }
 }

@@ -16,7 +16,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-
 /**
  * UI Tests for SearchFragment
  */
@@ -184,5 +183,4 @@ class SearchFragmentTest {
         onView(withId(R.id.orgDetailsFragment))
             .check(matches(isDisplayed()))
     }
-
 }

@@ -23,7 +23,4 @@ class SearchViewModel
         super.onCleared()
         orgRepository.cancelGetOrganizationCall()
     }
-
 }
-
-

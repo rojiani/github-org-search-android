@@ -8,11 +8,13 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [
-    ContextModule::class,
-    NetworkModule::class,
-    ViewModelModule::class
-])
+@Component(
+    modules = [
+        ContextModule::class,
+        NetworkModule::class,
+        ViewModelModule::class
+    ]
+)
 interface ApplicationComponent {
     fun inject(searchFragment: SearchFragment)
     fun inject(orgDetailsFragment: OrgDetailsFragment)

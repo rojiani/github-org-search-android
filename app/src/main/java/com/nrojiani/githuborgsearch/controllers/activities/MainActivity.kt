@@ -22,5 +22,4 @@ class MainActivity : AppCompatActivity() {
         val webDelegate = WebContentDelegate(this)
         webDelegate.openWebContent(url)
     }
-
 }

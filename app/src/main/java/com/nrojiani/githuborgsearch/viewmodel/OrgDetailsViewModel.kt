@@ -10,7 +10,6 @@ import com.nrojiani.githuborgsearch.data.repository.ReposRepository
 import com.nrojiani.githuborgsearch.network.responsehandler.ApiResult
 import javax.inject.Inject
 
-
 /**
  * ViewModel for the view displaying Org Details & most starred repos.
  */
@@ -48,5 +47,4 @@ class OrgDetailsViewModel
     companion object {
         const val NUM_REPOS_TO_DISPLAY = 3
     }
-
 }

@@ -25,5 +25,4 @@ interface GitHubService {
     @Headers("Accept: application/vnd.github.v3+json", "Content-Type: application/json")
     @GET("orgs/{org}/repos")
     fun getRepositoriesForOrg(@Path("org") org: String): Call<List<Repo>>
-
 }

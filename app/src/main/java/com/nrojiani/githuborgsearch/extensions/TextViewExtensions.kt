@@ -1,12 +1,10 @@
 @file:JvmName("TextViewExtensions")
 
-
 package com.nrojiani.githuborgsearch.extensions
 
 import android.view.View
 import android.widget.TextView
 import androidx.core.view.isVisible
-
 
 /**
  * Extension functions for TextView.

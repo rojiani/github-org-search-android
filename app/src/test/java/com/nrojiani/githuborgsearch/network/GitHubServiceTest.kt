@@ -126,7 +126,6 @@ class GitHubServiceTest : MockWebServerTest() {
         assertRequestContainsHeaders(expectedHeaders)
     }
 
-
     @Test
     fun `getRepositoriesForOrg call sends to correct resource path endpoint`() {
         enqueueMockApiResponse(MockApiResponse.REPOS_SUCCESS)
@@ -193,5 +192,4 @@ class GitHubServiceTest : MockWebServerTest() {
 
     private fun enqueueMockApiResponse(mockResponse: MockApiResponse) =
         enqueueMockResponse(code = mockResponse.code, fileName = mockResponse.filename)
-
 }

@@ -11,7 +11,6 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.nrojiani.githuborgsearch.R
 
-
 /**
  * This Activity is used as a fallback when there is no browser installed that supports
  * Chrome Custom Tabs.

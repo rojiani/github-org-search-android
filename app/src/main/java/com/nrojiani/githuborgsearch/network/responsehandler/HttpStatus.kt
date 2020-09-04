@@ -29,5 +29,4 @@ data class HttpStatus(
         CLIENT_ERROR("4xx"),
         SERVER_ERROR("5xx");
     }
-
 }

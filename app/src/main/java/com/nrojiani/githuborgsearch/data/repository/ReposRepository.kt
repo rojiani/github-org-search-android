@@ -61,22 +61,24 @@ class ReposRepository
         _allRepos.value = ApiResult.Loading
 
         repoCall = gitHubService.getRepositoriesForOrg(organization.login)
-        repoCall?.enqueue(object : Callback<List<Repo>> {
-            override fun onResponse(call: Call<List<Repo>>, response: Response<List<Repo>>) {
-                Log.d(TAG, "getReposForOrg - onResponse: response.body() = ${response.body()}")
+        repoCall?.enqueue(
+            object : Callback<List<Repo>> {
+                override fun onResponse(call: Call<List<Repo>>, response: Response<List<Repo>>) {
+                    Log.d(TAG, "getReposForOrg - onResponse: response.body() = ${response.body()}")
 
-                val apiResult = responseConverter(response)
-                _allRepos.value = apiResult
-                reposCache[organization] = apiResult
-            }
+                    val apiResult = responseConverter(response)
+                    _allRepos.value = apiResult
+                    reposCache[organization] = apiResult
+                }
 
-            override fun onFailure(call: Call<List<Repo>>, t: Throwable) {
-                Log.e(TAG, t.message, t)
-                val apiResult = ApiResult.Exception(t)
-                reposCache[organization] = apiResult
-                _allRepos.value = apiResult
+                override fun onFailure(call: Call<List<Repo>>, t: Throwable) {
+                    Log.e(TAG, t.message, t)
+                    val apiResult = ApiResult.Exception(t)
+                    reposCache[organization] = apiResult
+                    _allRepos.value = apiResult
+                }
             }
-        })
+        )
     }
 
     fun cancelGetReposCall(): Unit? {

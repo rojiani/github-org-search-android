@@ -44,7 +44,7 @@ class SearchFragment : Fragment() {
     }
 
     /** OrgDetailsViewModel reference used for pre-fetching view data for next screen, and setting
-        the selected org */
+     the selected org */
     private var orgDetailsViewModel: OrgDetailsViewModel? = null
 
     override fun onAttach(context: Context) {
@@ -53,7 +53,8 @@ class SearchFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_search, container, false)
 
@@ -199,7 +200,7 @@ class SearchFragment : Fragment() {
 
     private fun hideSoftKeyBoard(parentActivity: Activity) {
         val inputMethodManager = parentActivity.getSystemService(Context.INPUT_METHOD_SERVICE)
-                as? InputMethodManager
+            as? InputMethodManager
 
         val currentFocus = parentActivity.currentFocus ?: return
         inputMethodManager?.takeIf { it.isAcceptingText }

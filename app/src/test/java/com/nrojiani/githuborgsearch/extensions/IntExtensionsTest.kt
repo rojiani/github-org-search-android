@@ -18,7 +18,7 @@ class IntExtensionsTest {
         Locale.setDefault(DEFAULT_LOCALE)
         assertThat(n.formatted(), `is`("123,456,789"))
         assertThat(n.formatted(DEFAULT_LOCALE), `is`("123,456,789"))
-        
+
         Locale.setDefault(Locale.GERMANY)
         assertThat(n.formatted(), `is`("123.456.789"))
         assertThat(n.formatted(Locale.GERMANY), `is`("123.456.789"))

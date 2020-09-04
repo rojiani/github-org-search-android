@@ -31,5 +31,4 @@ class ResponseConverterTest {
             defaultResponseConverter(response)
         )
     }
-
 }

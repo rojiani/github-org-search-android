@@ -62,22 +62,24 @@ class OrganizationRepository
         _organization.value = ApiResult.Loading
 
         orgCall = gitHubService.getOrg(organizationName)
-        orgCall?.enqueue(object : Callback<Organization> {
-            override fun onResponse(call: Call<Organization>, response: Response<Organization>) {
-                Log.d(TAG, "getOrganization - onResponse: response.body = ${response.body()}")
+        orgCall?.enqueue(
+            object : Callback<Organization> {
+                override fun onResponse(call: Call<Organization>, response: Response<Organization>) {
+                    Log.d(TAG, "getOrganization - onResponse: response.body = ${response.body()}")
 
-                val apiResult = responseConverter(response)
-                _organization.value = apiResult
-                orgCache[organizationName] = apiResult
-            }
+                    val apiResult = responseConverter(response)
+                    _organization.value = apiResult
+                    orgCache[organizationName] = apiResult
+                }
 
-            override fun onFailure(call: Call<Organization>, t: Throwable) {
-                Log.e(TAG, t.message, t)
-                val apiResult = ApiResult.Exception(t)
-                orgCache[organizationName] = apiResult
-                _organization.value = apiResult
+                override fun onFailure(call: Call<Organization>, t: Throwable) {
+                    Log.e(TAG, t.message, t)
+                    val apiResult = ApiResult.Exception(t)
+                    orgCache[organizationName] = apiResult
+                    _organization.value = apiResult
+                }
             }
-        })
+        )
     }
 
     fun cancelGetOrganizationCall() {

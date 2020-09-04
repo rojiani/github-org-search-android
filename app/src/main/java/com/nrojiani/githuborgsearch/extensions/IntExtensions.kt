@@ -24,4 +24,3 @@ import java.util.*
  */
 fun Int.formatted(locale: Locale = Locale.getDefault()): String =
     NumberFormat.getNumberInstance(locale).format(this)
-
