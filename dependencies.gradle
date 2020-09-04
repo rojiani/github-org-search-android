@@ -6,7 +6,7 @@ ext {
     targetSdkVersion = 28
 
     // Plugins
-    gradlePluginVersion = '3.3.2'
+    androidGradlePluginVersion = '4.0.1'
 
     // ************** Libraries ************
     androidXBrowserVersion = '1.0.0'
