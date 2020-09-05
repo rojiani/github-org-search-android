@@ -37,8 +37,9 @@ spotless {
     }
 
     kotlin {
-        target fileTree('.') {
+        target fileTree('app/src') {
             include '**/*.kt'
+            exclude '**/build/*'
         }
 
         ktlint("$ktlintVersion")
