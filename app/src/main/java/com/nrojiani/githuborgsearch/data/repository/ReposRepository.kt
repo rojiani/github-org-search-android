@@ -13,21 +13,22 @@ import com.nrojiani.githuborgsearch.network.responsehandler.isCompleted
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Repository responsible for retrieving the repositories owned by an organization on GitHub
  * from the database or over the network.
  */
-@Singleton
-class ReposRepository
-@Inject constructor(private val gitHubService: GitHubService) {
+class ReposRepository(private val gitHubService: GitHubService) {
+
+    init {
+        Log.d(TAG, "initializing $TAG - ${hashCode()}")
+    }
 
     val responseConverter: ResponseConverter<List<Repo>> = ::defaultResponseConverter
 
     /* Mutable backing field */
     private val _allRepos = MutableLiveData<ApiResult<List<Repo>>>()
+
     /* Publicly exposed immutable LiveData */
     val allRepos: LiveData<ApiResult<List<Repo>>> = _allRepos
 
@@ -79,9 +80,9 @@ class ReposRepository
         )
     }
 
-    fun cancelGetReposCall(): Unit? {
+    internal fun cancelGetReposCall() {
+        repoCall?.cancel()
         _allRepos.value = ApiResult.Cancelled
-        return repoCall?.cancel()
     }
 
     companion object {

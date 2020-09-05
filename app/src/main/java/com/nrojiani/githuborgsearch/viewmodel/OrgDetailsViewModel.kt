@@ -1,5 +1,6 @@
 package com.nrojiani.githuborgsearch.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -8,19 +9,21 @@ import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.data.model.Repo
 import com.nrojiani.githuborgsearch.data.repository.ReposRepository
 import com.nrojiani.githuborgsearch.network.responsehandler.ApiResult
-import javax.inject.Inject
 
 /**
  * ViewModel for the view displaying Org Details & most starred repos.
  */
-class OrgDetailsViewModel
-@Inject constructor(
+class OrgDetailsViewModel(
     private val reposRepository: ReposRepository
 ) : ViewModel() {
 
+    init {
+        Log.d(TAG, "initializing $TAG - ${hashCode()}")
+    }
+
     /**
      * The top `n` most starred repos for the [selectedOrganization] in decreasing order,
-     * where `n` is [NUM_REPOS_TO_DISPLAY].
+     * where `n` is [REPOS_TO_DISPLAY].
      */
     val topRepos: LiveData<ApiResult<List<Repo>>> =
         Transformations.map(reposRepository.allRepos) { allReposResult ->
@@ -28,7 +31,7 @@ class OrgDetailsViewModel
                 is ApiResult.Success<List<Repo>> -> {
                     val mostStarred = allReposResult.data
                         .sortedByDescending { it.stars }
-                        .take(NUM_REPOS_TO_DISPLAY)
+                        .take(REPOS_TO_DISPLAY)
                     ApiResult.Success(mostStarred, allReposResult.httpStatus)
                 }
                 else -> allReposResult
@@ -45,6 +48,7 @@ class OrgDetailsViewModel
     }
 
     companion object {
-        const val NUM_REPOS_TO_DISPLAY = 3
+        const val REPOS_TO_DISPLAY = 4
+        private const val TAG = "OrgDetailsViewModel"
     }
 }

@@ -12,45 +12,35 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.replace
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.data.model.Organization
-import com.nrojiani.githuborgsearch.di.MyApplication
 import com.nrojiani.githuborgsearch.extensions.displayTextOrHide
 import com.nrojiani.githuborgsearch.network.responsehandler.ApiResult
 import com.nrojiani.githuborgsearch.network.responsehandler.formattedErrorMessage
 import com.nrojiani.githuborgsearch.network.responsehandler.responseData
 import com.nrojiani.githuborgsearch.viewmodel.OrgDetailsViewModel
 import com.nrojiani.githuborgsearch.viewmodel.SearchViewModel
-import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.card_org_full.*
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.widget_search_bar.*
-import javax.inject.Inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * Fragment associated with searching for an Organization and displaying
  * details about the Organization (or error messages if not found).
  */
-class SearchFragment : Fragment() {
+class SearchFragment(private val picasso: Picasso) : Fragment() {
 
-    @Inject
-    lateinit var picasso: Picasso
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
+    private val viewModel: SearchViewModel by viewModel()
 
-    private val viewModel: SearchViewModel by lazy {
-        viewModelFactory.create(SearchViewModel::class.java)
-    }
-
-    /** OrgDetailsViewModel reference used for pre-fetching view data for next screen, and setting
-     the selected org */
-    private var orgDetailsViewModel: OrgDetailsViewModel? = null
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        MyApplication.getApplicationComponent(context).inject(this)
-    }
+    /**
+     * [OrgDetailsViewModel] reference used for pre-fetching view data for next screen,
+     * and setting the selected org.
+     */
+    private val orgDetailsViewModel: OrgDetailsViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -88,9 +78,12 @@ class SearchFragment : Fragment() {
 
         orgCardView.setOnClickListener {
             val apiResult = viewModel.organization.value
-            apiResult?.responseData?.let {
+            apiResult.responseData?.let {
                 onOrgSelected(it)
-            } ?: Log.e(TAG, "registerListeners: cardView clicked but not success - apiResult = $apiResult")
+            } ?: Log.e(
+                TAG,
+                "registerListeners: cardView clicked but not success - apiResult = $apiResult"
+            )
         }
     }
 
@@ -123,7 +116,6 @@ class SearchFragment : Fragment() {
 
             progressBar.isInvisible = true
             orgCardView.isInvisible = true
-            // TODO use UIResolver
             displayErrorMessage(apiResult.formattedErrorMessage)
         }
         is ApiResult.Error -> {
@@ -176,24 +168,18 @@ class SearchFragment : Fragment() {
     }
 
     private fun prefetchTopRepos(org: Organization) {
-        if (orgDetailsViewModel == null) {
-            orgDetailsViewModel = viewModelFactory.create(OrgDetailsViewModel::class.java)
-        }
-        orgDetailsViewModel?.getReposForOrg(org)
+        orgDetailsViewModel.getReposForOrg(org)
     }
 
     private fun onOrgSelected(org: Organization) {
         Log.d(TAG, "onOrgSelected($org)")
-        if (orgDetailsViewModel == null) {
-            orgDetailsViewModel = viewModelFactory.create(OrgDetailsViewModel::class.java)
-        }
-
         // set the selected organization in that ViewModel
-        orgDetailsViewModel?.selectedOrganization?.value = org
+        orgDetailsViewModel.selectedOrganization.value = org
 
         // Replace SearchFragment with OrgDetailsFragment
-        activity?.supportFragmentManager?.beginTransaction()
-            ?.replace(R.id.fragment_container, OrgDetailsFragment())
+        activity?.supportFragmentManager
+            ?.beginTransaction()
+            ?.replace<OrgDetailsFragment>(R.id.fragment_container)
             ?.addToBackStack(null)
             ?.commit()
     }

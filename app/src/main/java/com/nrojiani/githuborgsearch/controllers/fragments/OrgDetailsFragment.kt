@@ -1,6 +1,5 @@
 package com.nrojiani.githuborgsearch.controllers.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,37 +14,22 @@ import com.nrojiani.githuborgsearch.adapters.RepoListAdapter
 import com.nrojiani.githuborgsearch.controllers.activities.MainActivity
 import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.data.model.Repo
-import com.nrojiani.githuborgsearch.di.MyApplication
 import com.nrojiani.githuborgsearch.network.responsehandler.ApiResult
 import com.nrojiani.githuborgsearch.network.responsehandler.formattedErrorMessage
 import com.nrojiani.githuborgsearch.viewmodel.OrgDetailsViewModel
-import com.nrojiani.githuborgsearch.viewmodel.ViewModelFactory
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.card_org_condensed.*
 import kotlinx.android.synthetic.main.fragment_org_details.*
 import kotlinx.android.synthetic.main.screen_list.*
-import javax.inject.Inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 /**
- * Fragment which displays the top 3 (most-starred) repos for
+ * Fragment which displays the top (most-starred) repos for
  * an organization.
  */
-class OrgDetailsFragment : Fragment() {
+class OrgDetailsFragment(private val picasso: Picasso) : Fragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    @Inject
-    lateinit var picasso: Picasso
-
-    private val viewModel: OrgDetailsViewModel by lazy {
-        viewModelFactory.create(OrgDetailsViewModel::class.java)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        MyApplication.getApplicationComponent(context).inject(this)
-    }
+    private val viewModel: OrgDetailsViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -114,7 +98,6 @@ class OrgDetailsFragment : Fragment() {
         }
         is ApiResult.Exception -> {
             repoProgressBar.isVisible = false
-            // TODO use UIResolver
             displayErrorMessage(apiResult.formattedErrorMessage)
         }
         is ApiResult.Error -> {

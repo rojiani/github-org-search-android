@@ -12,18 +12,17 @@ import com.nrojiani.githuborgsearch.network.responsehandler.isCompleted
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Repository responsible for retrieving data about an organization on GitHub
  * from the database or over the network.
  */
-@Singleton
-class OrganizationRepository
-@Inject constructor(
-    private val gitHubService: GitHubService
-) {
+
+class OrganizationRepository(private val gitHubService: GitHubService) {
+
+    init {
+        Log.d(TAG, "initializing $TAG - ${hashCode()}")
+    }
 
     private val responseConverter: ResponseConverter<Organization> =
         ::defaultResponseConverter
@@ -82,7 +81,7 @@ class OrganizationRepository
         )
     }
 
-    fun cancelGetOrganizationCall() {
+    internal fun cancelGetOrganizationCall() {
         orgCall?.cancel()
         _organization.value = ApiResult.Cancelled
     }
