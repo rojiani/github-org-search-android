@@ -1,12 +1,13 @@
 ext {
-    // ************ Android **************
-    // Sdk and tools
+    /* Android */
     compileSdkVersion = 29
     minSdkVersion = 21
     targetSdkVersion = 29
 
-    // Plugins
+    /* Gradle Plugin Versions */
     androidGradlePluginVersion = '4.0.1'
+    androidJUnit5PluginVersion = '1.6.2.0'
+    spotlessPluginVersion = '5.3.0'
 
     /* Source Dependencies */
     androidXBrowserVersion = '1.2.0'
@@ -28,12 +29,11 @@ ext {
     /* Test Dependencies */
     archCoreTestingVersion = '2.1.0'
     espressoVersion = '3.1.1'
-    junitVersion = '4.12'
+    junitVersion = '5.6.2'
     junitKtxVersion = '1.1.0'
     mockkVersion = '1.10.0'
     mockWebServerVersion = '4.8.1'
     testCoreVersion = '1.2.0'
-    testRunnerVersion = '1.1.1'
+    testRunnerVersion = '1.2.0'
     testRulesVersion = '1.2.0'
-
 }

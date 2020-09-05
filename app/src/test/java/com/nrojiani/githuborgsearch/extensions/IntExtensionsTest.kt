@@ -2,14 +2,10 @@ package com.nrojiani.githuborgsearch.extensions
 
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.util.*
 
-class IntExtensionsTest {
-
-    companion object {
-        private val DEFAULT_LOCALE = Locale.US
-    }
+internal class IntExtensionsTest {
 
     @Test
     fun formatted() {
@@ -26,5 +22,9 @@ class IntExtensionsTest {
         Locale.setDefault(Locale.FRANCE)
         assertThat(n.formatted(), `is`("123 456 789"))
         assertThat(n.formatted(Locale.FRANCE), `is`("123 456 789"))
+    }
+
+    companion object {
+        private val DEFAULT_LOCALE = Locale.US
     }
 }

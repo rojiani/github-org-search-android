@@ -1,10 +1,15 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'de.mannodermaus.android-junit5'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
+
     defaultConfig {
         applicationId "com.nrojiani.githuborgsearch"
         minSdkVersion rootProject.minSdkVersion
@@ -12,31 +17,51 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     testOptions {
-        unitTests.returnDefaultValues = true
+        unitTests {
+            returnDefaultValues = true
+
+            all {
+                useJUnitPlatform()
+
+                testLogging {
+                    events = [TestLogEvent.PASSED, TestLogEvent.FAILED, TestLogEvent.SKIPPED, TestLogEvent.STANDARD_OUT, TestLogEvent.STANDARD_ERROR]
+                    exceptionFormat = TestExceptionFormat.FULL
+                    showStackTraces = true
+                    showCauses = true
+                    showExceptions = true
+                }
+            }
+        }
+    }
+
+    // JUnit 5 will bundle in files with identical paths; exclude them
+    packagingOptions {
+        exclude "META-INF/LICENSE*"
     }
 }
 
 androidExtensions {
     experimental = true
-}
-
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
 }
 
 dependencies {
@@ -66,7 +91,9 @@ dependencies {
 
     // Local Unit Test Dependencies
     testImplementation "com.squareup.okhttp3:mockwebserver:$mockWebServerVersion"
-    testImplementation "junit:junit:$junitVersion"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+
     testImplementation "androidx.arch.core:core-testing:$archCoreTestingVersion"
     testImplementation "androidx.test:core:$testCoreVersion"
     testImplementation "androidx.test:core-ktx:$testCoreVersion"
@@ -84,6 +111,9 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
     androidTestImplementation "androidx.test:runner:$testRunnerVersion"
     androidTestImplementation "androidx.test:rules:$testRulesVersion"
+    androidTestImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    androidTestImplementation "de.mannodermaus.junit5:android-test-core:$testCoreVersion"
+    androidTestRuntimeOnly "de.mannodermaus.junit5:android-test-runner:$testRunnerVersion"
 
     debugImplementation "androidx.fragment:fragment-testing:$fragmentVersion"
 }

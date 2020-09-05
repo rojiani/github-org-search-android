@@ -4,16 +4,16 @@ import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.data.model.Repo
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import org.junit.Assert.*
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 private const val ORG_NAME = "nytimes"
 
-class GitHubServiceTest : MockWebServerTest() {
+internal class GitHubServiceTest : MockWebServerTest() {
 
     private val expectedHeaders = mapOf(
         "Accept" to "application/vnd.github.v3+json",
@@ -31,7 +31,7 @@ class GitHubServiceTest : MockWebServerTest() {
 
     private lateinit var gitHubClient: GitHubService
 
-    @Before
+    @BeforeEach
     override fun setUp() {
         super.setUp()
         val mockWebServerEndpoint = baseEndpoint

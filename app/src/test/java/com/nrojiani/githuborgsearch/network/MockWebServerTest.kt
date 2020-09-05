@@ -4,9 +4,9 @@ import com.nrojiani.githuborgsearch.testutils.readJsonFile
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
-import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Before
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import java.io.File
 
 /**
@@ -24,12 +24,12 @@ open class MockWebServerTest {
         GET, HEAD, PUT, POST, PATCH, DELETE, CONNECT, OPTIONS, TRACE
     }
 
-    @Before
+    @BeforeEach
     open fun setUp() {
         server.start()
     }
 
-    @After
+    @AfterEach
     fun tearDown() {
         server.shutdown()
     }

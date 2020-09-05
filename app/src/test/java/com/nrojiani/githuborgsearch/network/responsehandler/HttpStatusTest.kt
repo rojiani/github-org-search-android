@@ -1,9 +1,9 @@
 package com.nrojiani.githuborgsearch.network.responsehandler
 
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
-class HttpStatusTest {
+internal class HttpStatusTest {
 
     @Test
     fun whenHttpStatusCreated_categoryIsSet() {

@@ -3,11 +3,11 @@ package com.nrojiani.githuborgsearch.network.responsehandler
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.ResponseBody
 import okhttp3.ResponseBody.Companion.toResponseBody
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
 import retrofit2.Response
+import org.junit.jupiter.api.Test
 
-class ResponseConverterTest {
+internal class ResponseConverterTest {
 
     @Test
     fun whenResponseSuccess_convertedToSuccess() {

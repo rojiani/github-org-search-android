@@ -1,10 +1,10 @@
 package com.nrojiani.githuborgsearch.network.responsehandler
 
-import junit.framework.Assert.*
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 import java.net.UnknownHostException
 
-class ApiResultTest {
+internal class ApiResultTest {
 
     private val success = ApiResult.Success(listOf(1, 2, 3), HttpStatus(200, "OK"))
     private val error = ApiResult.Error(HttpStatus(404, "Not Found"))
