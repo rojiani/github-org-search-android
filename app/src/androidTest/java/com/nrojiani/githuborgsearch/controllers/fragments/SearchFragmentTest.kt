@@ -1,25 +1,23 @@
 package com.nrojiani.githuborgsearch.controllers.fragments
 
+import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import androidx.test.ext.junit.rules.activityScenarioRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.controllers.activities.MainActivity
+import de.mannodermaus.junit5.ActivityScenarioExtension
 import org.hamcrest.Matchers.not
-import org.junit.Ignore
-import org.junit.Rule
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 
 /**
  * UI Tests for SearchFragment
  */
-@RunWith(AndroidJUnit4::class)
 @LargeTest
 class SearchFragmentTest {
 
@@ -27,11 +25,12 @@ class SearchFragmentTest {
      * Use [ActivityScenarioRule] to create and launch the activity under test before each test,
      * and close it after each test. This is a replacement for [androidx.test.rule.ActivityTestRule].
      */
-    @get:Rule
-    var activityScenarioRule = activityScenarioRule<MainActivity>()
+    @JvmField
+    @RegisterExtension
+    val scenarioExtension = ActivityScenarioExtension.launch<MainActivity>()
 
     @Test
-    fun searchWidgetViewsAreVisible() {
+    fun searchWidgetViewsAreVisible(scenario: ActivityScenario<MainActivity>) {
         val searchWidgetViewIds = setOf(
             R.id.searchBarWidget,
             R.id.textInputLayout,
@@ -45,7 +44,7 @@ class SearchFragmentTest {
     }
 
     @Test
-    fun whenSearchEditTextIsVisible_displayHint() {
+    fun whenSearchEditTextIsVisible_displayHint(scenario: ActivityScenario<MainActivity>) {
         onView(withId(R.id.searchEditText))
             .check(
                 matches(
@@ -55,7 +54,9 @@ class SearchFragmentTest {
     }
 
     @Test
-    fun whenSearchEditTextIsEmpty_andSearchButtonClicked_showErrorMessage() {
+    fun whenSearchEditTextIsEmpty_andSearchButtonClicked_showErrorMessage(
+        scenario: ActivityScenario<MainActivity>
+    ) {
         // Type (empty) text and then press the search button.
         onView(withId(R.id.searchEditText)).perform(typeText(""), closeSoftKeyboard())
         onView(withId(R.id.searchButton)).perform(click())
@@ -67,7 +68,9 @@ class SearchFragmentTest {
     }
 
     @Test
-    fun whenSearchEditTextIsNotFound_andSearchButtonClicked_showErrorMessage() {
+    fun whenSearchEditTextIsNotFound_andSearchButtonClicked_showErrorMessage(
+        scenario: ActivityScenario<MainActivity>
+    ) {
         // Error message that displays API errors is initially invisible
         onView(withId(R.id.errorTextView))
             .check(matches(not(isDisplayed())))
@@ -83,14 +86,14 @@ class SearchFragmentTest {
     }
 
     @Test
-    fun whenActivityStarts_progressBar_notVisible() {
+    fun whenActivityStarts_progressBar_notVisible(scenario: ActivityScenario<MainActivity>) {
         // Progress bar not displayed until after text
         onView(withId(R.id.progressBar))
             .check(matches(not(isDisplayed())))
     }
 
     @Test
-    fun whenValidSearch_orgCardViewIsDisplayed() {
+    fun whenValidSearch_orgCardViewIsDisplayed(scenario: ActivityScenario<MainActivity>) {
         // TODO: this is causing test to fail if all tests run in succession
         // initially not visible
         // onView(withId(R.id.orgCardView))
@@ -118,9 +121,9 @@ class SearchFragmentTest {
         }
     }
 
-    @Ignore("See comment")
+    @Disabled("See comment")
     @Test
-    fun whenValidSearch_withSomeMissingInfo_orgCardViewIsDisplayedWithMissingTextHidden() {
+    fun whenValidSearch_withSomeMissingInfo_orgCardViewIsDisplayedWithMissingTextHidden(scenario: ActivityScenario<MainActivity>) {
         // TODO: this is causing test to fail if all tests run in succession
         // initially not visible
         // onView(withId(R.id.orgCardView))
@@ -154,7 +157,7 @@ class SearchFragmentTest {
     }
 
     @Test
-    fun whenSearchQueryHasWhitespace_theQueryIsTrimmed() {
+    fun whenSearchQueryHasWhitespace_theQueryIsTrimmed(scenario: ActivityScenario<MainActivity>) {
         // initially not visible
         onView(withId(R.id.orgCardView))
             .check(matches(not(isDisplayed())))
@@ -169,7 +172,7 @@ class SearchFragmentTest {
     }
 
     @Test
-    fun whenOrgCardViewClicked_fragmentTransition() {
+    fun whenOrgCardViewClicked_fragmentTransition(scenario: ActivityScenario<MainActivity>) {
         // Type (empty) text and then press the search button.
         onView(withId(R.id.searchEditText)).perform(typeText("amzn"), closeSoftKeyboard())
         onView(withId(R.id.searchButton)).perform(click())

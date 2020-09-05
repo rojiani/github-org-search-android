@@ -4,7 +4,11 @@ import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.data.model.Repo
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import org.junit.jupiter.api.Assertions.*
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import retrofit2.Response
@@ -74,15 +78,15 @@ internal class GitHubServiceTest : MockWebServerTest() {
         enqueueMockApiResponse(MockApiResponse.ORG_SUCCESS)
         val response: Response<Organization> = gitHubClient.getOrg(ORG_NAME).execute()
         val org = response.body()
-        assertNotNull(org)
+        org.shouldNotBeNull()
 
-        org?.apply {
-            assertEquals(name, "The New York Times")
-            assertEquals(login, "nytimes")
-            assertEquals(avatarUrl, "https://avatars0.githubusercontent.com/u/221409?v=4")
-            assertEquals(blogUrl, "nytimes.com")
-            assertEquals(location, "New York, NY")
-            assertEquals(description, "")
+        org.apply {
+            name.shouldBe("The New York Times")
+            login.shouldBe("nytimes")
+            avatarUrl.shouldBe("https://avatars0.githubusercontent.com/u/221409?v=4")
+            blogUrl.shouldBe("nytimes.com")
+            location.shouldBe("New York, NY")
+            description.shouldBe("")
         }
     }
 
@@ -94,15 +98,15 @@ internal class GitHubServiceTest : MockWebServerTest() {
         enqueueMockApiResponse(MockApiResponse.ORG_SUCCESS_WITH_MISSING_AND_NULL_PROPS)
         val response: Response<Organization> = gitHubClient.getOrg("amzn").execute()
         val org = response.body()
-        assertNotNull(org)
+        org.shouldNotBeNull()
 
-        org?.apply {
-            assertEquals("Amazon", name)
-            assertEquals("amzn", login)
-            assertEquals("https://avatars1.githubusercontent.com/u/8594673?v=4", avatarUrl)
-            assertEquals("", blogUrl)
-            assertEquals("", description)
-            assertNull(location)
+        org.apply {
+            "Amazon".shouldBe(name)
+            "amzn".shouldBe(login)
+            "https://avatars1.githubusercontent.com/u/8594673?v=4".shouldBe(avatarUrl)
+            "".shouldBe(blogUrl)
+            "".shouldBe(description)
+            location.shouldBeNull()
         }
     }
 
@@ -110,13 +114,13 @@ internal class GitHubServiceTest : MockWebServerTest() {
     fun `getOrg 404 not found`() {
         enqueueMockApiResponse(MockApiResponse.ORG_NOT_FOUND)
         val response: Response<Organization> = gitHubClient.getOrg("foobar").execute()
-        assertNull(response.body())
-        assertEquals(404, response.code())
+        response.body().shouldBeNull()
+        response.code().shouldBe(404)
 
         /* response.message() would be "Not Found", but MockResponse doesn't expose a way
            to set the message, and it is set based on HTTP status code category (1xx, 2xx, ..., 5xx).
            code: http://tinyurl.com/y5hx4pge */
-        assertEquals("Client Error", response.message())
+        response.message().shouldBe("Client Error")
     }
 
     @Test
@@ -146,23 +150,20 @@ internal class GitHubServiceTest : MockWebServerTest() {
         val response: Response<List<Repo>> = gitHubClient.getRepositoriesForOrg(ORG_NAME).execute()
         val repos = response.body()
 
-        assertNotNull(repos)
-        assertEquals(30, repos!!.size)
-        assertTrue(repos is List)
+        repos.shouldNotBeNull()
+        repos.shouldHaveSize(30)
         val firstRepo = repos.first()
-        assertTrue(firstRepo is Repo)
 
         firstRepo.apply {
-            assertEquals(590289, id)
-            assertEquals("tweetftp", name)
-            assertEquals("https://github.com/nytimes/tweetftp", repoUrl)
-            assertEquals(
+            id.shouldBe(590289)
+            name.shouldBe("tweetftp")
+            repoUrl.shouldBe("https://github.com/nytimes/tweetftp")
+            description.shouldBe(
                 "Ruby Implementation of the Tweet File Transfer Protocol (APRIL FOOLS JOKE)",
-                description
             )
-            assertEquals(19, stars)
-            assertEquals(1, forks)
-            assertEquals("Ruby", language)
+            stars.shouldBe(19)
+            forks.shouldBe(1)
+            language.shouldBe("Ruby")
         }
     }
 
@@ -174,20 +175,18 @@ internal class GitHubServiceTest : MockWebServerTest() {
         val response: Response<List<Repo>> = gitHubClient.getRepositoriesForOrg("amzn").execute()
 
         val repos = response.body()
-        assertNotNull(repos)
-        assertEquals(30, repos!!.size)
-        assertTrue(repos is List)
-        val firstRepo = repos.first()
-        assertTrue(firstRepo is Repo)
+        repos.shouldNotBeNull()
+        repos.shouldHaveSize(30)
+        repos.first().shouldBeInstanceOf<Repo>()
     }
 
     @Test
     fun `getRepositoriesForOrg 404 not found`() {
         enqueueMockApiResponse(MockApiResponse.REPOS_NOT_FOUND)
         val response: Response<List<Repo>> = gitHubClient.getRepositoriesForOrg("foobar").execute()
-        assertNull(response.body())
-        assertEquals(404, response.code())
-        assertEquals("Client Error", response.message())
+        response.body().shouldBeNull()
+        response.code().shouldBe(404)
+        response.message().shouldBe("Client Error")
     }
 
     private fun enqueueMockApiResponse(mockResponse: MockApiResponse) =

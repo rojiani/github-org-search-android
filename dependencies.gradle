@@ -31,6 +31,7 @@ ext {
     espressoVersion = '3.1.1'
     junitVersion = '5.6.2'
     junitKtxVersion = '1.1.0'
+    kotestVersion = '4.2.3'
     mockkVersion = '1.10.0'
     mockWebServerVersion = '4.8.1'
     testCoreVersion = '1.2.0'

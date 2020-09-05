@@ -1,6 +1,9 @@
 package com.nrojiani.githuborgsearch.network.responsehandler
 
-import org.junit.jupiter.api.Assertions.*
+import io.kotest.matchers.booleans.shouldBeFalse
+import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import java.net.UnknownHostException
 
@@ -17,47 +20,52 @@ internal class ApiResultTest {
 
     @Test
     fun isCompleted() {
-        assertTrue(success.isCompleted)
-        assertTrue(error.isCompleted)
-        assertFalse(exception.isCompleted)
-        assertFalse(loading.isCompleted)
-        assertFalse(cancelled.isCompleted)
-        assertFalse(nullResult.isCompleted)
+        success.isCompleted.shouldBeTrue()
+        error.isCompleted.shouldBeTrue()
+        exception.isCompleted.shouldBeFalse()
+        loading.isCompleted.shouldBeFalse()
+        cancelled.isCompleted.shouldBeFalse()
+        nullResult.isCompleted.shouldBeFalse()
     }
 
     @Test
     fun responseData() {
         val successResult: ApiResult<List<Int>>? =
             ApiResult.Success(listOf(1, 2, 3), HttpStatus(200, "OK"))
-        assertEquals(listOf(1, 2, 3), successResult.responseData)
+        listOf(1, 2, 3).shouldBe(successResult.responseData)
 
-        assertNull(error.responseData)
-        assertNull(exception.responseData)
-        assertNull(loading.responseData)
-        assertNull(cancelled.responseData)
-        assertNull(nullResult.responseData)
+        error.responseData.shouldBeNull()
+        exception.responseData.shouldBeNull()
+        loading.responseData.shouldBeNull()
+        cancelled.responseData.shouldBeNull()
+        nullResult.responseData.shouldBeNull()
     }
 
     @Test
     fun formattedErrorMessage_onErrorResult() {
-        assertEquals("Error: Not Found (404)", error.formattedErrorMessage)
+        error.formattedErrorMessage.shouldBe("Error: Not Found (404)")
 
         val errorWithEmptyMessage = ApiResult.Error(HttpStatus(599, ""))
-        assertEquals("Error: Unknown Error (599)", errorWithEmptyMessage.formattedErrorMessage)
+        errorWithEmptyMessage.formattedErrorMessage
+            .shouldBe("Error: Unknown Error (599)")
     }
 
     @Test
     fun formattedErrorMessage_onExceptionResult() {
-        assertEquals("Exception: Unable to resolve host api.github.com: No address associated with hostname", exception.formattedErrorMessage)
+        exception.formattedErrorMessage
+            .shouldBe(
+                "Exception: Unable to resolve host api.github.com: No address associated with hostname"
+            )
         val exceptionWithNoDetailMsg = ApiResult.Exception(IllegalStateException())
-        assertEquals("Exception: IllegalStateException", exceptionWithNoDetailMsg.formattedErrorMessage)
+        exceptionWithNoDetailMsg.formattedErrorMessage
+            .shouldBe("Exception: IllegalStateException")
     }
 
     @Test
     fun formattedErrorMessage_onNonFailureResult() {
-        assertNull(success.formattedErrorMessage)
-        assertNull(loading.formattedErrorMessage)
-        assertNull(cancelled.formattedErrorMessage)
-        assertNull(nullResult.formattedErrorMessage)
+        success.formattedErrorMessage.shouldBeNull()
+        loading.formattedErrorMessage.shouldBeNull()
+        cancelled.formattedErrorMessage.shouldBeNull()
+        nullResult.formattedErrorMessage.shouldBeNull()
     }
 }
