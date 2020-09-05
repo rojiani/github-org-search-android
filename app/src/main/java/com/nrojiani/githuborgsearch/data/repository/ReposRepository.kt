@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.data.model.Repo
-import com.nrojiani.githuborgsearch.misc.OpenForTesting
 import com.nrojiani.githuborgsearch.network.GitHubService
 import com.nrojiani.githuborgsearch.network.responsehandler.ApiResult
 import com.nrojiani.githuborgsearch.network.responsehandler.ResponseConverter
@@ -21,7 +20,6 @@ import javax.inject.Singleton
  * Repository responsible for retrieving the repositories owned by an organization on GitHub
  * from the database or over the network.
  */
-@OpenForTesting
 @Singleton
 class ReposRepository
 @Inject constructor(private val gitHubService: GitHubService) {

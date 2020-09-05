@@ -35,12 +35,12 @@ Improvements to be made:
     - [x] Encapsulate API response (result, error message, isLoading)
     - [ ] Error & Exception handling
     - [ ] Retries
-- [ ] Full Test coverage - ViewModels, RecyclerView, Mockito tests
+- [ ] Full Test coverage - ViewModels, RecyclerView, tests
 - [ ] RxJava
 - [ ] Room
-- [ ] App icon - only works on some devices?
 - [ ] Toolbar Up button
 - [ ] Logging/Build variant
+- [ ] Animation when opening browser
 
 ## Instructions ##
 

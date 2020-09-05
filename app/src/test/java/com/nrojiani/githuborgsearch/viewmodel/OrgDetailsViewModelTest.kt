@@ -2,12 +2,12 @@ package com.nrojiani.githuborgsearch.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nrojiani.githuborgsearch.data.repository.ReposRepository
+import io.mockk.mockk
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.Mockito
 
 @RunWith(JUnit4::class)
 class OrgDetailsViewModelTest {
@@ -22,7 +22,7 @@ class OrgDetailsViewModelTest {
 
     @Before
     fun setUp() {
-        mockReposRepository = Mockito.mock(ReposRepository::class.java)
+        mockReposRepository = mockk()
         orgDetailsViewModel = OrgDetailsViewModel(mockReposRepository)
     }
 
