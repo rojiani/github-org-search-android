@@ -118,7 +118,7 @@ class SearchFragmentTest {
         }
     }
 
-    @Ignore
+    @Ignore("See comment")
     @Test
     fun whenValidSearch_withSomeMissingInfo_orgCardViewIsDisplayedWithMissingTextHidden() {
         // TODO: this is causing test to fail if all tests run in succession

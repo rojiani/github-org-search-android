@@ -5,9 +5,7 @@
     android:layout_height="wrap_content"
     tools:context="com.nrojiani.githuborgsearch.controllers.activities.MainActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/searchFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

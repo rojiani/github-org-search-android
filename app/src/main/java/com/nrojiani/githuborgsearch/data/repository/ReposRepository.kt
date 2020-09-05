@@ -80,8 +80,8 @@ class ReposRepository
     }
 
     fun cancelGetReposCall(): Unit? {
-        return repoCall?.cancel()
         _allRepos.value = ApiResult.Cancelled
+        return repoCall?.cancel()
     }
 
     companion object {

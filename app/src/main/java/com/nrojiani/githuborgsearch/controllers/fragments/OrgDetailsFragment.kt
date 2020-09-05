@@ -89,7 +89,7 @@ class OrgDetailsFragment : Fragment() {
         (activity as MainActivity).openWebContent(repo.repoUrl)
 
     private fun observeViewModel() {
-        viewModel.selectedOrganization.observe(this) { org: Organization? ->
+        viewModel.selectedOrganization.observe(viewLifecycleOwner) { org: Organization? ->
             Log.d(TAG, "(Observer): selectedOrganization => $org")
             org?.let { newOrg ->
                 viewModel.getReposForOrg(newOrg)
@@ -97,7 +97,7 @@ class OrgDetailsFragment : Fragment() {
             }
         }
 
-        viewModel.topRepos.observe(this) { topReposResource ->
+        viewModel.topRepos.observe(viewLifecycleOwner) { topReposResource ->
             Log.d(TAG, "(Observer): topRepos => $topReposResource")
             topReposResource?.let { updateUI(it) }
         }

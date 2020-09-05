@@ -95,7 +95,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.organization.observe(this) { orgApiResult ->
+        viewModel.organization.observe(viewLifecycleOwner) { orgApiResult ->
             Log.d(TAG, "(Observer) orgApiResult => $orgApiResult")
             orgApiResult?.let {
                 updateUI(it)
