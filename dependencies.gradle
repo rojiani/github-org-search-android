@@ -1,9 +1,4 @@
 ext {
-    /* Android */
-    compileSdkVersion = 29
-    minSdkVersion = 21
-    targetSdkVersion = 29
-
     /* Gradle Plugin Versions */
     androidGradlePluginVersion = '4.0.1'
     androidJUnit5PluginVersion = '1.6.2.0'
@@ -14,6 +9,7 @@ ext {
     appCompatVersion = '1.2.0'
     constraintLayoutVersion = '2.0.1'
     customTabsKotlinVersion = '1.1'
+    desugarJdkLibsVersion = '1.0.9'
     fragmentVersion = '1.2.5'
     koinVersion = '2.2.0-beta-1'
     kotlinVersion = '1.4.0'
@@ -30,7 +26,6 @@ ext {
     archCoreTestingVersion = '2.1.0'
     espressoVersion = '3.1.1'
     junitVersion = '5.6.2'
-    junitKtxVersion = '1.1.0'
     kotestVersion = '4.2.3'
     mockkVersion = '1.10.0'
     mockWebServerVersion = '4.8.1'

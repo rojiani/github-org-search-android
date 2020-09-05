@@ -5,7 +5,6 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.LargeTest
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.controllers.activities.MainActivity
@@ -22,7 +21,7 @@ import org.junit.jupiter.api.extension.RegisterExtension
 class SearchFragmentTest {
 
     /**
-     * Use [ActivityScenarioRule] to create and launch the activity under test before each test,
+     * Use `ActivityScenarioRule` to create and launch the activity under test before each test,
      * and close it after each test. This is a replacement for [androidx.test.rule.ActivityTestRule].
      */
     @JvmField

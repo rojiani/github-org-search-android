@@ -44,7 +44,7 @@ class OrgDetailsFragmentTest {
 
         onView(withId(R.id.condensedOrgLoginTextView))
             .check(matches(isDisplayed()))
-            .check(matches(withText("nytimes")))
+            .check(matches(withText("@nytimes")))
     }
 
     @Test
