@@ -1,0 +1,36 @@
+/******************************************************************************
+ * Detekt - Static Analysis
+ * https://arturbosch.github.io/detekt
+ ******************************************************************************/
+apply plugin: 'io.gitlab.arturbosch.detekt'
+
+detekt {
+    autoCorrect = true
+    parallel = true
+    failFast = false
+    input = files(
+            "$projectDir/app/src/main/java",
+            "$projectDir/app/src/main/kotlin"
+    )
+    buildUponDefaultConfig = true // preconfigure defaults
+    config = files("$projectDir/config/detekt/detekt.yml")
+    debug = false
+    ignoreFailures = false
+    baseline = file("${projectDir}/config/detekt/baseline.xml")
+
+    def detektReportsDir = "${buildDir}/reports/detekt"
+    reports {
+        xml {
+            enabled = true
+            destination = file("${detektReportsDir}/detekt.xml")
+        }
+        html {
+            enabled = true
+            destination = file("${detektReportsDir}/detekt.html")
+        }
+        txt {
+            enabled = true
+            destination = file("${detektReportsDir}/detekt.txt")
+        }
+    }
+}

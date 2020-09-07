@@ -1,0 +1,68 @@
+# https://github.com/detekt/detekt/blob/master/detekt-core/src/main/resources/default-detekt-config.yml
+
+complexity:
+  active: true
+  TooManyFunctions:
+    active: true
+    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    thresholdInFiles: 15
+    thresholdInClasses: 15
+    thresholdInInterfaces: 15
+    thresholdInObjects: 15
+    thresholdInEnums: 15
+    ignoreDeprecated: false
+    ignorePrivate: false
+    ignoreOverridden: false
+
+formatting:
+  active: true
+  android: true
+  autoCorrect: true
+  NoWildcardImports:
+    active: false
+
+naming:
+  ConstructorParameterNaming:
+    active: true
+    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**', '**/src/*/kotlin/leetcode/**']
+    parameterPattern: '[a-z][A-Za-z0-9]*'
+    privateParameterPattern: '[a-z][A-Za-z0-9]*'
+    excludeClassPattern: '$^'
+    ignoreOverridden: true
+  FunctionParameterNaming:
+    active: true
+    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**', '**/src/*/kotlin/leetcode/**']
+    parameterPattern: '[a-z][A-Za-z0-9]*'
+    excludeClassPattern: '$^'
+    ignoreOverridden: true
+  MatchingDeclarationName:
+    active: false
+    mustBeFirst: true
+  PackageNaming:
+    active: true
+    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**', '**/src/*/kotlin/leetcode/**']
+    packagePattern: '[a-z]+(\.[a-z][A-Za-z0-9]*)*'
+
+performance:
+  active: true
+  ArrayPrimitive:
+    active: false
+
+style:
+  active: true
+  ForbiddenComment:
+    active: false
+    values: ['TODO:', 'FIXME:', 'STOPSHIP:']
+    allowedPatterns: ''
+  MagicNumber:
+    active: false
+  MaxLineLength:
+    active: true
+    maxLineLength: 150
+    excludePackageStatements: true
+    excludeImportStatements: true
+    excludeCommentStatements: false
+  WildcardImport:
+    active: false
+    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludeImports: ['java.util.*', 'kotlinx.android.synthetic.*']

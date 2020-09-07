@@ -1,0 +1,8 @@
+apply plugin: "com.github.jakemarsden.git-hooks"
+
+gitHooks {
+    hooks = [
+            'pre-push': 'detekt spotlessCheck'
+    ]
+    hooksDirectory = file("${rootDir}/.git/hooks")
+}

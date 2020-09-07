@@ -17,7 +17,7 @@ Android Architecture Components:
 - [LiveData](https://developer.android.com/topic/libraries/architecture/livedata)
 - [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
 
-[Dagger 2](https://google.github.io/dagger/) - Dependency Injection  
+[Koin](https://start.insert-koin.io/) - Dependency Injection  
 [Retrofit](https://square.github.io/retrofit/) - REST client  
 [Moshi](https://github.com/square/moshi) - JSON processing  
 [Picasso](https://square.github.io/picasso/) - Image downloading & caching  

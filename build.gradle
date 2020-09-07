@@ -1,22 +1,20 @@
 buildscript {
-    apply from: 'dependencies.gradle'
+    apply from: 'gradle/versions.gradle'
 
     repositories {
         google()
         jcenter()
+        gradlePluginPortal()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$androidGradlePluginVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "de.mannodermaus.gradle.plugins:android-junit5:$androidJUnit5PluginVersion"
         classpath "com.diffplug.spotless:spotless-plugin-gradle:$spotlessPluginVersion"
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektVersion"
+        classpath "com.github.jakemarsden:git-hooks-gradle-plugin:$gitHooksPluginVersion"
+        classpath "com.adarshr:gradle-test-logger-plugin:$testLoggerPluginVersion"
     }
-}
-
-apply plugin: 'com.diffplug.spotless'
-
-subprojects {
-    apply from: '../dependencies.gradle'
 }
 
 allprojects {
@@ -26,32 +24,5 @@ allprojects {
     }
 }
 
-spotless {
-    format 'misc', {
-        target '**/*.gradle', '**/.gitignore'
-
-        endWithNewline()
-        indentWithSpaces()
-        trimTrailingWhitespace()
-    }
-
-    kotlin {
-        target fileTree('app/src') {
-            include '**/*.kt'
-            exclude '**/build/*'
-        }
-
-        ktlint("$ktlintVersion")
-                .userData([
-                        'max_line_length'     : '150',
-                        'indent_style'        : 'space',
-                        'insert_final_newline': 'true',
-                        'experimental:indent' : 'false',
-                        'disabled_rules'      : 'no-multi-spaces, no-wildcard-imports'
-                ])
-
-        endWithNewline()
-        indentWithSpaces()
-        trimTrailingWhitespace()
-    }
-}
+apply from: 'gradle/githooks.gradle'
+apply from: 'gradle/spotless.gradle'

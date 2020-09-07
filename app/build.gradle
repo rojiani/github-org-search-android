@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'de.mannodermaus.android-junit5'
+apply from: '../gradle/detekt.gradle'
+apply from: '../gradle/test-logger.gradle'
 
 android {
     compileSdkVersion 29
