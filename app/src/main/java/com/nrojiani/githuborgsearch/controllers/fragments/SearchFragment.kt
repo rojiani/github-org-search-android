@@ -15,6 +15,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.replace
 import com.nrojiani.githuborgsearch.R
 import com.nrojiani.githuborgsearch.data.model.Organization
+import com.nrojiani.githuborgsearch.databinding.CardOrgFullBinding
+import com.nrojiani.githuborgsearch.databinding.FragmentSearchBinding
 import com.nrojiani.githuborgsearch.extensions.displayTextOrHide
 import com.nrojiani.githuborgsearch.network.responsehandler.ApiResult
 import com.nrojiani.githuborgsearch.network.responsehandler.formattedErrorMessage
@@ -22,9 +24,6 @@ import com.nrojiani.githuborgsearch.network.responsehandler.responseData
 import com.nrojiani.githuborgsearch.viewmodel.OrgDetailsViewModel
 import com.nrojiani.githuborgsearch.viewmodel.SearchViewModel
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.card_org_full.*
-import kotlinx.android.synthetic.main.fragment_search.*
-import kotlinx.android.synthetic.main.widget_search_bar.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -36,6 +35,12 @@ class SearchFragment(private val picasso: Picasso) : Fragment() {
 
     private val viewModel: SearchViewModel by viewModel()
 
+    private var _binding: FragmentSearchBinding? = null
+    /** This property is only valid between onCreateView and onDestroyView. */
+    private val binding get() = _binding!!
+
+    private lateinit var orgCardViewBinding: CardOrgFullBinding
+
     /**
      * [OrgDetailsViewModel] reference used for pre-fetching view data for next screen,
      * and setting the selected org.
@@ -46,7 +51,12 @@ class SearchFragment(private val picasso: Picasso) : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_search, container, false)
+    ): View? {
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        val view = binding.root
+        orgCardViewBinding = binding.orgCardView
+        return view
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,12 +66,17 @@ class SearchFragment(private val picasso: Picasso) : Fragment() {
         observeViewModel()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     /** Set listeners */
     private fun registerListeners() {
         /* Trigger GitHub Org search call when either the Search button is pressed
            or the search key is pressed on keyboard */
-        searchButton.setOnClickListener { performSearch() }
-        searchEditText.setOnEditorActionListener { _, actionId, _ ->
+        binding.searchBarWidget.searchButton.setOnClickListener { performSearch() }
+        binding.searchBarWidget.searchEditText.setOnEditorActionListener { _, actionId, _ ->
             when (actionId) {
                 EditorInfo.IME_ACTION_SEARCH -> {
                     performSearch()
@@ -72,11 +87,11 @@ class SearchFragment(private val picasso: Picasso) : Fragment() {
         }
 
         // Tap outside of text field dismisses keyboard
-        searchFragment.setOnClickListener {
+        binding.root.setOnClickListener {
             activity?.let(this::hideSoftKeyBoard)
         }
 
-        orgCardView.setOnClickListener {
+        orgCardViewBinding.root.setOnClickListener {
             val apiResult = viewModel.organization.value
             apiResult.responseData?.let {
                 onOrgSelected(it)
@@ -101,46 +116,46 @@ class SearchFragment(private val picasso: Picasso) : Fragment() {
      */
     private fun updateUI(apiResult: ApiResult<Organization>) = when (apiResult) {
         is ApiResult.Loading -> {
-            progressBar.isVisible = true
-            errorTextView.isVisible = false
-            orgCardView.isInvisible = true
+            binding.progressBar.isVisible = true
+            binding.errorTextView.isVisible = false
+            orgCardViewBinding.root.isInvisible = true
         }
         is ApiResult.Cancelled -> {
-            progressBar.isVisible = false
-            errorTextView.isVisible = false
-            orgCardView.isInvisible = true
+            binding.progressBar.isVisible = false
+            binding.errorTextView.isVisible = false
+            orgCardViewBinding.root.isInvisible = true
         }
         is ApiResult.Exception -> {
             Log.e(TAG, "updateUI: ApiResult.Exception: $apiResult")
             Log.e(TAG, "stack trace: ${apiResult.throwable.stackTrace}")
 
-            progressBar.isInvisible = true
-            orgCardView.isInvisible = true
+            binding.progressBar.isInvisible = true
+            orgCardViewBinding.root.isInvisible = true
             displayErrorMessage(apiResult.formattedErrorMessage)
         }
         is ApiResult.Error -> {
             Log.e(TAG, "updateUI: ApiResult.Error: $apiResult")
-            progressBar.isInvisible = true
-            orgCardView.isInvisible = true
+            binding.progressBar.isInvisible = true
+            orgCardViewBinding.root.isInvisible = true
             displayErrorMessage(apiResult.formattedErrorMessage)
         }
         is ApiResult.Success -> {
             val org = apiResult.data
-            progressBar.isInvisible = true
-            errorTextView.isVisible = false
+            binding.progressBar.isInvisible = true
+            binding.errorTextView.isVisible = false
             showOrgDetails(org)
             prefetchTopRepos(org)
         }
     }
 
     private fun performSearch() {
-        val orgQuery = searchEditText.text.toString().trim()
+        val orgQuery = binding.searchBarWidget.searchEditText.text.toString().trim()
 
         when {
-            orgQuery.isBlank() -> searchEditText.error = EMPTY_SEARCH_ERROR_MESSAGE
+            orgQuery.isBlank() -> binding.searchBarWidget.searchEditText.error = EMPTY_SEARCH_ERROR_MESSAGE
             else -> {
                 // Dismiss Keyboard
-                searchEditText.onEditorAction(EditorInfo.IME_ACTION_DONE)
+                binding.searchBarWidget.searchEditText.onEditorAction(EditorInfo.IME_ACTION_DONE)
 
                 // Fetch Org info
                 viewModel.loadOrgDetails(orgQuery)
@@ -149,18 +164,18 @@ class SearchFragment(private val picasso: Picasso) : Fragment() {
     }
 
     private fun showOrgDetails(org: Organization) {
-        orgCardView.isVisible = true
+        orgCardViewBinding.root.isVisible = true
 
         org.apply {
-            picasso.load(avatarUrl).into(orgImageView)
+            picasso.load(avatarUrl).into(orgCardViewBinding.orgImageView)
 
-            orgNameTextView.text = name
-            orgLoginTextView.text = login
+            orgCardViewBinding.orgNameTextView.text = name
+            orgCardViewBinding.orgLoginTextView.text = login
 
             mapOf(
-                orgLocationTextView to location,
-                orgBlogTextView to blogUrl,
-                orgDescriptionTextView to description
+                orgCardViewBinding.orgLocationTextView to location,
+                orgCardViewBinding.orgBlogTextView to blogUrl,
+                orgCardViewBinding.orgDescriptionTextView to description
             ).forEach { (textView, text) ->
                 textView.displayTextOrHide(text)
             }
@@ -194,11 +209,11 @@ class SearchFragment(private val picasso: Picasso) : Fragment() {
     }
 
     private fun displayErrorMessage(errorMessage: String?) = if (errorMessage.isNullOrBlank()) {
-        errorTextView.isVisible = false
-        errorTextView.text = ""
+        binding.errorTextView.isVisible = false
+        binding.errorTextView.text = ""
     } else {
-        errorTextView.isVisible = true
-        errorTextView.text = errorMessage
+        binding.errorTextView.isVisible = true
+        binding.errorTextView.text = errorMessage
     }
 
     companion object {

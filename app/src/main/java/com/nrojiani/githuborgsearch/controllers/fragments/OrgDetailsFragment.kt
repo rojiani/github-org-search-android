@@ -14,13 +14,11 @@ import com.nrojiani.githuborgsearch.adapters.RepoListAdapter
 import com.nrojiani.githuborgsearch.controllers.activities.MainActivity
 import com.nrojiani.githuborgsearch.data.model.Organization
 import com.nrojiani.githuborgsearch.data.model.Repo
+import com.nrojiani.githuborgsearch.databinding.FragmentOrgDetailsBinding
 import com.nrojiani.githuborgsearch.network.responsehandler.ApiResult
 import com.nrojiani.githuborgsearch.network.responsehandler.formattedErrorMessage
 import com.nrojiani.githuborgsearch.viewmodel.OrgDetailsViewModel
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.card_org_condensed.*
-import kotlinx.android.synthetic.main.fragment_org_details.*
-import kotlinx.android.synthetic.main.screen_list.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 /**
@@ -31,11 +29,19 @@ class OrgDetailsFragment(private val picasso: Picasso) : Fragment() {
 
     private val viewModel: OrgDetailsViewModel by sharedViewModel()
 
+    private var _binding: FragmentOrgDetailsBinding? = null
+    /** This property is only valid between onCreateView and onDestroyView. */
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_org_details, container, false)
+    ): View? {
+        _binding = FragmentOrgDetailsBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,13 +51,18 @@ class OrgDetailsFragment(private val picasso: Picasso) : Fragment() {
         restoreFromBundle(savedInstanceState)
 
         // RecyclerView setup
-        recyclerView.addItemDecoration(
+        binding.repoList.recyclerView.addItemDecoration(
             DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         )
-        recyclerView.adapter = RepoListAdapter(viewModel, this, ::onRepoSelected)
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.repoList.recyclerView.adapter = RepoListAdapter(viewModel, this, ::onRepoSelected)
+        binding.repoList.recyclerView.layoutManager = LinearLayoutManager(context)
 
         observeViewModel()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -89,44 +100,46 @@ class OrgDetailsFragment(private val picasso: Picasso) : Fragment() {
 
     private fun updateUI(apiResult: ApiResult<List<Repo>>) = when (apiResult) {
         is ApiResult.Loading -> {
-            repoProgressBar.isVisible = true
-            repoErrorTextView.isVisible = false
+            binding.repoList.repoProgressBar.isVisible = true
+            binding.repoList.repoErrorTextView.isVisible = false
         }
         is ApiResult.Cancelled -> {
-            repoProgressBar.isVisible = false
-            repoErrorTextView.isVisible = false
+            binding.repoList.repoProgressBar.isVisible = false
+            binding.repoList.repoErrorTextView.isVisible = false
         }
         is ApiResult.Exception -> {
-            repoProgressBar.isVisible = false
+            binding.repoList.repoProgressBar.isVisible = false
             displayErrorMessage(apiResult.formattedErrorMessage)
         }
         is ApiResult.Error -> {
-            repoProgressBar.isVisible = false
+            binding.repoList.repoProgressBar.isVisible = false
             displayErrorMessage(apiResult.formattedErrorMessage)
         }
         is ApiResult.Success -> {
             // If an org. exists but owns 0 repos, display an error message (e.g. 'nytime')
             // Other updates handled by RepoListAdapter.
-            orgOwnsNoReposErrorMessage.isVisible = apiResult.data.isEmpty()
-            repoProgressBar.isVisible = false
-            repoErrorTextView.isVisible = false
+            binding.orgOwnsNoReposErrorMessage.isVisible = apiResult.data.isEmpty()
+            binding.repoList.repoProgressBar.isVisible = false
+            binding.repoList.repoErrorTextView.isVisible = false
         }
     }
 
     private fun showCondensedOrgDetails(org: Organization) {
+        val condensedOrgViewBinding = binding.condensedOrgView
+
         org.apply {
-            picasso.load(avatarUrl).into(orgAvatarImageView)
-            condensedOrgNameTextView.text = name
-            condensedOrgLoginTextView.text = getString(R.string.org_login_condensed, login)
+            picasso.load(avatarUrl).into(condensedOrgViewBinding.orgAvatarImageView)
+            condensedOrgViewBinding.condensedOrgNameTextView.text = name
+            condensedOrgViewBinding.condensedOrgLoginTextView.text = getString(R.string.org_login_condensed, login)
         }
     }
 
     private fun displayErrorMessage(errorMessage: String?) = if (errorMessage.isNullOrBlank()) {
-        repoErrorTextView.isVisible = false
-        repoErrorTextView.text = ""
+        binding.repoList.repoErrorTextView.isVisible = false
+        binding.repoList.repoErrorTextView.text = ""
     } else {
-        repoErrorTextView.isVisible = true
-        repoErrorTextView.text = errorMessage
+        binding.repoList.repoErrorTextView.isVisible = true
+        binding.repoList.repoErrorTextView.text = errorMessage
     }
 
     companion object {
